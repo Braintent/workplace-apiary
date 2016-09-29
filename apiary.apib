@@ -1,0 +1,353 @@
+FORMAT: 1A
+HOST: http://localhost:3000/
+
+# GZApi
+
+Основные API методы приложения
+
+Все методы работают ТОЛЬКО в формате JSON
+
+Большинство методов по работы с ресурсами соответсвуют спецификации JSON API
+такие методы помечены следующим текстовым флажком:
+
+`JSON API`
+
+и имеют тип данных `application/vnd.api+json`
+
+Подробнее:
+https://braintent.gitbooks.io/goznak-docs/content/controllers.html
+
+# Group Пользователи
+
+## Сессии [/users/sign_in]
+#### Создать сессию [POST]
+
++ Request (application/json)
+
+        {
+            "account_name": "DOCSVISION\\dv",
+            "password": "12345678"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Access-Token:Ly2s3IWFvEJWNSlgr0BlSg
+            Client:57sggIs-NRwfnv2oe5dKcg
+            Etag:W/"43c2f9eabb3ecef557ff77804a90f79b"
+            Expiry:1471867003
+            Token-Type:Bearer
+            Uid:5
+
+    + Body
+
+            {
+                "data":{
+                    "id":1,
+                    "employee_id":"d70f6f76-f047-4daf-9fac-72acb68f0338"
+                }
+            }
+            
+
+# Group Администраторы
+
+## Авторизация [/admins/sign_in]
+
+#### Создать сессию [POST]
+
++ Request (application/json)
+
+        {
+            "login": "superadmin",
+            "password": "12345678"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Access-Token:4yzt0hS8ZPTeZWvCrO5dQQ
+            Client:G24hRw_GOnm-vDSP14VxVw
+            Etag:W/"a0c9026fb660a244f8b76750bc11942d"
+            Expiry:1471867013
+            Token-Type:Bearer
+            Uid:1
+
+    + Body
+
+            {
+                "data":{
+                    "login": "superadmin",
+                    "id": "1"
+                }
+            }
+            
+
+# Group Задания
+
+## Список заданий [/task_cards/?list={list}]
+
+- `list` ( **String**, *required* )
+Тип листа, который необходимо получить
+
+
+### Получить список заданий по типу [GET]
+#### Описание
+Ответ содержит список заданий. 
+Для каждого задания кроме основной информации посылаются необходимые для отображения зависимости, а именно - лист сотрудников, являющихся участниками задания.
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer <ACCESS_TOKEN>
+
++ Response 200 (application/json)
+
+        {
+            [ 
+                data:{
+                    id: UUID,
+                    attributes: {
+                        state: "состояние"
+                    },
+                    relationships: {
+                        author: {
+                            data: { type: "employee", id: "UUID" }
+                        }
+                    }
+                },
+                included: [
+                    {
+                        type: "employee",
+                        id: UUID,
+                        attributes: {
+                            display_string: "Petrosyan K. V."
+                        }
+                    }            
+                }
+            ]
+        }
+
+## Задание [/task_cards/{id}/]
+
+- `id` ( **String**, *required* )
+Уникальный ID задания (`InstanceID` карточки)
+
+
+### Получить информацию по заданию [GET]
+#### Описание
+При открытии еденичного задания информация схожа с той, что выдается к списку заданий, дополненная следующими элементами:
+* Список возможных действий над поручением
+* Список доступных прав для текущего пользователя
+* Список комментариев
+* Ход исполнения (?)
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer <ACCESS_TOKEN>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            meta: {
+                allowed_actions: "список прав на работу с заданием",
+                possible_actions:  "список возможных действий"
+            },
+            data:{
+                id: UUID,
+                attributes: {
+                    state: "состояние"
+                },
+                relationships: {
+                    author: {
+                        data: { type: "employee", id: "UUID" }
+                    }
+                }
+            },
+            included: [
+                {
+                    type: "comments",
+                    id: UUID,
+                    attributes: {
+                        message: "First!"
+                    },
+                    relationships: {
+                        author: {
+                            data: { type: "employee", id: "UUID" }
+                        }
+                    }
+                },
+                {
+                    type: "employee",
+                    id: UUID,
+                    attributes: {
+                        display_string: "Petrosyan K. V."
+                    }
+                }            
+            }
+        }
+
+
+### Удаление [DELETE]
+#### Описание
+Допустимо только для шаблона
+
++ Request (application/vnd.api+json)
+
+        {
+        }
+
++ Response 200 (application/vnd.api+json)
+
+    + Headers
+
+            Access-Token:4yzt0hS8ZPTeZWvCrO5dQQ
+            Client:G24hRw_GOnm-vDSP14VxVw
+            Etag:W/"a0c9026fb660a244f8b76750bc11942d"
+            Expiry:1471867013
+            Token-Type:Bearer
+            Uid:1
+
+    + Body
+
+            {
+                "data":{
+                    "id": "1"
+                }
+            }
+
+
+## Комментирование [/task_cards/{id}/comments]
+
+### Комментирование [POST]
+
++ Request (application/json)
+
+        {
+            "login": "superadmin",
+            "password": "12345678"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Access-Token:4yzt0hS8ZPTeZWvCrO5dQQ
+            Client:G24hRw_GOnm-vDSP14VxVw
+            Etag:W/"a0c9026fb660a244f8b76750bc11942d"
+            Expiry:1471867013
+            Token-Type:Bearer
+            Uid:1
+
+    + Body
+
+            {
+                "data":{
+                    "login": "superadmin",
+                    "id": "1"
+                }
+            }
+
+## Новое задание [/tasks/]
+
+### Создание шаблона [POST]
+
++ Request (application/json)
+
++ Response 201 (application/vnd.api+json)
+
+    + Headers
+
+    + Body
+
+            {
+                data:{
+                    id: UUID
+                }
+            }
+            
+
+### Отправка в работу [/tasks/id/send]
+
+#### Проекта [PATCH]
++ Request (application/json)
+
+        {
+            performers: [UUID],
+            co_performers: [UUID],
+            acquaintance: [UUID],
+            content: text,
+            author: UUID,
+            controller: UUID,
+            end_date: datetime
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+    + Body
+
+            {
+                data:{
+                    id: UUID
+                }
+            }
+
+### Действия [/tasks/id/action]
+
+#### Вызов действия DV [PATCH]
++ Request (application/json)
+
+        {
+            action: action_id
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+
+    + Body
+
+
+### Файлы задания [/tasks/id/file]
+
+#### Добавление [POST]
+
++ Request (application/json)
+
+        { file: file(сделать) }
+
++ Response 201 (application/json)
+
+    + Headers
+
+    + Body
+
+            {
+                data:{
+                    id: UUID,
+                    name: filename
+                }
+            }
+
+### Файл задания [/tasks/id/file/file_id]
+#### Удаление [DELETE]
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+    + Headers
+
+    + Body
+
+            {
+                data:{
+                    id: UUID,
+                    name: filename
+                }
