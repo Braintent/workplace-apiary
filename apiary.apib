@@ -8,14 +8,124 @@ HOST: http://localhost:3000/
 Все методы работают ТОЛЬКО в формате JSON
 
 Большинство методов по работы с ресурсами соответсвуют спецификации JSON API
-такие методы помечены следующим текстовым флажком:
-
-`JSON API`
-
-и имеют тип данных `application/vnd.api+json`
+такие методы имеют тип данных `application/vnd.api+json` и отличительную структуру
 
 Подробнее:
 https://braintent.gitbooks.io/goznak-docs/content/controllers.html
+
+## Data Structures
+
+## UserAttributes (object)
++ account_name: 'ACCOUNT\test' (string, required)
+
+## UserAuthAttributes (object)
++ Include: UserAttributes
++ password: sekr3t (string)
+
+## EmployeeAttributes
++ first_name: `Сергей`
++ last_name: `Васильевич`
++ middle_name: `Иванови`
++ display_string: `Васильев С. И.`
+
+## EmployeeRelationships
++ department (object)
+  + data (DepartmentIdentifier)
+
+  
+## EmployeeIdentifier
++ data (object)
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
+    + type: `employees` (string, required)
+
+## Employee (object)
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `employees` (string, required)
++ attributes (EmployeeAttributes)
++ relationships (EmployeeRelationships)
+
+## TaskCardCommentsIdentifier
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: task_card_comments (string, required)
+
+## TaskCardCommentCreateParams
++ data
+    + type: task_card_comments (string, required)
+    + attributes
+        + content: `Текст комментария` (string, required)
+
+
+## TaskCardCommentWithAuthor
++ id:`AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: "task_card_comments" (string, required)
++ attributes (object)
+    + content: `Текст комментария` (string, required)
+    + creation_date: `Дата создания комментария` (string, required)
++ relationships
+    + author (EmployeeIdentifier)
+     
+
+## TaskCardIdentifier
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: task_cards (string, required)
+
+## TaskCardPerformParams
++ data
+    + content: `Тест заполненности полей` (string, required)
+    + end_date: `2007-01-01 000000 UTC` (string, required)
+    + relationships (TaskCardShowAttributes)
+
+## TaskCardShowAttributes
++ description: `Задание на исполнение Поручение от 09.09.2016` (string, required)
++ content: `Тест заполненности полей` (string, required)
++ state_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ state_name: `Не начато` (string, required)
++ state_default_name: `Started` (string, required)
++ start_date: `2007-01-01 000000 UTC` (string, required)
++ end_date: `2007-01-01 000000 UTC` (string, required)
+
+## TaskCardShowRelationships
++ author (EmployeeIdentifier)
++ controller (EmployeeIdentifier)
++ comments (array[TaskCardCommentsIdentifier, TaskCardCommentsIdentifier])
++ cycles (array[])
++ performer (EmployeeIdentifier)
++ co_performers (array[EmployeeIdentifier, EmployeeIdentifier])
+
+
+## DepartmentIdentifier
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: departments (string, required)
+
+## TaskAvailableActions
++ name: `Default action name. May be eng/rus` (string, required)
++ name_ru: `Имя действия на русском` (string)
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+
+## TaskOperationsPattern
++ name: `Default operation name. May be eng/rus` (string, required)
++ local_name: `Имя операции на русском` (string)
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+
+
+## CardRoles
++ name: `Название роли` (string, required)
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+
+## TaskCardWithActionsMeta
++ data (object)
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+    + type: 'task_cards' (string, required)
+    + attributes (TaskCardShowAttributes)
+    + relationships (TaskCardShowRelationships)
++ included (array[Employee, Employee, DepartmentIdentifier])
++ meta (object)
+    + possible_actions (array[TaskAvailableActions, TaskAvailableActions], required)
+    + common_roles (array[CardRoles, CardRoles], required)
+    + card_roles (array[CardRoles, CardRoles], required)
+    + allowed_operations (array[TaskOperationsPattern, TaskOperationsPattern], required)
+
+
 
 # Group Пользователи
 
@@ -225,14 +335,12 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 ### Комментирование [POST]
 
-+ Request (application/json)
++ Request (application/vnd.api+json)
 
-        {
-            "login": "superadmin",
-            "password": "12345678"
-        }
-
-+ Response 201 (application/json)
+    + Attributes
+        + data (TaskCardCommentCreateParams)
+        
++ Response 201 (application/vnd.api+json)
 
     + Headers
 
@@ -245,12 +353,9 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
     + Body
 
-            {
-                "data":{
-                    "login": "superadmin",
-                    "id": "1"
-                }
-            }
+    + Attributes
+        + data (TaskCardCommentWithAuthor)
+        + included (Employee)
 
 ## Новое задание [/tasks/]
 
@@ -262,42 +367,26 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
     + Headers
 
-    + Body
-
-            {
-                data:{
-                    id: UUID
-                }
-            }
+    + Attributes (TaskCardIdentifier)
             
 
-### Отправка в работу [/tasks/id/send]
+### Отправка в работу [/task_cards/{id}/send_assignment_to_perform]
+
+- `id` ( **String**, *required* )
+Уникальный ID задания (`InstanceID` карточки)
+
 
 #### Проекта [PATCH]
-+ Request (application/json)
++ Request (application/vnd.api+json)
 
-        {
-            performers: [UUID],
-            co_performers: [UUID],
-            acquaintance: [UUID],
-            content: text,
-            author: UUID,
-            controller: UUID,
-            end_date: datetime
-        }
+    + Attributes (TaskCardPerformParams)
 
-+ Response 200 (application/json)
++ Response 200 (application/vnd.api+json)
 
     + Headers
 
-    + Body
-
-            {
-                data:{
-                    id: UUID
-                }
-            }
-
+    + Attributes (TaskCardWithActionsMeta)
+    
 ### Действия [/tasks/id/action]
 
 #### Вызов действия DV [PATCH]
