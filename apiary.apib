@@ -73,7 +73,15 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + data
     + content: `Тест заполненности полей` (string, required)
     + end_date: `2007-01-01 000000 UTC` (string, required)
-    + relationships (TaskCardShowAttributes)
+    + relationships (TaskCardCreateRelationships)
+
+## TaskCardCreateRelationships
++ author (EmployeeIdentifier)
++ controller (EmployeeIdentifier)
++ performer (EmployeeIdentifier)
++ co_performers (array[EmployeeIdentifier, EmployeeIdentifier])
+
+
 
 ## TaskCardShowAttributes
 + description: `Задание на исполнение Поручение от 09.09.2016` (string, required)
@@ -207,13 +215,13 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 Ответ содержит список заданий. 
 Для каждого задания кроме основной информации посылаются необходимые для отображения зависимости, а именно - лист сотрудников, являющихся участниками задания.
 
-+ Request
++ Request  (application/vnd.api+json)
 
     + Headers
 
             Authorization: Bearer <ACCESS_TOKEN>
 
-+ Response 200 (application/json)
++ Response 200 (application/vnd.api+json)
 
         {
             [ 
@@ -262,44 +270,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 + Response 200 (application/vnd.api+json)
 
-        {
-            meta: {
-                allowed_actions: "список прав на работу с заданием",
-                possible_actions:  "список возможных действий"
-            },
-            data:{
-                id: UUID,
-                attributes: {
-                    state: "состояние"
-                },
-                relationships: {
-                    author: {
-                        data: { type: "employee", id: "UUID" }
-                    }
-                }
-            },
-            included: [
-                {
-                    type: "comments",
-                    id: UUID,
-                    attributes: {
-                        message: "First!"
-                    },
-                    relationships: {
-                        author: {
-                            data: { type: "employee", id: "UUID" }
-                        }
-                    }
-                },
-                {
-                    type: "employee",
-                    id: UUID,
-                    attributes: {
-                        display_string: "Petrosyan K. V."
-                    }
-                }            
-            }
-        }
+    + Attributes (TaskCardWithActionsMeta)
 
 
 ### Удаление [DELETE]
@@ -311,24 +282,8 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
         {
         }
 
-+ Response 200 (application/vnd.api+json)
++ Response 204 (application/vnd.api+json)
 
-    + Headers
-
-            Access-Token:4yzt0hS8ZPTeZWvCrO5dQQ
-            Client:G24hRw_GOnm-vDSP14VxVw
-            Etag:W/"a0c9026fb660a244f8b76750bc11942d"
-            Expiry:1471867013
-            Token-Type:Bearer
-            Uid:1
-
-    + Body
-
-            {
-                "data":{
-                    "id": "1"
-                }
-            }
 
 
 ## Комментирование [/task_cards/{id}/comments]
@@ -361,7 +316,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 ### Создание шаблона [POST]
 
-+ Request (application/json)
++ Request (application/vnd.api+json)
 
 + Response 201 (application/vnd.api+json)
 
