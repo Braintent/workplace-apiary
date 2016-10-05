@@ -79,7 +79,8 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + controller (EmployeeIdentifier)
 + performer (EmployeeIdentifier)
 + co_performers (array[EmployeeIdentifier, EmployeeIdentifier])
-
++ acquaintances (array[EmployeeIdentifier, EmployeeIdentifier])
++ referenced_cards (array[DocumentCardIdentifier, DocumentCardIdentifier])
 
 
 ## TaskCardShowAttributes
@@ -95,10 +96,16 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + author (EmployeeIdentifier)
 + controller (EmployeeIdentifier)
 + comments (array[TaskCardCommentsIdentifier, TaskCardCommentsIdentifier])
-+ cycles (array[])
++ cycles (array[TaskCardCycleIdentifier, TaskCardCycleIdentifier])
 + performer (EmployeeIdentifier)
 + co_performers (array[EmployeeIdentifier, EmployeeIdentifier])
++ acquaintances (array[EmployeeIdentifier, EmployeeIdentifier])
++ referenced_cards (array[DocumentCardIdentifier, DocumentCardIdentifier])
 
+
+## TaskCardCycleIdentifier
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: task_card_cycles (string, required)
 
 ## DepartmentIdentifier
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
@@ -115,6 +122,42 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 
 
+
+## VersionedCardRelationInfo
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `versioned_file_cards`
++ attributes
+    + description: `Имя файла.формат` (string, required)
+    + file_name: `Имя файла.формат` (string, required)
+    + current_version_number: `1` (string, required)
+    + current_version_file_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+
+## DocumentCardReferenceRelationInfoFile
++ id: `99BF9654-7389-E611-80AD-0800278BDFDD` (string, required)
++ type: `document_cards` (string, required)
++ attributes
+    + description:         `Имя файла.формат` (string, required)
+    + card_kind_name:      `Файл` (string, required)
+    + card_kind_id:        `F9A8D158-9884-4765-859D-31C4EFCA149D` (string, required)
+    + state_id:            `E528052C-A932-4295-A5A3-7233520FAAC8` (string, required)
+    + state_name:          `Создан` (string, required)
+    + state_default_name:  `Created` (string, required)
++ relationships 
+    + file_cards (array[VersionedFileCardIdentifier])
+
+
+## VersionedFileCardIdentifier
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: versioned_file_cards (string, required)
+
+
+## DocumentCardIdentifier   
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: document_cards (string, required)
+
+
+
+
 ## CardRoles
 + name: `Название роли` (string, required)
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
@@ -125,7 +168,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + type: 'task_cards' (string, required)
     + attributes (TaskCardShowAttributes)
     + relationships (TaskCardShowRelationships)
-+ included (array[Employee, Employee, DepartmentIdentifier])
++ included (array[Employee, Employee, DepartmentIdentifier, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo])
 + meta (object)
     + possible_actions (array[TaskAvailableActions, TaskAvailableActions], required)
     + common_roles (array[CardRoles, CardRoles], required)
