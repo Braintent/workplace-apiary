@@ -107,6 +107,40 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 + type: task_card_cycles (string, required)
 
+
+## TaskCardCycle
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: task_card_cycles (string, required)
++ attributes
+    + Number: 1 (string, required)
+    + Executer: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+    + Date: `2007-01-01 000000 UTC` (string, required)
+    + Decision: `Текст - название состояния`
+    + Comment: `Комментарий - отчет`
+    
+## TaskCardPresetIdentifier
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: task_card_presets (string, required)
+
+## TaskCardCompletionPresetIdentifier
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: task_card_preset_completion_presets (string, required)
+
+## TaskCardPreset
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: task_card_presets (string, required)
++ relationships
+    + completion_preset (TaskCardCompletionPresetIdentifier)
+
+## TaskCardCompletionPreset
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: task_card_preset_completion_presets (string, required)
++ attributes
+    + report_required: false
+
+
+
+
 ## DepartmentIdentifier
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
 + type: departments (string, required)
@@ -168,7 +202,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + type: 'task_cards' (string, required)
     + attributes (TaskCardShowAttributes)
     + relationships (TaskCardShowRelationships)
-+ included (array[Employee, Employee, DepartmentIdentifier, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo])
++ included (array[Employee, Employee, DepartmentIdentifier, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardPreset, TaskCardCompletionPreset])
 + meta (object)
     + possible_actions (array[TaskAvailableActions, TaskAvailableActions], required)
     + common_roles (array[CardRoles, CardRoles], required)
