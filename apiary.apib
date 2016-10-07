@@ -145,6 +145,13 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
 + type: departments (string, required)
 
+## DepartmentInfo
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: departments (string, required)
++ attributes
+    + name: `Имя подразделения` (string, required)
+
+
 ## TaskAvailableActions
 + name: `Default action name. May be eng/rus` (string, required)
 + name_ru: `Имя действия на русском` (string)
@@ -202,7 +209,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + type: 'task_cards' (string, required)
     + attributes (TaskCardShowAttributes)
     + relationships (TaskCardShowRelationships)
-+ included (array[Employee, Employee, DepartmentIdentifier, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardPreset, TaskCardCompletionPreset])
++ included (array[Employee, Employee, DepartmentInfo, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardPreset, TaskCardCompletionPreset])
 + meta (object)
     + possible_actions (array[TaskAvailableActions, TaskAvailableActions], required)
     + common_roles (array[CardRoles, CardRoles], required)
@@ -243,6 +250,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
                 }
             }
             
+            
 
 # Group Администраторы
 
@@ -277,6 +285,44 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
                 }
             }
             
+
+# Group Сотрудники
+
+## Поиск [GET /staff/employee/find?filter={filter}]
+- `filter` ( **String**, *required* )
+Строковое значение, по которому будет произведен поиск.
+
+Вернет первых 20 сотрудинков, найденных по запросу.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer <ACCESS_TOKEN>
+
++ Response 200 (application/vnd.api+json)
+    + Attributes
+        + data (array[Employee, Employee])
+        + included (array[DepartmentInfo, DepartmentInfo])
+
+## Список замещаемых текущим пользователем [GET /staff/employee/deputized_by_me]
+
+Вернется набор пользователей, замещаемых текущим сотрудником.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer <ACCESS_TOKEN>
+
++ Response 200 (application/vnd.api+json)
+    + Attributes
+        + data (array[Employee, Employee])
+        + included (array[DepartmentInfo, DepartmentInfo])
+
+## Изображение [GET /staff/employee/{employee_id}/photo]
+- `employee_id` ( **String**, *required* )
+ID сотрудника
 
 # Group Задания
 
