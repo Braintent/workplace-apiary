@@ -326,13 +326,11 @@ ID сотрудника
 
 # Group Задания
 
-## Список заданий [/task_cards/?list={list}]
+## Список заданий [GET /task_cards/?list={list}]
 
 - `list` ( **String**, *required* )
 Тип листа, который необходимо получить
 
-
-### Получить список заданий по типу [GET]
 #### Описание
 Ответ содержит список заданий. 
 Для каждого задания кроме основной информации посылаются необходимые для отображения зависимости, а именно - лист сотрудников, являющихся участниками задания.
@@ -401,16 +399,11 @@ ID сотрудника
 
 + Request (application/vnd.api+json)
 
-        {
-        }
-
-+ Response 204 (application/vnd.api+json)
-
++ Response 204
 
 
 ## Комментирование [/task_cards/{id}/comments]
-
-### Комментирование [POST]
+### Добавить комментарий [POST]
 
 + Request (application/vnd.api+json)
 
@@ -433,9 +426,9 @@ ID сотрудника
         + data (TaskCardCommentWithAuthor)
         + included (Employee)
 
-## Новое задание [/tasks/]
 
-### Создание шаблона [POST]
+## Создание шаблона задания [/task_cards/assignment_template]
+### с типом Поручение  [POST]
 
 + Request (application/vnd.api+json)
 
@@ -446,13 +439,11 @@ ID сотрудника
     + Attributes (TaskCardIdentifier)
             
 
-### Отправка в работу [/task_cards/{id}/send_assignment_to_perform]
+### Отправка шаблона в работу  [PATCH /task_cards/{id}/send_assignment_to_perform]
 
 - `id` ( **String**, *required* )
 Уникальный ID задания (`InstanceID` карточки)
 
-
-#### Проекта [PATCH]
 + Request (application/vnd.api+json)
 
     + Attributes (TaskCardPerformParams)
@@ -462,22 +453,22 @@ ID сотрудника
     + Headers
 
     + Attributes (TaskCardWithActionsMeta)
-    
-### Действия [/tasks/id/action]
 
-#### Вызов действия DV [PATCH]
+
+## Действие над заданием [/task_cards/{id}/operation/{operation_id}?report={report}]
+- `id` ( **String**, *required* )
+Уникальный ID задания (`InstanceID` карточки)
+
+- `operation_id` ( **String**, *required* )
+Уникальный ID операции (StatesDir::CardKindSettings::Operation)
+
+- `report` ( **String** )
+Текст отчета о выполнении, если требуется.
+
+### Вызов действия DV [PATCH]
 + Request (application/json)
 
-        {
-            action: action_id
-        }
-
-+ Response 200 (application/json)
-
-    + Headers
-
-    + Body
-
++ Response 204 (application/json)
 
 ### Файлы задания [/tasks/id/file]
 
