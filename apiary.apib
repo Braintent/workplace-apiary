@@ -83,13 +83,44 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + referenced_cards (array[DocumentCardIdentifier, DocumentCardIdentifier])
 
 
+
+## TaskCardListData
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: 'task_cards' (string, required)
++ attributes 
+    + description: `Задание на исполнение Поручение от 09.09.2016` (string, required)
+    + content: `Тест заполненности полей` (string, required)
+    + card_kind_name: `Тип карточки` (string)
+    + card_kind_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string)
+    + state_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+    + state_name: `Не начато` (string, required)
+    + state_default_name: `Started` (string, required)
+    + start_date: `2007-01-01 000000 UTC` (string, required)
+    + collaborators_task: true (boolean)
+    + parent_document_type: `Тип родительского документа`
+    + end_date: `2007-01-01 000000 UTC` (string, required)
++ relationships (TaskCardListRelationships)
+
+## TaskCardListRelationships
++ author (EmployeeIdentifier)
++ controller (EmployeeIdentifier)
++ performer (EmployeeIdentifier)
++ co_performers (array[EmployeeIdentifier, EmployeeIdentifier])
++ acquaintances (array[EmployeeIdentifier, EmployeeIdentifier])
+
+## TaskCardListIncluded
++ included (array[Employee, Employee, Employee] )
+
 ## TaskCardShowAttributes
 + description: `Задание на исполнение Поручение от 09.09.2016` (string, required)
 + content: `Тест заполненности полей` (string, required)
++ card_kind_name: `Тип карточки` (string)
++ card_kind_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string)
 + state_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 + state_name: `Не начато` (string, required)
 + state_default_name: `Started` (string, required)
 + start_date: `2007-01-01 000000 UTC` (string, required)
++ collaborators_task: true (boolean)
 + end_date: `2007-01-01 000000 UTC` (string, required)
 
 ## TaskCardShowRelationships
@@ -326,14 +357,24 @@ ID сотрудника
 
 # Group Задания
 
-## Список заданий [GET /task_cards/?list={list}]
+## Список заданий [GET /task_cards/?list={list}&status={status}]
 
 - `list` ( **String**, *required* )
-Тип листа, который необходимо получить
+- `status` ( **Array** )
+При помощи данного параметра можно определить массив свойств, по которым нужно фильтровать список:
+
+Возможна филтьтрация по полям:
+
+1. Status: 
+    1. expired    - просрочено
+    2. expiring   - подходит срок
+    3. controlled - на контроле
 
 #### Описание
 Ответ содержит список заданий. 
 Для каждого задания кроме основной информации посылаются необходимые для отображения зависимости, а именно - лист сотрудников, являющихся участниками задания.
+
+
 
 + Request  (application/vnd.api+json)
 
@@ -343,30 +384,9 @@ ID сотрудника
 
 + Response 200 (application/vnd.api+json)
 
-        {
-            [ 
-                data:{
-                    id: UUID,
-                    attributes: {
-                        state: "состояние"
-                    },
-                    relationships: {
-                        author: {
-                            data: { type: "employee", id: "UUID" }
-                        }
-                    }
-                },
-                included: [
-                    {
-                        type: "employee",
-                        id: UUID,
-                        attributes: {
-                            display_string: "Petrosyan K. V."
-                        }
-                    }            
-                }
-            ]
-        }
+    + Attributes
+        + data (array[TaskCardListData, TaskCardListData])
+        + included (TaskCardListIncluded)
 
 ## Задание [/task_cards/{id}/]
 
