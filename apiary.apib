@@ -41,6 +41,8 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
 + type: `employees` (string, required)
 + attributes (EmployeeAttributes)
+
+## EmployeeWithDepartment (Employee)
 + relationships (EmployeeRelationships)
 
 ## TaskCardCommentsIdentifier
@@ -357,11 +359,16 @@ ID сотрудника
 
 # Group Задания
 
-## Список заданий [GET /task_cards/?list={list}&status={status}]
+## Список заданий [GET /task_cards/?list={list}&status={status}&page={page}]
 
 - `list` ( **String**, *required* )
 
 Определяет вид листа, который нуж
+
+- `page` ( **String** )ы 
+
+Номер страницы. Сейчас на странице показывается 50 элементов и сортировка идёт по дате создания карточки `dvsys_instances.CreationDateTime`
+В случаях если он не задан или задан не верно (меньше еденицы, не цифровым значением) - `page` принимается за 1
 
 - `status` ( **Array** )
 При помощи данного параметра можно определить массив свойств, по которым нужно фильтровать список:
