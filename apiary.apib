@@ -73,7 +73,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 ## TaskCardPerformParams
 + data
     + content: `Тест заполненности полей` (string, required)
-    + end_date: `2007-01-01 000000 UTC` (string, required)
+    + end_date: `2016-10-21T00:00:00.000Z` (string, required)
     + relationships (TaskCardCreateRelationships)
 
 ## TaskCardCreateRelationships
@@ -97,10 +97,12 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + state_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
     + state_name: `Не начато` (string, required)
     + state_default_name: `Started` (string, required)
-    + start_date: `2007-01-01 000000 UTC` (string, required)
+    + start_date: `2016-10-21T00:00:00.000Z` (string, required)
+    + crereation_date_time: `2016-10-21T00:00:00.000Z`,
+    + change_date_time: `2016-10-21T00:00:00.000Z`,
     + collaborators_task: true (boolean)
+    + end_date: `2016-10-21T00:00:00.000Z` (string, required)
     + parent_document_type: `Тип родительского документа`
-    + end_date: `2007-01-01 000000 UTC` (string, required)
 + relationships (TaskCardListRelationships)
 
 ## TaskCardListRelationships
@@ -121,9 +123,11 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + state_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 + state_name: `Не начато` (string, required)
 + state_default_name: `Started` (string, required)
-+ start_date: `2007-01-01 000000 UTC` (string, required)
++ start_date: `2016-10-21T00:00:00.000Z` (string, required)
++ crereation_date_time: `2016-10-21T00:00:00.000Z`,
++ change_date_time: `2016-10-21T00:00:00.000Z`,
 + collaborators_task: true (boolean)
-+ end_date: `2007-01-01 000000 UTC` (string, required)
++ end_date: `2016-10-21T00:00:00.000Z` (string, required)
 
 ## TaskCardShowRelationships
 + author (EmployeeIdentifier)
