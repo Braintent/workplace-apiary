@@ -530,15 +530,31 @@ ID сотрудника
 
 + Response 204 (application/json)
 
-### Файлы задания [/tasks/id/file]
+### Файлы задания [/task_cards/{id}/files]
+- `id` ( **String**, *required* )
+Уникальный ID задания (`InstanceID` карточки)
+
+Файлы задания - это карточки документа с типом `Файл`, которые привязаны через список ссылок карточки заданий ссылкой определнного типа.
+
+Добавление могло бы происходить в два шага: 
+
+1. Создание документа типа `Файл`
+2. Добавление определенного типа ссылки на новый документ.
+
+Однако, в этом случае, пользователь сможет заливать ни к чему не привязанные файлы, 
+по этой причине добавление файла и создание ссылки сделано в едином  методе. 
+
+Файл, на данный момент, заливается способом multipart/form-data
+Ответ приходит в форме JSON API.
 
 #### Добавление [POST]
 
-+ Request (application/json)
++ Request 
+    + Headers 
+        Accept: application/vnd.api+json
+        Content-Type: multipart/form-data
 
-        { file: file(сделать) }
-
-+ Response 201 (application/json)
++ Response 201 (application/vnd.api+json)
 
     + Headers
 
@@ -551,19 +567,15 @@ ID сотрудника
                 }
             }
 
-### Файл задания [/tasks/id/file/file_id]
-#### Удаление [DELETE]
+#### Удаление [DELETE /task_cards/{id}/files/{file_doc_id}]
 
-+ Request (application/json)
 
-+ Response 200 (application/json)
+- `file_doc_id` ( **String**, *required* )
+ID карточки документа, которую необходимо удалить
 
-    + Headers
++ Request (application/vnd.api+json)
 
-    + Body
+    + Headers 
+        Accept: application/vnd.api+json
 
-            {
-                data:{
-                    id: UUID,
-                    name: filename
-                }
++ Response 204 (application/json)
