@@ -235,6 +235,19 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + type: document_cards (string, required)
 
 
+## CardReferenceIdentifier
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `reference_list_card_references`
+
+## CardReferenceLinkDescription (CardReferenceIdentifier)
++ attributes
+  + type_name: `КЗ_ДополненияФайлыОтчет` (string)
+  + type_description: `КЗ_ДополненияФайлыОтчет` (string)
+  + creation_date: `2007-01-01 000000 UTC`  - сейчас возвращается null из-за кривого sql adapter
++ relationships
+  + destination_card (DepartmentIdentifier)
++ included (array[DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo]) 
+
 
 
 ## CardRoles
@@ -362,6 +375,10 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 - `employee_id` ( **String**, *required* )
 ID сотрудника
 
++ Response 200 (text/plain)
+
+        Ok.
+
 # Group Задания
 
 ## Список заданий [GET /task_cards/?list={list}&status={status}&page={page}]
@@ -475,11 +492,10 @@ ID сотрудника
             Token-Type:Bearer
             Uid:1
 
-    + Body
-
     + Attributes
         + data (TaskCardCommentWithAuthor)
         + included (Employee)
+
 
 
 ## Шаблон задания (Создание поручения) [/task_cards/assignment_template]
@@ -487,6 +503,7 @@ ID сотрудника
 Что бы создать задание типа `Поручение` необходимо сначала создать шаблон.  В ответе вернется ID созданного шаблона задания.
 Теперь к этому шаблону можно отправлять связки. (Файлы)
 Далее необходимо отправить шаблон в работу. Это действие требует корректную отправку заполненных в UI данных поручения.
+
 
 ### Создание шаблона с типом Поручение  [POST]
 
@@ -544,28 +561,24 @@ ID сотрудника
 Однако, в этом случае, пользователь сможет заливать ни к чему не привязанные файлы, 
 по этой причине добавление файла и создание ссылки сделано в едином  методе. 
 
-Файл, на данный момент, заливается способом multipart/form-data
+Файл, на данный момент, заливается способом `multipart/form-data`
 Ответ приходит в форме JSON API.
 
 #### Добавление [POST]
 
-+ Request 
+
++ Request (multipart/form-data; boundary=---BOUNDARY)
+
     + Headers 
-        Accept: application/vnd.api+json
-        Content-Type: multipart/form-data
+    
+            Accept: application/vnd.api+json
+
 
 + Response 201 (application/vnd.api+json)
 
     + Headers
 
-    + Body
-
-            {
-                data:{
-                    id: UUID,
-                    name: filename
-                }
-            }
+    + Attributes (CardReferenceLinkDescription)
 
 #### Удаление [DELETE /task_cards/{id}/files/{file_doc_id}]
 
@@ -576,6 +589,7 @@ ID карточки документа, которую необходимо уд
 + Request (application/vnd.api+json)
 
     + Headers 
-        Accept: application/vnd.api+json
+    
+            Accept: application/vnd.api+json
 
 + Response 204 (application/json)
