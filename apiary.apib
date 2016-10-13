@@ -103,7 +103,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + collaborators_task: true (boolean)
     + end_date: `2016-10-21T00:00:00.000Z` (string, required)
     + parent_document_type: `Тип родительского документа`
-    + unread: `Прочтено или нет. true или false`
+    + unread: true (boolean)
 + relationships (TaskCardListRelationships)
 
 ## TaskCardListRelationships
@@ -326,7 +326,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 # Group Сотрудники
 
-## Поиск [GET /staff/employee/find?filter={filter}]
+## Поиск [GET /staff/employees/find?filter={filter}]
 - `filter` ( **String**, *required* )
 Строковое значение, по которому будет произведен поиск.
 
@@ -343,7 +343,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
         + data (array[Employee, Employee])
         + included (array[DepartmentInfo, DepartmentInfo])
 
-## Список замещаемых текущим пользователем [GET /staff/employee/deputized_by_me]
+## Список замещаемых текущим пользователем [GET /staff/employees/deputized_by_me]
 
 Вернется набор пользователей, замещаемых текущим сотрудником.
 
@@ -358,7 +358,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
         + data (array[Employee, Employee])
         + included (array[DepartmentInfo, DepartmentInfo])
 
-## Изображение [GET /staff/employee/{employee_id}/photo]
+## Изображение [GET /staff/employees/{employee_id}/photo]
 - `employee_id` ( **String**, *required* )
 ID сотрудника
 
@@ -371,7 +371,7 @@ ID сотрудника
 Определяет вид листа, который нужно получить.
 На данный момент доступны следующие
 
-На данный момент доступны следующие листы. В таблице после параметра и описания указаны условия соответсвия листу
+На данный момент доступны следующие листы (В таблице после параметра и описания указаны условия соответсвия листу): 
 | Параметр            | Описание             | Тип задания   | Распределено | В состоянии                               | Сотрудник, один из: |
 | -                   | -                    | -             | -   | -                                                  | - |
 | todo                | Мне сделать          | на исполнение | нет | 'Started', 'In work', 'Not accepted', 'Acceptance' | И, С, К, О  |
@@ -482,8 +482,13 @@ ID сотрудника
         + included (Employee)
 
 
-## Создание шаблона задания [/task_cards/assignment_template]
-### с типом Поручение  [POST]
+## Шаблон задания (Создание поручения) [/task_cards/assignment_template]
+
+Что бы создать задание типа `Поручение` необходимо сначала создать шаблон.  В ответе вернется ID созданного шаблона задания.
+Теперь к этому шаблону можно отправлять связки. (Файлы)
+Далее необходимо отправить шаблон в работу. Это действие требует корректную отправку заполненных в UI данных поручения.
+
+### Создание шаблона с типом Поручение  [POST]
 
 + Request (application/vnd.api+json)
 
