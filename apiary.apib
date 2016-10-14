@@ -31,7 +31,10 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + department (object)
   + data (DepartmentIdentifier)
 
-  
+## EmployeeIdentifierAttributes
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `employees` (string, required)
+
 ## EmployeeIdentifier
 + data (object)
     + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
@@ -45,7 +48,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 ## EmployeeWithDepartment (Employee)
 + relationships (EmployeeRelationships)
 
-## TaskCardCommentsIdentifier
+## TaskCardCommentsIdentifierAttributes
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
 + type: task_card_comments (string, required)
 
@@ -80,9 +83,12 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + author (EmployeeIdentifier)
 + controller (EmployeeIdentifier)
 + performer (EmployeeIdentifier)
-+ co_performers (array[EmployeeIdentifier, EmployeeIdentifier])
-+ acquaintances (array[EmployeeIdentifier, EmployeeIdentifier])
-+ referenced_cards (array[DocumentCardIdentifier, DocumentCardIdentifier])
++ co_performers 
+    + data (array[EmployeeIdentifierAttributes, EmployeeIdentifierAttributes])
++ acquaintances 
+    + data (array[EmployeeIdentifierAttributes, EmployeeIdentifierAttributes])
+<!--+ references-->
+<!--    + data (array[CardReferenceIdentifier, CardReferenceIdentifier])-->
 
 
 
@@ -110,8 +116,10 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + author (EmployeeIdentifier)
 + controller (EmployeeIdentifier)
 + performer (EmployeeIdentifier)
-+ co_performers (array[EmployeeIdentifier, EmployeeIdentifier])
-+ acquaintances (array[EmployeeIdentifier, EmployeeIdentifier])
++ co_performers 
+    + data (array[EmployeeIdentifierAttributes, EmployeeIdentifierAttributes])
++ acquaintances 
+    + data (array[EmployeeIdentifierAttributes, EmployeeIdentifierAttributes])
 
 ## TaskCardListIncluded
 + included (array[Employee, Employee, Employee] )
@@ -133,15 +141,18 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 ## TaskCardShowRelationships
 + author (EmployeeIdentifier)
 + controller (EmployeeIdentifier)
-+ comments (array[TaskCardCommentsIdentifier, TaskCardCommentsIdentifier])
-+ cycles (array[TaskCardCycleIdentifier, TaskCardCycleIdentifier])
++ comments (array[TaskCardCommentsIdentifierAttributes, TaskCardCommentsIdentifierAttributes])
++ cycles (array[TaskCardCycleIdentifierAttributes, TaskCardCycleIdentifierAttributes])
 + performer (EmployeeIdentifier)
-+ co_performers (array[EmployeeIdentifier, EmployeeIdentifier])
-+ acquaintances (array[EmployeeIdentifier, EmployeeIdentifier])
-+ referenced_cards (array[DocumentCardIdentifier, DocumentCardIdentifier])
++ co_performers 
+    + data (array[EmployeeIdentifierAttributes, EmployeeIdentifierAttributes])
++ acquaintances 
+    + data (array[EmployeeIdentifierAttributes, EmployeeIdentifierAttributes])
++ references
+    + data (array[CardReferenceIdentifier, CardReferenceIdentifier])
 
 
-## TaskCardCycleIdentifier
+## TaskCardCycleIdentifierAttributes
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 + type: task_card_cycles (string, required)
 
@@ -500,8 +511,6 @@ ID сотрудника
     + Attributes
         + data (TaskCardCommentWithAuthor)
         + included (Employee)
-
-
 
 ## Шаблон задания (Создание поручения) [/task_cards/assignment_template]
 
