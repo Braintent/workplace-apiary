@@ -382,9 +382,11 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
         + data (array[Employee, Employee])
         + included (array[DepartmentInfo, DepartmentInfo])
 
-## Изображение [GET /staff/employees/{employee_id}/photo]
+## Изображение [/staff/employees/{employee_id}/photo]
 - `employee_id` ( **String**, *required* )
 ID сотрудника
+
+### Получить [GET]
 
 + Response 200 (text/plain)
 
@@ -392,10 +394,11 @@ ID сотрудника
 
 # Group Задания
 
-## Список заданий [GET /task_cards/?list={list}&status={status}&page={page}]
+## Список заданий [/task_cards/?list={list}&status={status}&page={page}]
 
 - `list` ( **String**, *required* )
 
+### Описание
 Определяет вид листа, который нужно получить.
 
 На данный момент доступны следующие листы (В таблице после параметра и описания указаны условия соответсвия листу): 
@@ -438,12 +441,11 @@ ID сотрудника
     2. expiring   - подходит срок
     3. controlled - на контроле
 
-#### Описание
 Ответ содержит список заданий. 
 Для каждого задания кроме основной информации посылаются необходимые для отображения зависимости, а именно - лист сотрудников, являющихся участниками задания.
 
 
-
+### Получить [GET]
 + Request  (application/vnd.api+json)
 
     + Headers
@@ -456,7 +458,7 @@ ID сотрудника
         + data (array[TaskCardListData, TaskCardListData])
         + included (array[Employee, Employee, Employee] )
 
-## Задание [/task_cards/{id}/]
+## Задание  [/task_cards/{id}/]
 
 - `id` ( **String**, *required* )
 Уникальный ID задания (`InstanceID` карточки)
@@ -512,8 +514,9 @@ ID сотрудника
         + data (TaskCardCommentWithAuthor)
         + included (Employee)
 
-## Шаблон задания (Создание поручения) [/task_cards/assignment_template]
+## Шаблон задания. Создание поручения  [/task_cards/assignment_template]
 
+### Описание 
 Что бы создать задание типа `Поручение` необходимо сначала создать шаблон.  В ответе вернется ID созданного шаблона задания.
 Теперь к этому шаблону можно отправлять связки. (Файлы)
 Далее необходимо отправить шаблон в работу. Это действие требует корректную отправку заполненных в UI данных поручения.
@@ -530,7 +533,9 @@ ID сотрудника
     + Attributes (TaskCardIdentifier)
             
 
-### Отправка шаблона в работу  [PATCH /task_cards/{id}/send_assignment_to_perform]
+### Отправка шаблона в работу  [/task_cards/{id}/send_assignment_to_perform]
+
+#### Отправить [PATCH]
 
 - `id` ( **String**, *required* )
 Уникальный ID задания (`InstanceID` карточки)
@@ -607,3 +612,22 @@ ID карточки документа, которую необходимо уд
             Accept: application/vnd.api+json
 
 + Response 204 (application/json)
+
+# Group Карточки файла с версиями
+
+## Описание
+
+
+## Файл [/versioned_files_card/{id}/file]
+### Получить [GET]
+- `id` ( **String**, *required* )
+
+Вернет файл - представляющий текущую версию `Карточка файла с версиями`, 
+с определенными по формату файла заголовками `Content-Type`, `Content-Disposition` и др.
+
+## Файл, конвертированный в PDF [/versioned_files_card/{id}/file/pdf]
+
+### Получить [GET]
+- `id` ( **String**, *required* )
+
+Вернет тот же файл, что и предыдущий метод, только в формате PDF (конвертируется с помощью LibreOffice)
