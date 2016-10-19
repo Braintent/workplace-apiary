@@ -21,11 +21,22 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + Include: UserAttributes
 + password: sekr3t (string)
 
+## PreferredEmployee
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `preferred_employees`
++ attributes
+    + use_count: 1 - количество использований
+    + field_type: `performer` - тип поля для заполнения
++ relationships
+    + employee (EmployeeIdentifier)
+
+
 ## EmployeeAttributes
 + first_name: `Сергей`
 + last_name: `Васильевич`
 + middle_name: `Иванови`
 + display_string: `Васильев С. И.`
++ gender: `Пол` - может быть male, female и none
 
 ## EmployeeRelationships
 + department (object)
@@ -44,6 +55,13 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
 + type: `employees` (string, required)
 + attributes (EmployeeAttributes)
+
+## EmployeeExpandedForDeputy (object)
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `employees` (string, required)
++ attributes (EmployeeAttributes)
+    + position: `должность`
+
 
 ## EmployeeWithDepartment (Employee)
 + relationships (EmployeeRelationships)
@@ -350,6 +368,25 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 # Group Сотрудники
 
+## Домашная страница [GET /staff/employees/my_page]
+
+Вернет информацию об основном пользователе. **БЕЗ** учета замещения.
+Вдобавок, в meta будут содержаться статические параметры приложения, которые необходимо показать (для всех одинаковы).
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer <ACCESS_TOKEN>
+
++ Response 200 (application/vnd.api+json)
+    + Attributes
+        + data (EmployeeExpandedForDeputy)
+        + included
+            + phonebook_url: `https://localhost:12345`
+
+
+
 ## Поиск [GET /staff/employees/find?filter={filter}]
 - `filter` ( **String**, *required* )
 Строковое значение, по которому будет произведен поиск.
@@ -367,6 +404,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
         + data (array[Employee, Employee])
         + included (array[DepartmentInfo, DepartmentInfo])
 
+
 ## Список замещаемых текущим пользователем [GET /staff/employees/deputized_by_me]
 
 Вернется набор пользователей, замещаемых текущим сотрудником.
@@ -379,8 +417,25 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 + Response 200 (application/vnd.api+json)
     + Attributes
-        + data (array[Employee, Employee])
+        + data (array[EmployeeExpandedForDeputy, EmployeeExpandedForDeputy])
         + included (array[DepartmentInfo, DepartmentInfo])
+
+
+## Сотрудники быстрого выбора [GET /staff/employees/preferred_employees]
+Вернет список сотрудников быстрого выбора, включая количество использований, типы полей и ссылки на сотрудников
+Метод **УЧИТЫВАЕТ** замещение. При указании замещения - вернет список для замещаемого
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer <ACCESS_TOKEN>
+
++ Response 200 (application/vnd.api+json)
+    + Attributes
+        + data (array[PreferredEmployee, PreferredEmployee])
+        + included (array[Employee, Employee])
+
 
 ## Изображение [/staff/employees/{employee_id}/photo]
 - `employee_id` ( **String**, *required* )
