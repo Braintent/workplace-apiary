@@ -126,6 +126,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + state_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
     + state_name: `Не начато` (string, required)
     + state_default_name: `Started` (string, required)
+    + built_in_state_name: `started` (string) - Имя связанного, встроенного в DV состояния.
     + start_date: `2016-10-21T00:00:00.000Z` (string, required)
     + crereation_date_time: `2016-10-21T00:00:00.000Z`,
     + change_date_time: `2016-10-21T00:00:00.000Z`,
@@ -155,6 +156,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + state_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 + state_name: `Не начато` (string, required)
 + state_default_name: `Started` (string, required)
++ built_in_state_name: `started` (string) - Имя связанного, встроенного в DV состояния.
 + start_date: `2016-10-21T00:00:00.000Z` (string, required)
 + crereation_date_time: `2016-10-21T00:00:00.000Z`,
 + change_date_time: `2016-10-21T00:00:00.000Z`,
@@ -212,9 +214,9 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 ## GroupSearchSerialized
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
-+ type: `employees` (string, required)
++ type: `groups`
 + attributes
-    + Name: `Лучшие люди` - название группы
+    + name: `Лучшие люди` - название группы
 
 ## DepartmentIdentifier
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
@@ -222,7 +224,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 ## DepartmentInfo
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
-+ type: departments (string, required)
++ type: `departments`
 + attributes
     + name: `ООО «Глазовский завод «Химмаш»` - название подразделения
 
@@ -237,11 +239,13 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 ## TaskAvailableActions
 + name: `Default action name. May be eng/rus` (string, required)
 + name_ru: `Имя действия на русском` (string)
++ built_in_operation_name: `started` (string) - Имя связанной встроенной в DV операции
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 
 ## TaskOperationsPattern
 + name: `Default operation name. May be eng/rus` (string, required)
-+ local_name: `Имя операции на русском` (string)
++ name_ru: `Имя операции на русском` (string)
++ built_in_operation_name: `started` (string) - Имя связанной встроенной в DV операции
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 
 
@@ -265,6 +269,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + state_id:            `E528052C-A932-4295-A5A3-7233520FAAC8` (string, required)
     + state_name:          `Создан` (string, required)
     + state_default_name:  `Created` (string, required)
+    + built_in_state_name: `started` (string) - Имя связанного, встроенного в DV состояния.
 + relationships 
     + file_cards (array[VersionedFileCardIdentifier])
 
@@ -478,7 +483,7 @@ ID группы
 
 # Group Подразделения
 
-## Показать [GET /staff/departments/{id}/participants]
+## Получить всех участников [GET /staff/departments/{id}/participants]
 - `id` ( **String**, *required* )
 ID группы
 
@@ -751,10 +756,7 @@ ID карточки документа, которую необходимо уд
 2. Группам
 3. Подразделениям
 
-Если не нашлось нужное количество для страницы - пойдет искать оставшиеся в группах 
-Так же соотв. подразделения.
-
-*Пагинатор пока не работает*
+Если не нашлось нужное количество сотрудников для страницы - пойдет искать в группах  недостающее кол-во до ON_PAGE. Так же соотв. подразделения.
 
 + Request (application/vnd.api+json)
 
