@@ -130,7 +130,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + state_default_name: `Started` (string, required)
     + built_in_state_name: `started` (string) - Имя связанного, встроенного в DV состояния.
     + start_date: `2016-10-21T00:00:00.000Z` (string, required)
-    + crereation_date_time: `2016-10-21T00:00:00.000Z`,
+    + creation_date_time: `2016-10-21T00:00:00.000Z`,
     + change_date_time: `2016-10-21T00:00:00.000Z`,
     + collaborators_task: true (boolean)
     + end_date: `2016-10-21T00:00:00.000Z` (string, required)
@@ -160,9 +160,10 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + state_default_name: `Started` (string, required)
 + built_in_state_name: `started` (string) - Имя связанного, встроенного в DV состояния.
 + start_date: `2016-10-21T00:00:00.000Z` (string, required)
-+ crereation_date_time: `2016-10-21T00:00:00.000Z`,
++ creation_date_time: `2016-10-21T00:00:00.000Z`,
 + change_date_time: `2016-10-21T00:00:00.000Z`,
 + collaborators_task: true (boolean)
++ end_date_actual: `2016-10-21T00:00:00.000Z` (string, required)
 + end_date: `2016-10-21T00:00:00.000Z` (string, required)
 
 ## TaskCardShowRelationships
@@ -279,8 +280,9 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 
 ## VersionedFileCardIdentifier
-+ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
-+ type: versioned_file_cards (string, required)
++ data
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
+    + type: versioned_file_cards (string, required)
 
 
 ## DocumentCardIdentifier   
@@ -292,7 +294,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
 + type: `reference_list_card_references`
 
-## CardReferenceLinkDescription (CardReferenceIdentifier)
+## CardReferenceLinkCreateDescription (CardReferenceIdentifier)
 + attributes
   + type_name: `КЗ_ДополненияФайлыОтчет` (string)
   + type_description: `КЗ_ДополненияФайлыОтчет` (string)
@@ -300,6 +302,25 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + relationships
   + destination_card (DepartmentIdentifier)
 + included (array[DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo]) 
+
+## CardReferenceLinkDescriptionExample1 (CardReferenceIdentifier)
++ attributes
+  + type_name: `КЗ_ДополненияФайлыОтчет` (string)
+  + type_description: `КЗ_ДополненияФайлыОтчет` (string)
+  + creation_date: `2007-01-01 000000 UTC`  - дата создания
++ relationships
+  + destination_card (DepartmentIdentifier)
++ included (array[DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo]) 
+
+
+## CardReferenceLinkDescriptionExample2 (CardReferenceIdentifier)
++ attributes
+  + type_name: `КЗ_Основной_документ` (string)
+  + type_description: `КЗ_Основной документ` (string)
+  + creation_date: `2007-01-01 000000 UTC`  - сдата создания
++ relationships
+  + destination_card (DepartmentIdentifier)
++ included (array[DocumentCardReferenceRelationInfoFile]) 
 
 
 
@@ -313,7 +334,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + type: 'task_cards' (string, required)
     + attributes (TaskCardShowAttributes)
     + relationships (TaskCardShowRelationships)
-+ included (array[Employee, Employee, DepartmentInfo, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardPreset, TaskCardCompletionPreset])
++ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardCommentWithAuthor, TaskCardCommentWithAuthor])
 + meta (object)
     + possible_actions (array[TaskAvailableActions, TaskAvailableActions], required)
     + common_roles (array[CardRoles, CardRoles], required)
@@ -707,7 +728,7 @@ ID группы
     + Headers
 
     + Attributes 
-        + data (CardReferenceLinkDescription)
+        + data (CardReferenceLinkCreateDescription)
 
 #### Удаление [DELETE /task_cards/{id}/files/{file_doc_id}]
 
