@@ -97,10 +97,12 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + type: task_cards (string, required)
 
 ## TaskCardPerformParams
-+ data
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `task_cards`
++ attributes
     + content: `Тест заполненности полей` (string, required)
     + end_date: `2016-10-21T00:00:00.000Z` (string, required)
-    + relationships (TaskCardCreateRelationships)
++ relationships (TaskCardCreateRelationships)
 
 ## TaskCardCreateRelationships
 + author (EmployeeIdentifier)
@@ -166,8 +168,10 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 ## TaskCardShowRelationships
 + author (EmployeeIdentifier)
 + controller (EmployeeIdentifier)
-+ comments (array[TaskCardCommentsIdentifierAttributes, TaskCardCommentsIdentifierAttributes])
-+ cycles (array[TaskCardCycleIdentifierAttributes, TaskCardCycleIdentifierAttributes])
++ comments 
+    + data (array[TaskCardCommentsIdentifierAttributes, TaskCardCommentsIdentifierAttributes])
++ cycles 
+    + data (array[TaskCardCycleIdentifierAttributes, TaskCardCycleIdentifierAttributes])
 + performer (EmployeeIdentifier)
 + co_performers 
     + data (array[EmployeeIdentifierAttributes, EmployeeIdentifierAttributes])
@@ -702,7 +706,8 @@ ID группы
 
     + Headers
 
-    + Attributes (CardReferenceLinkDescription)
+    + Attributes 
+        + data (CardReferenceLinkDescription)
 
 #### Удаление [DELETE /task_cards/{id}/files/{file_doc_id}]
 
