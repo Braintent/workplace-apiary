@@ -84,7 +84,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 ## TaskCardCommentWithAuthor
 + id:`AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
-+ type: "task_card_comments" (string, required)
++ type: task_card_comments (string, required)
 + attributes (object)
     + content: `Текст комментария` (string, required)
     + creation_date: `Дата создания комментария` (string, required)
@@ -241,16 +241,16 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 
 
-## TaskAvailableActions
-+ name: `Default action name. May be eng/rus` (string, required)
-+ name_ru: `Имя действия на русском` (string)
-+ built_in_operation_name: `started` (string) - Имя связанной встроенной в DV операции
+## TaskAvailableAction
++ name: `Reject` (string, required) - Стаднартное имя операции. Встречается на английском
++ name_ru: `Отклонить` (string) - Имя операции на русском
++ built_in_operation_name: `edit` (string) - Имя связанной встроенной в DV операции
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 
 ## TaskOperationsPattern
-+ name: `Default operation name. May be eng/rus` (string, required)
-+ name_ru: `Имя операции на русском` (string)
-+ built_in_operation_name: `started` (string) - Имя связанной встроенной в DV операции
++ name: `Edit` (string, required) - Стаднартное имя операции. Встречается на английском
++ name_ru: `Редактировать` (string) - Имя операции на русском
++ built_in_operation_name: `edit` (string) - Имя связанной встроенной в DV операции
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 
 
@@ -300,7 +300,8 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
   + type_description: `КЗ_ДополненияФайлыОтчет` (string)
   + creation_date: `2007-01-01 000000 UTC`  - сейчас возвращается null из-за кривого sql adapter
 + relationships
-  + destination_card (DepartmentIdentifier)
+    + destination_card
+      + data (DocumentCardIdentifier)
 + included (array[DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo]) 
 
 ## CardReferenceLinkDescriptionExample1 (CardReferenceIdentifier)
@@ -309,8 +310,8 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
   + type_description: `КЗ_ДополненияФайлыОтчет` (string)
   + creation_date: `2007-01-01 000000 UTC`  - дата создания
 + relationships
-  + destination_card (DepartmentIdentifier)
-+ included (array[DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo]) 
+    + destination_card 
+        + data (DocumentCardIdentifier)
 
 
 ## CardReferenceLinkDescriptionExample2 (CardReferenceIdentifier)
@@ -319,8 +320,8 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
   + type_description: `КЗ_Основной документ` (string)
   + creation_date: `2007-01-01 000000 UTC`  - сдата создания
 + relationships
-  + destination_card (DepartmentIdentifier)
-+ included (array[DocumentCardReferenceRelationInfoFile]) 
+    + destination_card 
+        + data (DocumentCardIdentifier)
 
 
 
@@ -334,12 +335,12 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + type: 'task_cards' (string, required)
     + attributes (TaskCardShowAttributes)
     + relationships (TaskCardShowRelationships)
-+ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardCommentWithAuthor, TaskCardCommentWithAuthor])
++ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardCommentWithAuthor, TaskCardCommentWithAuthor])
 + meta (object)
-    + possible_actions (array[TaskAvailableActions, TaskAvailableActions], required)
+    + possible_actions (array[TaskAvailableAction], required)
     + common_roles (array[CardRoles, CardRoles], required)
     + card_roles (array[CardRoles, CardRoles], required)
-    + allowed_operations (array[TaskOperationsPattern, TaskOperationsPattern], required)
+    + allowed_operations (array[TaskAvailableAction, TaskOperationsPattern], required)
 
 
 
