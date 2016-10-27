@@ -276,13 +276,13 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + state_default_name:  `Created` (string, required)
     + built_in_state_name: `started` (string) - Имя связанного, встроенного в DV состояния.
 + relationships 
-    + file_cards (array[VersionedFileCardIdentifier])
+    + file_cards 
+        + data (array[VersionedFileCardIdentifier])
 
 
 ## VersionedFileCardIdentifier
-+ data
-    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
-    + type: versioned_file_cards (string, required)
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: versioned_file_cards (string, required)
 
 
 ## DocumentCardIdentifier   
