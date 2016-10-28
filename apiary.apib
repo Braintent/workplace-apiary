@@ -108,7 +108,8 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 ## TaskCardCreateRelationships
 + author (EmployeeIdentifier)
 + controller (EmployeeIdentifier)
-+ performer (EmployeeIdentifier)
++ performers 
+    + data (array[EmployeeIdentifierAttributes]) - может быть множественным, если пусты соисполнтели
 + co_performers 
     + data (array[EmployeeIdentifierAttributes, EmployeeIdentifierAttributes])
 + acquaintances 
@@ -142,7 +143,8 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 ## TaskCardListRelationships
 + author (EmployeeIdentifier)
 + controller (EmployeeIdentifier)
-+ performer (EmployeeIdentifier)
++ performers 
+    + data (array[EmployeeIdentifierAttributes]) - может быть множественным, если пусты соисполнтели
 + co_performers 
     + data (array[EmployeeIdentifierAttributes, EmployeeIdentifierAttributes])
 + acquaintances 
@@ -174,7 +176,8 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + data (array[TaskCardCommentsIdentifierAttributes, TaskCardCommentsIdentifierAttributes])
 + cycles 
     + data (array[TaskCardCycleIdentifierAttributes, TaskCardCycleIdentifierAttributes])
-+ performer (EmployeeIdentifier)
++ performers 
+    + data (array[EmployeeIdentifierAttributes]) - может быть множественным, если пусты соисполнтели
 + co_performers 
     + data (array[EmployeeIdentifierAttributes, EmployeeIdentifierAttributes])
 + acquaintances 
