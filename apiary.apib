@@ -347,6 +347,40 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + allowed_operations (array[TaskAvailableAction, TaskOperationsPattern], required)
 
 
+## TaskCardAfterTemplateCreate
++ data (object)
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+    + type: 'task_cards' (string, required)
+    + attributes (TaskCardShowAttributes)
+    + relationships 
+        + author 
+            - data (object, optional, nullable)
+        + controller 
+            - data (object, optional, nullable)
+        + cycles 
+            + data (array[])
+        + performers 
+            + data (array[])
+        + co_performers 
+            + data (array[])
+        + acquaintances 
+            + data (array[])
+
+
+## TaskCardWithActionsMetaDelegation
++ data (object)
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+    + type: 'task_cards' (string, required)
+    + attributes (TaskCardShowAttributes)
+    + relationships (TaskCardShowRelationships)
++ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo])
++ meta (object)
+    + possible_actions (array[TaskAvailableAction], required)
+    + common_roles (array[CardRoles, CardRoles], required)
+    + card_roles (array[CardRoles, CardRoles], required)
+    + allowed_operations (array[TaskAvailableAction, TaskOperationsPattern], required)
+
+
 
 # Group Пользователи
 
@@ -539,6 +573,7 @@ ID группы
 На данный момент доступны следующие листы (В таблице после параметра и описания указаны условия соответсвия листу): 
 | Параметр            | Описание             | Тип задания   | Распределено | В состоянии                               | Сотрудник, один из: |
 | -                   | -                    | -             | -   | -                                                  | - |
+| mine                | Выданные мной        | на исполнение | -   | 'Started', 'In work', 'Not accepted', 'Acceptance' | А |
 | todo                | Мне сделать          | на исполнение | нет | 'Started', 'In work', 'Not accepted', 'Acceptance' | И, С, К, О  |
 | commissions_perform | Исполнение поручений | на исполнение | нет | 'Started', 'In work'                               | И, С |
 | commissions_rework  | Доработка поручений  | на исполнение | нет | 'Not accepted'                                     | И, С |
@@ -665,7 +700,7 @@ ID группы
 
     + Headers
 
-    + Attributes (TaskCardIdentifier)
+    + Attributes (TaskCardAfterTemplateCreate)
             
 
 ### Отправка шаблона в работу  [/task_cards/{id}/send_assignment_to_perform]
@@ -700,6 +735,36 @@ ID группы
 + Request (application/json)
 
 + Response 204 (application/json)
+
+## Распределение задания [/task_cards/{id}/delegation_template]
+
+**В РАЗРАБОТКЕ. НЕ ИСПОЛЬЗОВАТЬ**
+
+- `id` ( **String**, *required* )
+Уникальный ID задания (`InstanceID` карточки)
+
+### Получить шаблон распределенного задания [POST]
+
+Метод инициирует создание дочернего задания. 
+См. раздел ['Распределение задания'](https://braintent.gitbooks.io/goznak-docs/content/zadaniya__logika_i_arhitektura.html)
+
+Вернется шаблон с предварительно заполненными данными - ссылками, preset'ами и др.
+Этот шаблон необходимо так же, как и простой шаблон 'Задание', послать в работу или удалить.
+
+
+
++ Request (application/vnd.api+json)
+
++ Response 201 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes (TaskCardWithActionsMetaDelegation)
+
+
+
+
+
 
 ### Файлы задания [/task_cards/{id}/files]
 - `id` ( **String**, *required* )
