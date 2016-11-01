@@ -737,9 +737,6 @@ ID группы
 + Response 204 (application/json)
 
 ## Распределение задания [/task_cards/{id}/delegation_template]
-
-**В РАЗРАБОТКЕ. НЕ ИСПОЛЬЗОВАТЬ**
-
 - `id` ( **String**, *required* )
 Уникальный ID задания (`InstanceID` карточки)
 
@@ -751,8 +748,6 @@ ID группы
 Вернется шаблон с предварительно заполненными данными - ссылками, preset'ами и др.
 Этот шаблон необходимо так же, как и простой шаблон 'Задание', послать в работу или удалить.
 
-
-
 + Request (application/vnd.api+json)
 
 + Response 201 (application/vnd.api+json)
@@ -762,11 +757,7 @@ ID группы
     + Attributes (TaskCardWithActionsMetaDelegation)
 
 
-
-
-
-
-### Файлы задания [/task_cards/{id}/files]
+## Файл задания [/task_cards/{id}/files]
 - `id` ( **String**, *required* )
 Уникальный ID задания (`InstanceID` карточки)
 
@@ -783,15 +774,12 @@ ID группы
 Файл, на данный момент, заливается способом `multipart/form-data`
 Ответ приходит в форме JSON API.
 
-#### Добавление [POST]
-
-
+### Добавление [POST]
 + Request (multipart/form-data; boundary=---BOUNDARY)
 
     + Headers 
-    
-            Accept: application/vnd.api+json
 
+            Accept: application/vnd.api+json
 
 + Response 201 (application/vnd.api+json)
 
@@ -800,16 +788,15 @@ ID группы
     + Attributes 
         + data (CardReferenceLinkCreateDescription)
 
-#### Удаление [DELETE /task_cards/{id}/files/{file_doc_id}]
-
-
+## Удаление файла задания [/task_cards/{id}/files/{file_doc_id}]
+### Удаление [DELETE]
 - `file_doc_id` ( **String**, *required* )
 ID карточки документа, которую необходимо удалить
 
 + Request (application/vnd.api+json)
 
     + Headers 
-    
+
             Accept: application/vnd.api+json
 
 + Response 204 (application/json)
