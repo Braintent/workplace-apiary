@@ -136,6 +136,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + change_date_time: `2016-10-21T00:00:00.000Z`,
     + collaborators_task: true (boolean)
     + end_date: `2016-10-21T00:00:00.000Z` (string, required)
+    + shared: `false` - Распределено или нет
     + parent_document_type: `Тип родительского документа`
     + unread: true (boolean)
 + relationships (TaskCardListRelationships)
@@ -168,6 +169,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + collaborators_task: true (boolean)
 + end_date_actual: `2016-10-21T00:00:00.000Z` (string, required)
 + end_date: `2016-10-21T00:00:00.000Z` (string, required)
++ shared: `false` - Распределено или нет
 
 ## TaskCardShowRelationships
 + author (EmployeeIdentifier)
@@ -574,12 +576,12 @@ ID группы
 | Параметр            | Описание             | Тип задания   | Распределено | В состоянии                               | Сотрудник, один из: |
 | -                   | -                    | -             | -   | -                                                  | - |
 | mine                | Выданные мной        | на исполнение | -   | 'Started', 'In work', 'Not accepted', 'Acceptance' | А |
-| todo                | Мне сделать          | на исполнение | нет | 'Started', 'In work', 'Not accepted', 'Acceptance' | И, С, К, О  |
+| todo                | Мне сделать          | исп, рассм    | нет | 'Started', 'In work', 'Not accepted', 'Acceptance' | И, С, К, О  |
 | commissions_perform | Исполнение поручений | на исполнение | нет | 'Started', 'In work'                               | И, С |
 | commissions_rework  | Доработка поручений  | на исполнение | нет | 'Not accepted'                                     | И, С |
 | commissions_check   | Контроль поручений   | на исполнение | нет | 'Acceptance'                                       | К |
 | informing           | Ознакомление         | на ознакомл.  | нет | 'Started', 'In work'                               | И, С |
-| shared              | Распределены         | на исполнение | да  | 'Started', 'In work'                               | И, С |
+| shared              | Распределены         | исп, рассм    | да  | 'Started', 'In work'                               | И, С |
 | completed           | Завершены            | все           | нет | 'Completed'                                        | И, С, К, О, А |
 | consideration       | Рассмотрение         | на рассмотр.  | нет | 'Started'                                          | И, С |
 | approval            | Согласование         | cогласование  | нет | 'Started'                                          | И, С |
@@ -613,6 +615,19 @@ ID группы
 
 Ответ содержит список заданий. 
 Для каждого задания кроме основной информации посылаются необходимые для отображения зависимости, а именно - лист сотрудников, являющихся участниками задания.
+
+**Основной документ**
+Список включает основные документы к каждому заданию, причем для каждого документа может быть свой сериализатор.
+В атрибутах, кроме всего прочего, в параметре `parent_card_kind_name` включается родительский тип, например: "Служебные записки", "Распорядительные документы".
+
+Краткая справка по дополнительным элементам сериализации документов из списка задач, готовым на данный момент.
+| Тип документа | Что включает | 
+| - | - | 
+| Все | имя, содержание, имя дела, имя родительского типа |
+| Исходящий | Получатели (тип отправления, компания, сотрудник => должность) |
+| Входящий | Отправитель (компания, сотрудник => должность), страниц в приложении |
+| Универсальный документ | Имя типа универсального документа |
+
 
 
 ### Получить [GET]
@@ -806,14 +821,14 @@ ID карточки документа, которую необходимо уд
 ## Описание
 
 
-## Файл [/versioned_files_card/{id}/file]
+## Файл [/versioned_file_cards/{id}/file]
 ### Получить [GET]
 - `id` ( **String**, *required* )
 
 Вернет файл - представляющий текущую версию `Карточка файла с версиями`, 
 с определенными по формату файла заголовками `Content-Type`, `Content-Disposition` и др.
 
-## Файл, конвертированный в PDF [/versioned_files_card/{id}/file/pdf]
+## Файл, конвертированный в PDF [/versioned_file_cards/{id}/file/pdf]
 
 ### Получить [GET]
 - `id` ( **String**, *required* )
