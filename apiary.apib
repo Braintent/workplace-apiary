@@ -24,7 +24,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + attributes
     + name: `Add Comment` - имя действия.
     + name_ru: `Добавить комментарий` - имя действия на русском.
-    + `built_in_operation_name`: `add_comment` - имя соответсвующего встроенного действия из DV, если оно определено.
+    + built_in_operation_name: `add_comment` - имя соответсвующего встроенного действия из DV, если оно определено.
 
 
 ## UserAttributes (object)
@@ -131,6 +131,26 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 <!--    + data (array[CardReferenceIdentifier, CardReferenceIdentifier])-->
 
 
+## TaskCardTreeListData
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: 'task_cards' (string, required)
++ attributes 
+    + description: `Задание на исполнение Поручение от 09.09.2016` (string, required)
+    + card_kind_name: `Тип карточки` (string)
+    + card_kind_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string)
+    + state_default_name: `Started` (string, required)
+    + collaborators_task: true (boolean)
++ relationships (TaskCardTreeListRelationships)
+
+
+## TaskCardTreeListRelationships
++ performers 
+    + data (array[EmployeeIdentifierAttributes])
++ operative_parent_task
+    + data 
+        + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+        + type: 'task_cards' (string, required)
+
 
 ## TaskCardListData
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
@@ -140,17 +160,12 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + content: `Тест заполненности полей` (string, required)
     + card_kind_name: `Тип карточки` (string)
     + card_kind_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string)
-    + state_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
-    + state_name: `Не начато` (string, required)
     + state_default_name: `Started` (string, required)
-    + built_in_state_name: `started` (string) - Имя связанного, встроенного в DV состояния.
     + start_date: `2016-10-21T00:00:00.000Z` (string, required)
-    + creation_date_time: `2016-10-21T00:00:00.000Z`,
-    + change_date_time: `2016-10-21T00:00:00.000Z`,
     + collaborators_task: true (boolean)
     + end_date: `2016-10-21T00:00:00.000Z` (string, required)
     + shared: `false` - Распределено или нет
-    + parent_document_type: `Тип родительского документа`
+    + end_date_actual: `2016-10-21T00:00:00.000Z` (string, required)
     + unread: true (boolean)
 + relationships (TaskCardListRelationships)
 
@@ -172,13 +187,8 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + content: `Тест заполненности полей` (string, required)
 + card_kind_name: `Тип карточки` (string)
 + card_kind_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string)
-+ state_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
-+ state_name: `Не начато` (string, required)
 + state_default_name: `Started` (string, required)
-+ built_in_state_name: `started` (string) - Имя связанного, встроенного в DV состояния.
 + start_date: `2016-10-21T00:00:00.000Z` (string, required)
-+ creation_date_time: `2016-10-21T00:00:00.000Z`,
-+ change_date_time: `2016-10-21T00:00:00.000Z`,
 + collaborators_task: true (boolean)
 + end_date_actual: `2016-10-21T00:00:00.000Z` (string, required)
 + end_date: `2016-10-21T00:00:00.000Z` (string, required)
@@ -292,10 +302,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + description:         `Имя файла.формат` (string, required)
     + card_kind_name:      `Файл` (string, required)
     + card_kind_id:        `F9A8D158-9884-4765-859D-31C4EFCA149D` (string, required)
-    + state_id:            `E528052C-A932-4295-A5A3-7233520FAAC8` (string, required)
-    + state_name:          `Создан` (string, required)
     + state_default_name:  `Created` (string, required)
-    + built_in_state_name: `started` (string) - Имя связанного, встроенного в DV состояния.
 + relationships 
     + file_cards 
         + data (array[VersionedFileCardIdentifier])
@@ -651,11 +658,11 @@ ID группы
         + data (array[TaskCardListData, TaskCardListData])
         + included (array[Employee, Employee, Employee] )
 
-## Задание  [/task_cards/{id}/]
+
+## Задание [/task_cards/{id}/]
 
 - `id` ( **String**, *required* )
 Уникальный ID задания (`InstanceID` карточки)
-
 
 ### Получить информацию по заданию [GET]
 #### Описание
@@ -676,7 +683,9 @@ ID группы
     + Attributes (TaskCardWithActions)
 
 
-### Удаление [DELETE]
+
+### Удалить задание [DELETE]
+
 #### Описание
 Допустимо только для шаблона
 
@@ -726,9 +735,9 @@ ID группы
     + Attributes (TaskCardAfterTemplateCreate)
             
 
-### Отправка шаблона в работу  [/task_cards/{id}/send_assignment_to_perform]
+## Отправка шаблона в работу  [/task_cards/{id}/send_assignment_to_perform]
 
-#### Отправить [PATCH]
+### Отправить [PATCH]
 
 - `id` ( **String**, *required* )
 Уникальный ID задания (`InstanceID` карточки)
@@ -742,6 +751,29 @@ ID группы
     + Headers
 
     + Attributes (TaskCardWithActions)
+
+## Дерево заданий [/task_cards/{id}/task_tree]
+- `id` ( **String**, *required* )
+Уникальный ID задания (`InstanceID` карточки)
+
+### Построить [GET]
+
+### Описание 
+Метод возвращает список заданий, составляющих дерево дочерних заданий.
+Информация о задании содержит ограниченный набор атрибутов с двумя связками:
+* Исполнители.
+* Родительское *оперативное* задание `operative_parent_task`. *Оперативным* оно названо потому, что здесь пропущены связки с родительскими заданиями видов `Поручение` и `Длительное поручение`, которые не нужны при отображени дерева. У заданий довольно часто есть родительское задание типа `Поручение` и `Длительное поручение` из которых бизнес-процессы системы выдают *оперативные* задания, например `На исполнение`.
+
++ Request (application/vnd.api+json)
+
+
++ Response 200 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes
+        + data (array[TaskCardTreeListData, TaskCardTreeListData])
+        + included (array[Employee, Employee, Employee] )
 
 
 ## Действие над заданием [/task_cards/{id}/operation/{operation_id}?report={report}]
