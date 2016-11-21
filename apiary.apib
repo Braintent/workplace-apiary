@@ -14,6 +14,19 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 ## Data Structures
 
+## AllowedOperationIdentifier
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `allowed_operations`
+
+## AllowedOperation
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `allowed_operations`
++ attributes
+    + name: `Add Comment` - имя действия.
+    + name_ru: `Добавить комментарий` - имя действия на русском.
+    + `built_in_operation_name`: `add_comment` - имя соответсвующего встроенного действия из DV, если оно определено.
+
+
 ## UserAttributes (object)
 + account_name: 'ACCOUNT\test' (string, required)
 
@@ -186,6 +199,8 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + data (array[EmployeeIdentifierAttributes, EmployeeIdentifierAttributes])
 + references
     + data (array[CardReferenceIdentifier, CardReferenceIdentifier])
++ allowed_operations
+    + data (array[AllowedOperationIdentifier, AllowedOperationIdentifier])
 
 
 ## TaskCardCycleIdentifierAttributes
@@ -335,18 +350,22 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + name: `Название роли` (string, required)
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 
-## TaskCardWithActionsMeta
+## TaskCardWithActions
 + data (object)
     + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
     + type: 'task_cards' (string, required)
     + attributes (TaskCardShowAttributes)
     + relationships (TaskCardShowRelationships)
-+ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardCommentWithAuthor, TaskCardCommentWithAuthor])
-+ meta (object)
-    + possible_actions (array[TaskAvailableAction], required)
-    + common_roles (array[CardRoles, CardRoles], required)
-    + card_roles (array[CardRoles, CardRoles], required)
-    + allowed_operations (array[TaskAvailableAction, TaskOperationsPattern], required)
++ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardCommentWithAuthor, TaskCardCommentWithAuthor, AllowedOperation, AllowedOperation])
+
+
+## TaskCardWithActionsDelegation
++ data (object)
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+    + type: 'task_cards' (string, required)
+    + attributes (TaskCardShowAttributes)
+    + relationships (TaskCardShowRelationships)
++ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, AllowedOperation, AllowedOperation])
 
 
 ## TaskCardAfterTemplateCreate
@@ -367,22 +386,6 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
             + data (array[])
         + acquaintances 
             + data (array[])
-
-
-## TaskCardWithActionsMetaDelegation
-+ data (object)
-    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
-    + type: 'task_cards' (string, required)
-    + attributes (TaskCardShowAttributes)
-    + relationships (TaskCardShowRelationships)
-+ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo])
-+ meta (object)
-    + possible_actions (array[TaskAvailableAction], required)
-    + common_roles (array[CardRoles, CardRoles], required)
-    + card_roles (array[CardRoles, CardRoles], required)
-    + allowed_operations (array[TaskAvailableAction, TaskOperationsPattern], required)
-
-
 
 # Group Пользователи
 
@@ -670,7 +673,7 @@ ID группы
 
 + Response 200 (application/vnd.api+json)
 
-    + Attributes (TaskCardWithActionsMeta)
+    + Attributes (TaskCardWithActions)
 
 
 ### Удаление [DELETE]
@@ -738,7 +741,7 @@ ID группы
 
     + Headers
 
-    + Attributes (TaskCardWithActionsMeta)
+    + Attributes (TaskCardWithActions)
 
 
 ## Действие над заданием [/task_cards/{id}/operation/{operation_id}?report={report}]
@@ -774,7 +777,7 @@ ID группы
 
     + Headers
 
-    + Attributes (TaskCardWithActionsMetaDelegation)
+    + Attributes (TaskCardWithActionsDelegation)
 
 
 ## Файл задания [/task_cards/{id}/files]
