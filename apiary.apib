@@ -164,9 +164,10 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + start_date: `2016-10-21T00:00:00.000Z` (string, required)
     + collaborators_task: true (boolean)
     + end_date: `2016-10-21T00:00:00.000Z` (string, required)
-    + shared: `false` - Распределено или нет
+    + shared: false (boolean) - Распределено или нет
     + end_date_actual: `2016-10-21T00:00:00.000Z` (string, required)
-    + unread: true (boolean)
+    + unread: true (boolean) - не прочитано текущим пользователем
+    + controlled: true (boolean) - на контроле
 + relationships (TaskCardListRelationships)
 
 ## TaskCardListRelationships
@@ -192,7 +193,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + collaborators_task: true (boolean)
 + end_date_actual: `2016-10-21T00:00:00.000Z` (string, required)
 + end_date: `2016-10-21T00:00:00.000Z` (string, required)
-+ shared: `false` - Распределено или нет
++ shared: false (boolean) - Распределено или нет
 
 ## TaskCardShowRelationships
 + author (EmployeeIdentifier)
@@ -759,10 +760,17 @@ ID группы
 ### Построить [GET]
 
 ### Описание 
-Метод возвращает список заданий, составляющих дерево дочерних заданий.
+Метод возвращает список заданий: 
+* В случае если исходное задание по документу (имеет ссылку ГЗ_Основной_документ)
+Будет приведено дерево заданий для документа, где может быть несколько корневых задач (выданных из БП, обрабатывающих документы)
+* В случае если исходное задание без документа (не имеет ссылки ГЗ_Основной_документ) будет найдено корневое задание
+и дерево будет построено от него.
+
+
 Информация о задании содержит ограниченный набор атрибутов с двумя связками:
 * Исполнители.
 * Родительское *оперативное* задание `operative_parent_task`. *Оперативным* оно названо потому, что здесь пропущены связки с родительскими заданиями видов `Поручение` и `Длительное поручение`, которые не нужны при отображени дерева. У заданий довольно часто есть родительское задание типа `Поручение` и `Длительное поручение` из которых бизнес-процессы системы выдают *оперативные* задания, например `На исполнение`.
+У корневых заданий `operative_parent_task` отсутствует
 
 + Request (application/vnd.api+json)
 
