@@ -81,6 +81,20 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + attributes (EmployeeAttributes)
     + position: `должность`
 
+## EmployeeShowSerialized (object)
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `employees` (string, required)
++ attributes (EmployeeAttributes)
+    + position: `должность`
+    + phone: `884-1311-11` - телефон (внутренний)
+    + room_number: `228` - номер кабинета
+    + email: `email@email.email` - email
++ relationships
+    + unit  - подразделение
+        + data (DepartmentIdentifier)
+    + company  - компания
+        + data (DepartmentIdentifier)
+
 ## EmployeeWithDepartment (Employee)
 + relationships (EmployeeRelationships)
 
@@ -484,6 +498,24 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 
 
+## Информация о сотруднике [GET /staff/employees/{id}]
+- `id` ( **String**, *required* )
+UUID запрашиваемого сотрудника 
+
+Вернет развернутую информацию о сотруднике
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer <ACCESS_TOKEN>
+
++ Response 200 (application/vnd.api+json)
+    + Attributes
+        + data (EmployeeShowSerialized)
+        + included (DepartmentInfo, DepartmentInfo)
+
+
 ## Поиск [GET /staff/employees/find?filter={filter}]
 - `filter` ( **String**, *required* )
 Строковое значение, по которому будет произведен поиск.
@@ -763,7 +795,7 @@ ID группы
 Метод возвращает список заданий: 
 * В случае если исходное задание по документу (имеет ссылку ГЗ_Основной_документ)
 Будет приведено дерево заданий для документа, где может быть несколько корневых задач (выданных из БП, обрабатывающих документы)
-* В случае если исходное задание без документа (не имеет ссылки ГЗ_Основной_документ) будет найдено корневое задание
+* В случае если исходное задание без документа (не имеет ссылки ГЗ_Основной_документ) будет найдено корневое родительское задание
 и дерево будет построено от него.
 
 
