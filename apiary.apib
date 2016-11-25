@@ -242,6 +242,11 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + Date: `2007-01-01 000000 UTC` (string, required)
     + Decision: `Текст - название состояния`
     + Comment: `Комментарий - отчет`
++ relationships
+    + executer
+        + data (EmployeeIdentifierAttributes)
+    + references
+        + data (array[CardReferenceIdentifier, CardReferenceIdentifier])
     
 ## TaskCardPresetIdentifier
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
@@ -340,7 +345,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 ## CardReferenceLinkCreateDescription (CardReferenceIdentifier)
 + attributes
   + type_name: `КЗ_ДополненияФайлыОтчет` (string)
-  + type_description: `КЗ_ДополненияФайлыОтчет` (string)
+  + type_description: `Дополнительные файлы` (string)
   + creation_date: `2007-01-01 000000 UTC`  - сейчас возвращается null из-за кривого sql adapter
 + relationships
     + destination_card
@@ -350,7 +355,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 ## CardReferenceLinkDescriptionExample1 (CardReferenceIdentifier)
 + attributes
   + type_name: `КЗ_ДополненияФайлыОтчет` (string)
-  + type_description: `КЗ_ДополненияФайлыОтчет` (string)
+  + type_description: `Дополнительные файлы` (string)
   + creation_date: `2007-01-01 000000 UTC`  - дата создания
 + relationships
     + destination_card 
@@ -359,8 +364,8 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
 ## CardReferenceLinkDescriptionExample2 (CardReferenceIdentifier)
 + attributes
-  + type_name: `КЗ_Основной_документ` (string)
-  + type_description: `КЗ_Основной документ` (string)
+  + type_name: `КЗ_Основной документ` (string)
+  + type_description: `Основной документ` (string)
   + creation_date: `2007-01-01 000000 UTC`  - сдата создания
 + relationships
     + destination_card 
