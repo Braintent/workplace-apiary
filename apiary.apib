@@ -386,6 +386,18 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + relationships (TaskCardShowRelationships)
 + included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardCommentWithAuthor, TaskCardCommentWithAuthor, AllowedOperation, AllowedOperation])
 
+## TaskCardRegularCommissionWithActions
++ data (object)
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+    + type: 'task_cards' (string, required)
+    + attributes (TaskCardShowAttributes)
+        + number: `ДП-74` (string) - Номер
+        + comment: `regular commission comment` (string) - Примечание
+        + percent_completed: `74` (string) - Процент исполнения
+        + report: `last report` (string) - Последний отчет
+    + relationships (TaskCardShowRelationships)
++ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardCommentWithAuthor, TaskCardCommentWithAuthor, AllowedOperation, AllowedOperation])
+
 
 ## TaskCardWithActionsDelegation
 + data (object)
@@ -790,17 +802,6 @@ ID группы
     + Attributes (TaskCardWithActions)
 
 
-
-### Удалить задание [DELETE]
-
-#### Описание
-Допустимо только для шаблона
-
-+ Request (application/vnd.api+json)
-
-+ Response 204
-
-
 ## Комментирование [/task_cards/{id}/comments]
 ### Добавить комментарий [POST]
 
@@ -823,7 +824,7 @@ ID группы
         + data (TaskCardCommentWithAuthor)
         + included (Employee)
 
-## Шаблон задания. Создание поручения  [/task_cards/assignment_template]
+## Создание шаблона вида `Поручение`  [/task_cards/templates/commission]
 
 ### Описание 
 Что бы создать задание типа `Поручение` необходимо сначала создать шаблон.  В ответе вернется ID созданного шаблона задания.
@@ -842,7 +843,41 @@ ID группы
     + Attributes (TaskCardAfterTemplateCreate)
             
 
-## Отправка шаблона в работу  [/task_cards/{id}/send_assignment_to_perform]
+## Удаление шаблона задания [/task_cards/templates/{id}]
+
+- `id` ( **String**, *required* )
+Уникальный ID задания (`InstanceID` карточки)
+
+### Удалить шаблон задания [DELETE]
+
+#### Описание
+Допустимо только для шаблона типов `Поручение` и `Длительное поручение`
+
++ Request (application/vnd.api+json)
+
++ Response 204
+
+
+## Изменение типа шаблона задания [/task_cards/templates/{id}/change_kind/{new_kind}]
+
+### Изменить тип [PATCH]
+
+- `id` ( **String**, *required* )
+Уникальный ID задания (`InstanceID` карточки)
+- `new_kind` ( **String**, *required* )
+Тип шаблона, на который следует поменять текущее задание. 
+Может быть двух видов: `commission`, 'regular_commission'
+
+
+
++ Response 200 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes (TaskCardAfterTemplateCreate)
+
+
+## Отправка шаблона в работу  [/task_cards/templates/{id}/start]
 
 ### Отправить [PATCH]
 
@@ -858,6 +893,28 @@ ID группы
     + Headers
 
     + Attributes (TaskCardWithActions)
+
+## Сохранить задание  [/task_cards/{id}/save]
+На данный момент используется только для карточки вида `Длительное поручение`
+
+- `id` ( **String**, *required* )
+Уникальный ID задания (`InstanceID` карточки)
+- `report` ( **String** )
+Отчет, который следует занести в историю исполнения длительного поручения. Если не задан - проигнорируется.
+- `percent_completed` ( **String** )
+Процент завершения длительного поручения. Если не задан - проигнорируется.
+
+
+### Сохранить [PATCH]
+
++ Request (application/vnd.api+json)
+
++ Response 200 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes (TaskCardRegularCommissionWithActions)
+
 
 ## Дерево заданий [/task_cards/{id}/task_tree]
 - `id` ( **String**, *required* )
