@@ -12,6 +12,11 @@ HOST: http://localhost:3000/
 Подробнее:
 https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 
+
+Ссылки по формату документации API:
+Проблемы API документации:
+https://github.com/apiaryio/api-blueprint/issues/58
+
 ## Data Structures
 
 ## AllowedOperationIdentifier
@@ -182,7 +187,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
     + end_date_actual: `2016-10-21T00:00:00.000Z` (string, required)
     + unread: true (boolean) - не прочитано текущим пользователем
     + controlled: true (boolean) - на контроле
-    + added_to_favorites_at: `2016-10-21T00:00:00.000Z` (string, required)
+    + added_to_favorites_at: `2016-10-21T00:00:00.000Z` (string, required) - дата добавления в избранное
 + relationships (TaskCardListRelationships)
 
 ## TaskCardListRelationships
@@ -209,6 +214,44 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + end_date_actual: `2016-10-21T00:00:00.000Z` (string, required)
 + end_date: `2016-10-21T00:00:00.000Z` (string, required)
 + shared: false (boolean) - Распределено или нет
++ unread: true (boolean) - Статус прочтенности
++ added_to_favorites_at: `2016-10-21T00:00:00.000Z` (string, required) - дата добавления в избранное
+
+## TaskCardRegularCommissionShowAttributes (TaskCardShowAttributes)
++ number: `ДП-74` (string) - Номер
++ comment: `` (string) - Примечание
++ percent_completed: `0` (string) - Процент исполнения
++ report: `` (string) - Последний отчет
++ description: `Длительное поручение №ДП-74 от 12.12.2016` (string, required) - Название карточки
++ state_default_name: `Initialization` (string, required) - Состояние карточки
++ card_kind_name: `Длительное поручение` (string) - Тип карточки
+
+## TaskCardTemplateAttributes
++ description: `Задание на исполнение Поручение от 09.09.2016` (string, required)
++ content: `-` (string, required) - Содержание
++ card_kind_name: `Тип карточки` (string)
++ card_kind_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string)
++ state_default_name: `Initialization` (string, required) - Состояние карточки
++ start_date: `2016-10-21T00:00:00.000Z` (string, required)
++ collaborators_task: true (boolean)
++ end_date_actual: `2016-10-21T00:00:00.000Z` (string, required)
++ end_date: `2016-10-21T00:00:00.000Z` (string, required)
++ shared: false (boolean) - Распределено или нет
+
+## TaskCardCommissionTemplateAttributes (TaskCardTemplateAttributes)
++ description: `Поручение от 12.12.2016` (string, required) - Название карточки
++ card_kind_name: `Поручение` (string) - Тип карточки
++ controlled: false (boolean) - На контроле
+
+## TaskCardRegularCommissionTemplateAttributes (TaskCardTemplateAttributes)
++ number: `ДП-74` (string) - Номер
++ comment: `` (string) - Примечание
++ description: `Длительное поручение №ДП-74 от 12.12.2016` (string, required) - Название карточки
++ card_kind_name: `Длительное поручение` (string) - Тип карточки
+
+
+
+
 
 ## TaskCardShowRelationships
 + author (EmployeeIdentifier)
@@ -238,11 +281,11 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 + type: task_card_cycles (string, required)
 + attributes
-    + Number: 1 (string, required)
-    + Executer: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
-    + Date: `2007-01-01 000000 UTC` (string, required)
-    + Decision: `Текст - название состояния`
-    + Comment: `Комментарий - отчет`
+    + number: 1 (string, required)
+    + executer: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+    + date: `2007-01-01 000000 UTC` (string, required)
+    + decision: `Текст - название состояния`
+    + comment: `Комментарий - отчет`
 + relationships
     + executer
         + data (EmployeeIdentifierAttributes)
@@ -390,11 +433,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + data (object)
     + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
     + type: 'task_cards' (string, required)
-    + attributes (TaskCardShowAttributes)
-        + number: `ДП-74` (string) - Номер
-        + comment: `regular commission comment` (string) - Примечание
-        + percent_completed: `74` (string) - Процент исполнения
-        + report: `last report` (string) - Последний отчет
+    + attributes (TaskCardRegularCommissionShowAttributes)
     + relationships (TaskCardShowRelationships)
 + included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardCommentWithAuthor, TaskCardCommentWithAuthor, AllowedOperation, AllowedOperation])
 
@@ -412,7 +451,7 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
 + data (object)
     + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
     + type: 'task_cards' (string, required)
-    + attributes (TaskCardShowAttributes)
+    + attributes (TaskCardCommissionTemplateAttributes)
     + relationships 
         + author 
             - data (object, optional, nullable)
@@ -426,6 +465,26 @@ https://braintent.gitbooks.io/goznak-docs/content/controllers.html
             + data (array[])
         + acquaintances 
             + data (array[])
+
+## TaskCardAfterRegularCommissionTemplateCreate
++ data (object)
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+    + type: 'task_cards' (string, required)
+    + attributes (TaskCardRegularCommissionTemplateAttributes)
+    + relationships 
+        + author 
+            - data (object, optional, nullable)
+        + controller 
+            - data (object, optional, nullable)
+        + cycles 
+            + data (array[])
+        + performers 
+            + data (array[])
+        + co_performers 
+            + data (array[])
+        + acquaintances 
+            + data (array[])
+
 
 # Group Пользователи
 
@@ -702,22 +761,25 @@ ID группы
 Определяет вид листа, который нужно получить.
 
 На данный момент доступны следующие листы (В таблице после параметра и описания указаны условия соответсвия листу): 
-| Параметр            | Описание             | Тип задания   | Распределено | В состоянии                               | Сотрудник, один из: |
-| -                   | -                    | -             | -   | -                                                  | - |
-| mine                | Выданные мной        | на исполнение | -   | 'Started', 'In work', 'Not accepted', 'Acceptance' | А |
-| todo                | Мне сделать          | исп, рассм    | нет | 'Started', 'In work', 'Not accepted', 'Acceptance' | И, С, К, О  |
-| commissions_perform | Исполнение поручений | на исполнение | нет | 'Started', 'In work'                               | И, С |
-| commissions_rework  | Доработка поручений  | на исполнение | нет | 'Not accepted'                                     | И, С |
-| commissions_check   | Контроль поручений   | на исполнение | нет | 'Acceptance'                                       | К |
-| informing           | Ознакомление         | на ознакомл.  | нет | 'Started', 'In work'                               | И, С |
-| shared              | Распределены         | исп, рассм    | да  | 'Started', 'In work'                               | И, С |
-| completed           | Завершены            | все           | нет | 'Completed'                                        | И, С, К, О, А |
-| consideration       | Рассмотрение         | на рассмотр.  | нет | 'Started'                                          | И, С |
-| approval            | Согласование         | cогласование  | нет | 'Started'                                          | И, С |
-| signing             | Подписание           | подписание    | нет | 'Started'                                          | И, С |
-| docs_rework         | Доработка документов | доработка     | нет | 'Started'                                          | И, С |
+| Параметр            | Описание             | Тип задания         | Распределено | В состоянии                               | Сотрудник, один из: |
+| -                   | -                    | -                   | -   | -                                                  | - |
+| mine                | Выданные мной        | исп, длительные     | -   | 'Started', 'In work', 'Not accepted', 'Acceptance' | А |
+| todo                | Мне сделать          | исп, рассм, длительные | нет | 'Started', 'In work', 'Not accepted', 'Acceptance' | И, С, К, О  |
+| commissions_perform | Исполнение поручений | на исполнение       | нет | 'Started', 'In work'                               | И, С |
+| commissions_rework  | Доработка поручений  | на исполнение       | нет | 'Not accepted'                                     | И, С |
+| commissions_check   | Контроль поручений   | на исполнение       | нет | 'Acceptance'                                       | К |
+| informing           | Ознакомление         | на ознакомл.        | нет | 'Started', 'In work'                               | И, С |
+| shared              | Распределены         | исп, рассм          | да  | 'Started', 'In work'                               | И, С |
+| completed           | Завершены            | кроме `Поручение`   | нет | 'Completed'                                        | И, С, К, О, А |
+| consideration       | Рассмотрение         | на рассмотр.        | нет | 'Started'                                          | И, С |
+| approval            | Согласование         | cогласование        | нет | 'Started'                                          | И, С |
+| signing             | Подписание           | подписание          | нет | 'Started'                                          | И, С |
+| docs_rework         | Доработка документов | доработка           | нет | 'Started'                                          | И, С |
+| regular_commissions | Длительные поручения | длит. поруч.        | -   | 'Started', 'In work'                               | И, С |
 
 Все листы сортируются по **дате создания карточки**, кроме completed в нём - по **дате завершения**
+
+**ВАЖНО** У длительных поручений нет атрибута `controlled`, но взамен есть `number`, `percent_completed`, `comment`, `report`
 
 Сокращения названий роли сотрудника, применяемые в таблице:
 | Обозначение | Расшифровка |
@@ -860,21 +922,30 @@ ID группы
 
 ## Изменение типа шаблона задания [/task_cards/templates/{id}/change_kind/{new_kind}]
 
-### Изменить тип [PATCH]
-
 - `id` ( **String**, *required* )
 Уникальный ID задания (`InstanceID` карточки)
 - `new_kind` ( **String**, *required* )
 Тип шаблона, на который следует поменять текущее задание. 
 Может быть двух видов: `commission`, 'regular_commission'
+Данный пример ответа предусмотрен для типа `commission`
 
-
+### Установить шаблону тип `Поручение` [PATCH /task_cards/templates/{id}/change_kind/commission]
 
 + Response 200 (application/vnd.api+json)
 
     + Headers
 
     + Attributes (TaskCardAfterTemplateCreate)
+
+### Установить шаблону тип `Длительное поручение` [PATCH /task_cards/templates/{id}/change_kind/regular_commission]
+
+
++ Response 200 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes (TaskCardAfterRegularCommissionTemplateCreate)
+
 
 
 ## Отправка шаблона в работу  [/task_cards/templates/{id}/start]
