@@ -171,23 +171,41 @@ https://github.com/apiaryio/api-blueprint/issues/58
         + type: 'task_cards' (string, required)
 
 
+## TaskCardListAttributes
++ description: `Задание на исполнение Поручение от 09.09.2016` (string, required)
++ content: `Тест заполненности полей` (string, required)
++ card_kind_name: `Тип карточки` (string)
++ card_kind_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string)
++ state_default_name: `Started` (string, required)
++ start_date: `2016-10-21T00:00:00.000Z` (string, required)
++ collaborators_task: true (boolean)
++ end_date: `2016-10-21T00:00:00.000Z` (string, required)
++ shared: false (boolean) - Распределено или нет
++ end_date_actual: `2016-10-21T00:00:00.000Z` (string, required)
++ unread: true (boolean) - не прочитано текущим пользователем
++ added_to_favorites_at: `2016-10-21T00:00:00.000Z` (string, required) - дата добавления в избранное
+
 ## TaskCardListData
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 + type: 'task_cards' (string, required)
-+ attributes 
-    + description: `Задание на исполнение Поручение от 09.09.2016` (string, required)
-    + content: `Тест заполненности полей` (string, required)
-    + card_kind_name: `Тип карточки` (string)
-    + card_kind_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string)
-    + state_default_name: `Started` (string, required)
-    + start_date: `2016-10-21T00:00:00.000Z` (string, required)
-    + collaborators_task: true (boolean)
-    + end_date: `2016-10-21T00:00:00.000Z` (string, required)
-    + shared: false (boolean) - Распределено или нет
-    + end_date_actual: `2016-10-21T00:00:00.000Z` (string, required)
-    + unread: true (boolean) - не прочитано текущим пользователем
-    + controlled: true (boolean) - на контроле
-    + added_to_favorites_at: `2016-10-21T00:00:00.000Z` (string, required) - дата добавления в избранное
++ attributes (TaskCardListAttributes)
+    + description: `Поручение от 12.12.2016` (string, required) - Название карточки
+    + card_kind_name: `Поручение` (string) - Тип карточки
+    + controlled: false (boolean) - На контроле
++ relationships (TaskCardListRelationships)
+
+
+## TaskCardRegularCommissionListData
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: 'task_cards' (string, required)
++ attributes (TaskCardListAttributes)
+    + number: `ДП-74` (string) - Номер
+    + comment: `очень важно!` (string) - Примечание
+    + percent_completed: `5` (string) - Процент исполнения
+    + report: `сделал аж 5%` (string) - Последний отчет
+    + description: `Длительное поручение №ДП-74 от 12.12.2016` (string, required) - Название карточки
+    + state_default_name: `In work` (string, required) - Состояние карточки
+    + card_kind_name: `Длительное поручение` (string) - Тип карточки
 + relationships (TaskCardListRelationships)
 
 ## TaskCardListRelationships
@@ -745,7 +763,7 @@ ID группы
 
 + Response 200 (application/vnd.api+json)
     + Attributes
-        + data (array[TaskCardListData, TaskCardListData])
+        + data (array[TaskCardListData, TaskCardListData, TaskCardRegularCommissionListData])
         + included (array[Employee, Employee, Employee] 
 
 
@@ -836,7 +854,7 @@ ID группы
 + Response 200 (application/vnd.api+json)
 
     + Attributes
-        + data (array[TaskCardListData, TaskCardListData])
+        + data (array[TaskCardListData, TaskCardRegularCommissionListData, TaskCardListData])
         + included (array[Employee, Employee, Employee] )
 
 
