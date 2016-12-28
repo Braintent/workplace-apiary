@@ -288,6 +288,8 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + data (array[CardReferenceIdentifier, CardReferenceIdentifier])
 + allowed_operations
     + data (array[AllowedOperationIdentifier, AllowedOperationIdentifier])
++ main_document - ссылка на основной документ задания
+    + data (DocumentCardIdentifier)
 
 
 ## TaskCardCycleIdentifierAttributes
@@ -445,7 +447,7 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + type: 'task_cards' (string, required)
     + attributes (TaskCardShowAttributes)
     + relationships (TaskCardShowRelationships)
-+ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardCommentWithAuthor, TaskCardCommentWithAuthor, AllowedOperation, AllowedOperation])
++ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardCommentWithAuthor, TaskCardCommentWithAuthor, AllowedOperation, AllowedOperation])
 
 ## TaskCardRegularCommissionWithActions
 + data (object)
@@ -453,7 +455,7 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + type: 'task_cards' (string, required)
     + attributes (TaskCardRegularCommissionShowAttributes)
     + relationships (TaskCardShowRelationships)
-+ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardCommentWithAuthor, TaskCardCommentWithAuthor, AllowedOperation, AllowedOperation])
++ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, TaskCardCycle, TaskCardCycle, TaskCardCommentWithAuthor, TaskCardCommentWithAuthor, AllowedOperation, AllowedOperation])
 
 
 ## TaskCardWithActionsDelegation
@@ -462,7 +464,7 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + type: 'task_cards' (string, required)
     + attributes (TaskCardShowAttributes)
     + relationships (TaskCardShowRelationships)
-+ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, CardReferenceLinkDescriptionExample2, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, AllowedOperation, AllowedOperation])
++ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, AllowedOperation, AllowedOperation])
 
 
 ## TaskCardAfterTemplateCreate
@@ -873,7 +875,9 @@ ID группы
 * Список возможных действий над поручением
 * Список доступных прав для текущего пользователя
 * Список комментариев
-* Ход исполнения (?)
+* Ход исполнения
+* Полное описание основного документа. Информация эквивалентна информации при получении документа через отдельный метод
+* Список приложенных файлов и связок (исключая основной документ)
 
 + Request (application/vnd.api+json)
 
@@ -1175,7 +1179,7 @@ ID карточки документа, которую необходимо уд
 | - | - |
 | ВД | отправитель(+кто); повторность (тип дублирования); гриф; контроль(+срок контроля, снятия); тема; содержание; |
 | ИД | куда(+кому) ; тема; содержание;  |
-| СЗ | кто получатель + его подразделение; тема; содержание; контроль(+срок контроля, снятия); |
+| СЗ | срок выполнения; кто получатель + его подразделение; тема; содержание; контроль(+срок контроля, снятия); |
 | Протокол | номер; дата регистрации; тема; тип совещания; содержание |
 | УД | содержание; тип документа (doc_type); номер; дата регистрации |
 | РД | тема; содержание; тип распоряжения (doc_type) |
@@ -1194,7 +1198,7 @@ ID карточки документа, которую необходимо уд
 
 
 
-## Информаия по документу [/document_cards/{id}]
+## Информация по документу [/document_cards/{id}]
 - `id` ( **String**, *required* )
 Уникальный идентификатор документа.
 
@@ -1202,13 +1206,13 @@ ID карточки документа, которую необходимо уд
 
 | Тип документа | Список элементов |
 | - | - |
-| Все | На контроле; Инфа об избранном; Регистратор; Исполнитель(секретарь) = preparator; К-во листов; к-во листов в прил; Подписанты (Signers); Связки (можно сериализовать так же как и в заданиях); Проектный номер(doc_info.ProjectNumber); Комментарии (ход исполнения); Лист согласования; История согласования(? выдавать ли сразу) |
-| ВД | Номер письма (main\_info.ExternalNumber); Дата письма (main\_info.DeliveryDate); Получен (DeliveryType); От (main\_info.DeliveryDdate) Вложенные письма; Журнал передач (TransferLog); Адрес (doc\_info.Address); Вложение (doc_info.Attachment) |
+| Все | Инфа об избранном; Регистратор; Исполнитель(секретарь) = preparator; К-во листов; к-во листов в прил; Подписанты (Signers); Связки (можно сериализовать так же как и в заданиях); Проектный номер(doc_info.ProjectNumber); Комментарии (ход исполнения); Лист согласования; История согласования(? выдавать ли сразу) |
+| ВД | Контроль; Номер письма (main\_info.ExternalNumber); Дата письма (main\_info.DeliveryDate); Получен (DeliveryType); От (main\_info.DeliveryDdate); Журнал передач (TransferLog); Адрес (doc\_info.Address); Вложение (doc_info.Attachment); **Не делается:** Вложенные письма |
 | ИД | Вид отправки (doc\_info.SendingKind); Вложение (doc\_info.Attachment); |
-| СЗ | Копия (AcquaintancePersons.AcquaintanceStaff) |
-| Протокол | Участники (Attendees); Уведомлямые (Receivers); Журнал передач; Повестка и решения |
-| УД | Контроль за исп. (main_info.Controller) | 
-| РД | Секции: Сведения об отмене; Журнал передач; Лист рассылки (Исполнение, Ознакомление); Тип распоряжения/приказа (doc_type) |
+| СЗ | Контроль; Копия (AcquaintancePersons.AcquaintanceStaff) |
+| Протокол |  Журнал передач;  **Не делается:**: Повестка и решения; Участники (Attendees); Уведомлямые (Receivers); |
+| УД | Контроль за исп. (main\_info.Controller) | 
+| РД | Журнал передач; Лист рассылки (Исполнение (MailingListForExecution), Ознакомление (MailingListForTheIntrodution)); Контроль за исп. (main\_info.Controller); Тип распоряжения/приказа (doc_type); **Не делается:** Сведения об отмене |
 
 
 ### Получить [GET]
