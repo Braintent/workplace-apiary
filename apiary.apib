@@ -124,6 +124,18 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + author (EmployeeIdentifier)
      
 
+
+## DocumentCardCommentWithAuthor
++ id:`AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: document_card_comments (string, required)
++ attributes (object)
+    + content: `Текст комментария` (string, required)
+    + creation_date: `Дата создания комментария` (string, required)
++ relationships
+    + author (EmployeeIdentifier)
+     
+
+
 ## TaskCardIdentifier
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
 + type: task_cards (string, required)
@@ -796,6 +808,7 @@ ID группы
 | signing             | Подписание           | подписание          | нет | 'Started', 'In work'                               | И, С |
 | docs_rework         | Доработка документов | доработка           | нет | 'Started', 'In work'                               | И, С |
 | regular_commissions | Длительные поручения | длит. поруч.        | -   | 'Started', 'In work'                               | И, С |
+| mine_regular_commissions | Мои длительные поручения | мои длит. поруч. | -   | 'Started', 'In work'                         | А |
 
 Все листы сортируются по **дате создания карточки**, кроме completed в нём - по **дате завершения**
 
@@ -890,12 +903,17 @@ ID группы
     + Attributes (TaskCardWithActions)
 
 
-## Комментирование [/task_cards/{id}/comments]
+## Комментирование [/task_cards/{id}/comments?{content}]
+
+- `id` ( **String**, *required* )
+Уникальный идентификатор документа.
+- `content` ( **String**, *required* )
+Текст комментария
+
 ### Добавить комментарий [POST]
 
-+ Request (application/vnd.api+json)
 
-    + Attributes (TaskCardCommentCreateParams)
++ Request (application/vnd.api+json)
         
 + Response 201 (application/vnd.api+json)
 
@@ -1224,6 +1242,430 @@ ID карточки документа, которую необходимо уд
     + Headers
 
     + Attributes ()
+
+
+## Комментирование [/document_cards/{id}/comments?{content}]
+
+- `id` ( **String**, *required* )
+Уникальный идентификатор документа.
+- `content` ( **String**, *required* )
+Текст комментария
+
+### Добавить комментарий [POST]
+
+
++ Request (application/vnd.api+json)
+        
++ Response 201 (application/vnd.api+json)
+
+    + Headers
+
+            Access-Token:4yzt0hS8ZPTeZWvCrO5dQQ
+            Client:G24hRw_GOnm-vDSP14VxVw
+            Etag:W/"a0c9026fb660a244f8b76750bc11942d"
+            Expiry:1471867013
+            Token-Type:Bearer
+            Uid:1
+
+    + Attributes
+        + data (DocumentCardCommentWithAuthor)
+        + included (Employee)
+
+
+## Дерево заданий [/document_cards/{id}/task_tree]
+- `id` ( **String**, *required* )
+Уникальный ID задания (`InstanceID` карточки)
+
+### Построить [GET]
+
+### Описание 
+**На данный момент перестало работать!**
+
+
+Информация о задании содержит ограниченный набор атрибутов с двумя связками:
+* Исполнители.
+* Родительское *оперативное* задание `operative_parent_task`. *Оперативным* оно названо потому, что здесь пропущены связки с родительскими заданиями видов `Поручение` и `Длительное поручение`, которые не нужны при отображени дерева. У заданий довольно часто есть родительское задание типа `Поручение` и `Длительное поручение` из которых бизнес-процессы системы выдают *оперативные* задания, например `На исполнение`.
+У корневых заданий `operative_parent_task` отсутствует
+
++ Request (application/vnd.api+json)
+
+
++ Response 200 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes
+        + data (array[TaskCardTreeListData, TaskCardTreeListData])
+        + included (array[Employee, Employee, Employee] )
+
+
+
+## История исполнения [/document_cards/{id}/approval_history]
+- `id` ( **String**, *required* )
+Уникальный ID задания (`InstanceID` карточки)
+
+### Построить [GET]
+
+### Описание 
+Вернет шаги истории согласования, к которым приложены:
+    * Состояние шага согласования
+    * Номер шага
+    * Задания с комментариями, исполнителем, завершившим задание сотрудником
+
+История согласования формируется в приложении на основе данных из нескольких таблиц, по-этому на выходе представлены кастомные имена состояний шагов согласования. Перечень возможных *на данный момент* состояний представлен в таблице:
+
+
+| Состояние | Комментарий |
+| - | - |
+| Не начат | - |
+| В работе | - |
+| Рассмотрен | - |
+| Согласован | - |
+| Не согласован | - |
+| Подписан | - |
+| Не подписан | - |
+| Отклонен | - |
+| Пропущен | - |
+| Неустранимое замечание | - |
+| Доработан | - |
+| На согласовании | - |
+| На подписании | - |
+| Подготовка к отправке | - |
+| Подготовлен к отправке | - |
+| На доработке | - |
+| На регистрации | - |
+| Зарегистрирован | - |
+
+
++ Request (application/vnd.api+json)
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": [
+            {
+              "id": "2BCC8688-0C58-44A0-921B-864D7EB4A54B",
+              "type": "document_cards_approval_steps",
+              "attributes": {
+                "number": 0,
+                "state_name": "Согласован"
+              },
+              "relationships": {
+                "task": {
+                  "data": {
+                    "id": "1529C098-9DCE-E611-BA25-0800279209D4",
+                    "type": "task_cards"
+                  }
+                }
+              }
+            },
+            {
+              "id": "93191ACD-8EA8-4C51-9798-45EEECD9F594",
+              "type": "document_cards_approval_steps",
+              "attributes": {
+                "number": 0,
+                "state_name": "Согласован"
+              },
+              "relationships": {
+                "task": {
+                  "data": {
+                    "id": "D8F57A91-9FCE-E611-BA25-0800279209D4",
+                    "type": "task_cards"
+                  }
+                }
+              }
+            },
+            {
+              "id": "5136EE5C-961D-4D58-93B7-443B5F209190",
+              "type": "document_cards_approval_steps",
+              "attributes": {
+                "number": 0,
+                "state_name": "На согласовании"
+              },
+              "relationships": {
+                "task": {
+                  "data": {
+                    "id": "0E0AE521-A0CE-E611-BA25-0800279209D4",
+                    "type": "task_cards"
+                  }
+                }
+              }
+            }
+          ],
+          "included": [
+            {
+              "id": "1529C098-9DCE-E611-BA25-0800279209D4",
+              "type": "task_cards",
+              "attributes": {
+                "description": "Согласование: Исходящий Новый документ. Тест истории согласования! 3 согласующих. Каждый добавит по файлу (??)",
+                "card_kind_name": "Согласование",
+                "card_kind_id": "7790B5DF-C84D-4812-89B6-394D9925FABA",
+                "state_default_name": "Completed",
+                "change_date_time": "2016-12-30T21:50:01.373Z",
+                "creation_date_time": "2016-12-30T21:38:25.040Z",
+                "state_id": "AC361E0E-DBAA-4B5D-87FE-0A187AD518DD",
+                "state_name": "Завершено",
+                "built_in_state_name": "completed"
+              },
+              "relationships": {
+                "references": {
+                  "data": [
+                    {
+                      "id": "F8F5CCB7-C039-42AD-8452-1F23237FB3A5",
+                      "type": "reference_list_card_references"
+                    }
+                  ]
+                },
+                "performers": {
+                  "data": [
+                    {
+                      "id": "FE6A4BE9-2C74-425D-BFFE-F4E590E8472B",
+                      "type": "employees"
+                    }
+                  ]
+                },
+                "completed_user": {
+                  "data": {
+                    "id": "FE6A4BE9-2C74-425D-BFFE-F4E590E8472B",
+                    "type": "employees"
+                  }
+                },
+                "comments": {
+                  "data": []
+                }
+              }
+            },
+            {
+              "id": "F8F5CCB7-C039-42AD-8452-1F23237FB3A5",
+              "type": "reference_list_card_references",
+              "attributes": {
+                "type_name": "КЗ_ДополненияФайлыОтчет",
+                "type_description": "Дополнительные файлы",
+                "creation_date": "2016-12-30T21:49:58.000Z"
+              },
+              "relationships": {
+                "destination_card": {
+                  "data": {
+                    "id": "37AFCE3A-9FCE-E611-BA25-0800279209D4",
+                    "type": "document_cards"
+                  }
+                }
+              }
+            },
+            {
+              "id": "37AFCE3A-9FCE-E611-BA25-0800279209D4",
+              "type": "document_cards",
+              "attributes": {
+                "description": "tst.txt",
+                "card_kind_name": "Файл",
+                "card_kind_id": "F9A8D158-9884-4765-859D-31C4EFCA149D",
+                "state_default_name": "Создан",
+                "change_date_time": "2016-12-30T21:49:58.087Z",
+                "creation_date_time": "2016-12-30T21:49:57.759Z",
+                "state_id": "E528052C-A932-4295-A5A3-7233520FAAC8",
+                "state_name": "Создан",
+                "built_in_state_name": null,
+                "parent_card_kind_name": "Документ",
+                "parent_card_kind_id": "8ACE1220-A452-455D-8EEB-9EDF9DC6E327",
+                "name": "tst.txt",
+                "content": null,
+                "doc_type": null,
+                "main_versioned_file_card": "2DAFCE3A-9FCE-E611-BA25-0800279209D4"
+              },
+              "relationships": {
+                "versioned_file_cards": {
+                  "data": [
+                    {
+                      "id": "2DAFCE3A-9FCE-E611-BA25-0800279209D4",
+                      "type": "versioned_file_cards"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "2DAFCE3A-9FCE-E611-BA25-0800279209D4",
+              "type": "versioned_file_cards",
+              "attributes": {
+                "description": "tst.txt",
+                "file_name": "tst.txt",
+                "current_version_number": 1,
+                "current_version_file_id": "2FAFCE3A-9FCE-E611-BA25-0800279209D4"
+              }
+            },
+            {
+              "id": "FE6A4BE9-2C74-425D-BFFE-F4E590E8472B",
+              "type": "employees",
+              "attributes": {
+                "first_name": "Назар",
+                "last_name": "Рохмистров",
+                "middle_name": "Олегович",
+                "display_string": "Рохмистров Н. О.",
+                "gender": "male",
+                "has_photo": true
+              }
+            },
+            {
+              "id": "D8F57A91-9FCE-E611-BA25-0800279209D4",
+              "type": "task_cards",
+              "attributes": {
+                "description": "Согласование: Исходящий Новый документ. Тест истории согласования! 3 согласующих. Каждый добавит по файлу (??)",
+                "card_kind_name": "Согласование",
+                "card_kind_id": "7790B5DF-C84D-4812-89B6-394D9925FABA",
+                "state_default_name": "Completed",
+                "change_date_time": "2016-12-30T21:55:58.909Z",
+                "creation_date_time": "2016-12-30T21:52:22.719Z",
+                "state_id": "AC361E0E-DBAA-4B5D-87FE-0A187AD518DD",
+                "state_name": "Завершено",
+                "built_in_state_name": "completed"
+              },
+              "relationships": {
+                "references": {
+                  "data": [
+                    {
+                      "id": "8CD74BDF-6E8D-4EFA-998A-00DDE8287CF6",
+                      "type": "reference_list_card_references"
+                    }
+                  ]
+                },
+                "performers": {
+                  "data": [
+                    {
+                      "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                      "type": "employees"
+                    }
+                  ]
+                },
+                "completed_user": {
+                  "data": {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                },
+                "comments": {
+                  "data": []
+                }
+              }
+            },
+            {
+              "id": "8CD74BDF-6E8D-4EFA-998A-00DDE8287CF6",
+              "type": "reference_list_card_references",
+              "attributes": {
+                "type_name": "КЗ_ДополненияФайлыОтчет",
+                "type_description": "Дополнительные файлы",
+                "creation_date": "2016-12-30T21:55:24.000Z"
+              },
+              "relationships": {
+                "destination_card": {
+                  "data": {
+                    "id": "AA950FFD-9FCE-E611-BA25-0800279209D4",
+                    "type": "document_cards"
+                  }
+                }
+              }
+            },
+            {
+              "id": "AA950FFD-9FCE-E611-BA25-0800279209D4",
+              "type": "document_cards",
+              "attributes": {
+                "description": "tst.txt",
+                "card_kind_name": "Файл",
+                "card_kind_id": "F9A8D158-9884-4765-859D-31C4EFCA149D",
+                "state_default_name": "Создан",
+                "change_date_time": "2016-12-30T21:55:23.573Z",
+                "creation_date_time": "2016-12-30T21:55:23.410Z",
+                "state_id": "E528052C-A932-4295-A5A3-7233520FAAC8",
+                "state_name": "Создан",
+                "built_in_state_name": null,
+                "parent_card_kind_name": "Документ",
+                "parent_card_kind_id": "8ACE1220-A452-455D-8EEB-9EDF9DC6E327",
+                "name": "tst.txt",
+                "content": null,
+                "doc_type": null,
+                "main_versioned_file_card": "A0950FFD-9FCE-E611-BA25-0800279209D4"
+              },
+              "relationships": {
+                "versioned_file_cards": {
+                  "data": [
+                    {
+                      "id": "A0950FFD-9FCE-E611-BA25-0800279209D4",
+                      "type": "versioned_file_cards"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "A0950FFD-9FCE-E611-BA25-0800279209D4",
+              "type": "versioned_file_cards",
+              "attributes": {
+                "description": "tst.txt",
+                "file_name": "tst.txt",
+                "current_version_number": 1,
+                "current_version_file_id": "A2950FFD-9FCE-E611-BA25-0800279209D4"
+              }
+            },
+            {
+              "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+              "type": "employees",
+              "attributes": {
+                "first_name": null,
+                "last_name": "Администратор",
+                "middle_name": null,
+                "display_string": "Администратор",
+                "gender": "male",
+                "has_photo": false
+              }
+            },
+            {
+              "id": "0E0AE521-A0CE-E611-BA25-0800279209D4",
+              "type": "task_cards",
+              "attributes": {
+                "description": "Согласование: Исходящий Новый документ. Тест истории согласования! 3 согласующих. Каждый добавит по файлу (??)",
+                "card_kind_name": "Согласование",
+                "card_kind_id": "7790B5DF-C84D-4812-89B6-394D9925FABA",
+                "state_default_name": "Started",
+                "change_date_time": "2016-12-30T22:00:22.376Z",
+                "creation_date_time": "2016-12-30T21:56:25.007Z",
+                "state_id": "9BF207F2-B08E-42F2-8871-C900BC501294",
+                "state_name": "Не начато",
+                "built_in_state_name": "started"
+              },
+              "relationships": {
+                "references": {
+                  "data": []
+                },
+                "performers": {
+                  "data": [
+                    {
+                      "id": "EDAE212A-0E13-4971-926A-D8FD4C4813BA",
+                      "type": "employees"
+                    }
+                  ]
+                },
+                "completed_user": {
+                  "data": null
+                },
+                "comments": {
+                  "data": []
+                }
+              }
+            },
+            {
+              "id": "EDAE212A-0E13-4971-926A-D8FD4C4813BA",
+              "type": "employees",
+              "attributes": {
+                "first_name": "Иван",
+                "last_name": "Дроботенко",
+                "middle_name": "Николаевич",
+                "display_string": "Дроботенко И. Н.",
+                "gender": "male",
+                "has_photo": false
+              }
+            }
+          ]
+        }
 
 
 
