@@ -85,6 +85,11 @@ https://github.com/apiaryio/api-blueprint/issues/58
 + type: `employees` (string, required)
 + attributes (EmployeeAttributes)
     + position: `должность`
++ relationships
+    + unit  - подразделение
+        + data (DepartmentIdentifier)
+    + company  - компания
+        + data (DepartmentIdentifier)
 
 ## EmployeeShowSerialized (object)
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
@@ -650,7 +655,7 @@ UUID запрашиваемого сотрудника
 + Response 200 (application/vnd.api+json)
     + Attributes
         + data (array[EmployeeSearchSerialized, EmployeeSearchSerialized, GroupSearchSerialized, DepartmentSearchSerialized])
-
+        + included (array[DepartmentInfo, DepartmentInfo])
 
 ## Список замещаемых текущим пользователем [GET /staff/employees/deputized_by_me]
 
@@ -903,7 +908,7 @@ ID группы
     + Attributes (TaskCardWithActions)
 
 
-## Комментирование [/task_cards/{id}/comments?{content}]
+## Комментирование [/task_cards/{id}/comments?content={content}]
 
 - `id` ( **String**, *required* )
 Уникальный идентификатор документа.
@@ -1195,7 +1200,7 @@ ID карточки документа, которую необходимо уд
 
 | Тип документа | Дополнительные объекты из сериализации |
 | - | - |
-| ВД | отправитель(+кто); повторность (тип дублирования); гриф; контроль(+срок контроля, снятия); тема; содержание; |
+| ВД | отправитель(+кто); Номер письма (main\_info.ExternalNumber); повторность (тип дублирования); гриф; контроль(+срок контроля, снятия); тема; содержание; |
 | ИД | куда(+кому) ; тема; содержание;  |
 | СЗ | срок выполнения; кто получатель + его подразделение; тема; содержание; контроль(+срок контроля, снятия); |
 | Протокол | номер; дата регистрации; тема; тип совещания; содержание |
@@ -1244,7 +1249,7 @@ ID карточки документа, которую необходимо уд
     + Attributes ()
 
 
-## Комментирование [/document_cards/{id}/comments?{content}]
+## Комментирование [/document_cards/{id}/comments?content={content}]
 
 - `id` ( **String**, *required* )
 Уникальный идентификатор документа.
