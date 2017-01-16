@@ -1242,12 +1242,311 @@ ID карточки документа, которую необходимо уд
 
 + Request (application/vnd.api+json)
 
-+ Response 201 (application/vnd.api+json)
-
-    + Headers
-
-    + Attributes ()
-
++ Response 200 (application/vnd.api+json)
+    
+        {  
+            "data":{  
+                "id":"52F3934F-989A-E611-9405-000C29D9CFCB",
+                "type":"document_cards",
+                "attributes":{  
+                    "description":"СЗ №",
+                    "card_kind_name":"Служебная записка",
+                    "card_kind_id":"426D03DB-88EA-45A3-AC3E-7BD58F8FED5D",
+                    "state_default_name":"Is registered",
+                    "change_date_time":"2016-10-25T23:55:00.343+07:00",
+                    "creation_date_time":"2016-10-25T23:49:28.556+07:00",
+                    "parent_card_kind_name":"Служебные записки",
+                    "parent_card_kind_id":"9B83DD42-8F74-4B40-B2E3-43E43B60B3F5",
+                    "name":"СЗ №",
+                    "content":"содержание СЗ",
+                    "doc_type":null,
+                    "control_date":null,
+                    "stop_control_date":null,
+                    "deadline":null,
+                    "controlled":false,
+                    "case_name":null,
+                    "number_of_sheets":null,
+                    "number_of_sheets_appendix":null,
+                    "added_to_favorites_at":null,
+                    "project_number":null
+                },
+                "relationships":{  
+                    "receiver_employees":{  
+                        "data":[  
+                            {  
+                                "id":"02826E05-666D-467D-B836-A9E5608D2ABD",
+                                "type":"employees"
+                            }
+                        ]
+                    },
+                    "allowed_operations":{  
+                        "data":[  
+                            {  
+                                "id":"D8E71A36-325D-46F1-98F1-AAC15C913A9D",
+                                "type":"allowed_operations"
+                            },
+                            {  
+                                "id":"CD7DAF38-3604-4614-AADB-6A491881A513",
+                                "type":"allowed_operations"
+                            }
+                        ]
+                    },
+                    "references":{  
+                        "data":[  
+                            {  
+                                "id":"4EE22FC2-F534-4D4A-8A7C-8B43DB3CB519",
+                                "type":"reference_list_card_references"
+                            },
+                            {  
+                                "id":"DE8675C8-828F-480C-8721-D3B1C95782B6",
+                                "type":"reference_list_card_references"
+                            }
+                        ]
+                    },
+                    "files":{  
+                        "data":[  
+                            {  
+                                "id":"128D825B-1099-4C57-B2E4-F1A289F8CC6D",
+                                "type":"document_card_files"
+                            },
+                            {  
+                                "id":"9D22984D-2D59-49BC-ADD9-FAEB1390885E",
+                                "type":"document_card_files"
+                            }
+                        ]
+                    },
+                    "preparator":{  
+                        "data":{  
+                            "id":"02826E05-666D-467D-B836-A9E5608D2ABD",
+                            "type":"employees"
+                        }
+                    },
+                    "registrar":{  
+                        "data":{  
+                            "id":"02826E05-666D-467D-B836-A9E5608D2ABD",
+                            "type":"employees"
+                        }
+                    },
+                    "signers":{  
+                        "data":[  
+                            {  
+                                "id":"BA68DD96-95D6-4B17-9C65-31EB877D96BF",
+                                "type":"employees"
+                            }
+                        ]
+                    },
+                    "comments":{  
+                        "data":[  
+        
+                        ]
+                    },
+                    "approvers":{  
+                        "data":[  
+                            {  
+                                "id":"59C9AD4F-6565-4A47-8DE6-429D412125D0",
+                                "type":"document_card_approvers"
+                            }
+                        ]
+                    },
+                    "copy_recipients":{  
+                        "data":[  
+        
+                        ]
+                    }
+                }
+            },
+            "included":[  
+                {  
+                    "id":"02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type":"employees",
+                    "attributes":{  
+                        "first_name":null,
+                        "last_name":"Администратор",
+                        "middle_name":null,
+                        "display_string":"Администратор, ГОЗНАК (АО)",
+                        "gender":"male",
+                        "has_photo":false
+                    },
+                    "relationships":{  
+                        "unit":{  
+                            "data":null
+                        },
+                        "company":{  
+                            "data":{  
+                                "id":"38166F8F-B87A-4424-A322-3C0DBE4C28ED",
+                                "type":"departments"
+                            }
+                        }
+                    }
+                },
+                {  
+                    "id":"38166F8F-B87A-4424-A322-3C0DBE4C28ED",
+                    "type":"departments",
+                    "attributes":{  
+                        "name":"ГОЗНАК (АО)"
+                    }
+                },
+                {  
+                    "id":"D8E71A36-325D-46F1-98F1-AAC15C913A9D",
+                    "type":"allowed_operations",
+                    "attributes":{  
+                        "name":"Save changes to the current version of main file",
+                        "name_ru":"Сохранение изменений в текущую версию основного файла",
+                        "built_in_operation_name":null
+                    }
+                },
+                {  
+                    "id":"CD7DAF38-3604-4614-AADB-6A491881A513",
+                    "type":"allowed_operations",
+                    "attributes":{  
+                        "name":"Рассмотрена",
+                        "name_ru":null,
+                        "built_in_operation_name":null
+                    }
+                },
+                {  
+                    "id":"4EE22FC2-F534-4D4A-8A7C-8B43DB3CB519",
+                    "type":"reference_list_card_references",
+                    "attributes":{  
+                        "type_name":"КЗ_ДополненияКарточкиВх",
+                        "type_description":"Связанные карточки",
+                        "creation_date":"2016-10-25T23:50:10.000+07:00"
+                    },
+                    "relationships":{  
+                        "destination_card":{  
+                            "data":{  
+                                "id":"41B17F9F-A80B-E611-BE8C-00505626075A",
+                                "type":"document_cards"
+                            }
+                        }
+                    }
+                },
+                {  
+                    "id":"41B17F9F-A80B-E611-BE8C-00505626075A",
+                    "type":"document_cards",
+                    "attributes":{  
+                        "description":"Входящий Вх-125 Тема документа",
+                        "card_kind_name":"Входящий",
+                        "card_kind_id":"C341B0B3-5ED4-4EBE-837F-932A8502921C",
+                        "state_default_name":"Drafting",
+                        "change_date_time":"2016-05-10T23:49:14.370+07:00",
+                        "creation_date_time":"2016-04-27T01:16:04.143+07:00"
+                    }
+                },
+                {  
+                    "id":"DE8675C8-828F-480C-8721-D3B1C95782B6",
+                    "type":"reference_list_card_references",
+                    "attributes":{  
+                        "type_name":"КЗ_ДополненияКарточкиВх",
+                        "type_description":"Связанные карточки",
+                        "creation_date":"2016-12-06T18:57:11.000+07:00"
+                    },
+                    "relationships":{  
+                        "destination_card":{  
+                            "data":{  
+                                "id":"35C6C9DF-5276-E611-9404-000C29D9CFCB",
+                                "type":"document_cards"
+                            }
+                        }
+                    }
+                },
+                {  
+                    "id":"35C6C9DF-5276-E611-9404-000C29D9CFCB",
+                    "type":"document_cards",
+                    "attributes":{  
+                        "description":"Входящий документ Вх-352 прлрчсплр",
+                        "card_kind_name":"Входящий (конфиденциальный)",
+                        "card_kind_id":"8E15B550-5FEE-43CD-A002-76D0229B5428",
+                        "state_default_name":"Is registered",
+                        "change_date_time":"2016-09-09T20:03:43.160+07:00",
+                        "creation_date_time":"2016-09-09T20:01:42.330+07:00"
+                    }
+                },
+                {  
+                    "id":"128D825B-1099-4C57-B2E4-F1A289F8CC6D",
+                    "type":"document_card_files",
+                    "attributes":{  
+                        "file_type":"main"
+                    },
+                    "relationships":{  
+                        "file_card":{  
+                            "data":{  
+                                "id":"38F03066-989A-E611-9405-000C29D9CFCB",
+                                "type":"versioned_file_cards"
+                            }
+                        }
+                    }
+                },
+                {  
+                    "id":"38F03066-989A-E611-9405-000C29D9CFCB",
+                    "type":"versioned_file_cards",
+                    "attributes":{  
+                        "description":"Входящий Итекон от30.03.16.PDF",
+                        "file_name":"Входящий Итекон от30.03.16.PDF",
+                        "current_version_number":1,
+                        "current_version_file_id":"3AF03066-989A-E611-9405-000C29D9CFCB"
+                    }
+                },
+                {  
+                    "id":"9D22984D-2D59-49BC-ADD9-FAEB1390885E",
+                    "type":"document_card_files",
+                    "attributes":{  
+                        "file_type":"additional"
+                    },
+                    "relationships":{  
+                        "file_card":{  
+                            "data":{  
+                                "id":"F1F71E15-999A-E611-9405-000C29D9CFCB",
+                                "type":"versioned_file_cards"
+                            }
+                        }
+                    }
+                },
+                {  
+                    "id":"F1F71E15-999A-E611-9405-000C29D9CFCB",
+                    "type":"versioned_file_cards",
+                    "attributes":{  
+                        "description":"Лист согласования.htm",
+                        "file_name":"Лист согласования.htm",
+                        "current_version_number":1,
+                        "current_version_file_id":"EDF71E15-999A-E611-9405-000C29D9CFCB"
+                    }
+                },
+                {  
+                    "id":"BA68DD96-95D6-4B17-9C65-31EB877D96BF",
+                    "type":"employees",
+                    "attributes":{  
+                        "first_name":"Василий",
+                        "last_name":"Котов",
+                        "middle_name":"Васильевич",
+                        "display_string":"Котов В. В.",
+                        "gender":"male",
+                        "has_photo":false
+                    }
+                },
+                {  
+                    "id":"59C9AD4F-6565-4A47-8DE6-429D412125D0",
+                    "type":"document_card_approvers",
+                    "attributes":{  
+                        "date_begin":"2016-10-25T23:50:28.000+07:00",
+                        "date_end":"2016-10-25T23:50:59.000+07:00",
+                        "number":1,
+                        "order":1,
+                        "route_type":"step_by_step",
+                        "state":"approved",
+                        "comment":""
+                    },
+                    "relationships":{  
+                        "employee":{  
+                            "data":{  
+                                "id":"02826E05-666D-467D-B836-A9E5608D2ABD",
+                                "type":"employees"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
 
 ## Комментирование [/document_cards/{id}/comments?content={content}]
 
