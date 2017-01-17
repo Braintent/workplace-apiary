@@ -633,9 +633,6 @@ UUID запрашиваемого сотрудника
 ## Редактирование информации о сотруднике [PATCH /staff/employees/]
 Метод позволяет изменить некоторые атрибуты текущего сотрудника
 
-- `id` ( **String**, *required* )
-UUID запрашиваемого сотрудника 
-
 Доступные для редактирования параметры:
 
 | Имя параметра | Комментарий |
@@ -654,6 +651,21 @@ UUID запрашиваемого сотрудника
         + data (EmployeeShowSerialized)
         + included (array[DepartmentInfo, DepartmentInfo])
 
+## Добавление фотографии [POST /staff/employees/photo]
+Метод позволяет добавить фотографию пользователя.
+В случае удачи вернется статус 201 с пустым ответом
+
++ Request (multipart/form-data; boundary=---BOUNDARY)
+
+    + Headers 
+
+            Accept: application/vnd.api+json
+
++ Response 201 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes
 
 
 ## Поиск по справочнику сотрудников [GET /staff/search?filter={filter}&page={page}]
