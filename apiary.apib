@@ -1266,7 +1266,7 @@ ID карточки документа, которую необходимо уд
 
 | Тип документа | Список элементов |
 | - | - |
-| Все | Инфа об избранном; Регистратор; Исполнитель(секретарь) = preparator; К-во листов; к-во листов в прил; Подписанты (Signers); Связки (можно сериализовать так же как и в заданиях); Проектный номер(doc_info.ProjectNumber); Комментарии (ход исполнения); Лист согласования; История согласования(? выдавать ли сразу) |
+| Все | Инфа об избранном; Дата регистрации; Регистратор; Исполнитель(секретарь) = preparator; К-во листов; к-во листов в прил; Подписанты (Signers); Файлы; Связки (можно сериализовать так же как и в заданиях); Комментарии (ход исполнения); Лист согласования; История согласования(? выдавать ли сразу) |
 | ВД | Контроль; Номер письма (main\_info.ExternalNumber); Дата письма (main\_info.DeliveryDate); Получен (DeliveryType); От (main\_info.DeliveryDdate); Журнал передач (TransferLog); Адрес (doc\_info.Address); Вложение (doc_info.Attachment); **Не делается:** Вложенные письма |
 | ИД | Вид отправки (doc\_info.SendingKind); Вложение (doc\_info.Attachment); |
 | СЗ | Контроль; Копия (AcquaintancePersons.AcquaintanceStaff) |
@@ -1305,7 +1305,9 @@ ID карточки документа, которую необходимо уд
                     "number_of_sheets":null,
                     "number_of_sheets_appendix":null,
                     "added_to_favorites_at":null,
-                    "project_number":null
+                    "project_number":null,
+                    "registration_number":null,
+                    "registration_date":null
                 },
                 "relationships":{  
                     "receiver_employees":{  
