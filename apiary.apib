@@ -1141,6 +1141,52 @@ ID группы
     + Attributes (TaskCardWithActionsDelegation)
 
 
+## Переназначение задания [/task_cards/{id}/reassign_template]
+- `id` ( **String**, *required* )
+Уникальный ID задания (`InstanceID` карточки)
+
+### Получить шаблон переназначения задания [POST]
+
+Метод создаст шаблон задания, которое является результатом переназначения указанного задания.
+См. раздел ['Действие `Переназначить`'](https://braintent.gitbooks.io/goznak-docs/content/task_card__kind_assignment.html)
+
+Вернется шаблон с заполненными данными из текущего задания вида `Поручение`. Если текущее задание имеет другой вид (например - `На исполнение`) - берется информация из родительской задачи вида `Поручение`.
+Список данных: 
+
+* Все сотрудники (исполнители, соисполнители, контролер и др.)
+* Содержание, срок исполнения.
+* Все ссылки на связки и файлы.
+* Системные: preset'ы и др.
+
++ Request (application/vnd.api+json)
+
++ Response 201 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes (TaskCardWithActionsDelegation)
+
+### Запустить шаблон переназначения в работу [PATCH /task_cards/{id}/reassign_template/{template_id}/start]
+- `id` ( **String**, *required* )
+ID задания, которое будет переназначено (изменено) (`InstanceID` карточки)
+- `template_id` ( **String**, *required* )
+ID шаблона переназначения задания, полученного методом `Получить шаблон переназначения задания`
+
+Данный метод, подобно обычному запуску шаблона поручения, запустит шаблон в работу и, в дополнение, выполнит обработку, связанную с переназначением (отзыв переназначеного задания и др.)
+
+
+
++ Request (application/vnd.api+json)
+
+    + Attributes (TaskCardPerformParams)
+
++ Response 200 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes (TaskCardWithActions)
+
+
 ## Файл задания [/task_cards/{id}/files]
 - `id` ( **String**, *required* )
 Уникальный ID задания (`InstanceID` карточки)
