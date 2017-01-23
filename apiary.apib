@@ -1135,10 +1135,25 @@ ID группы
 - `report` ( **String** )
 Текст отчета о выполнении, если требуется.
 
+В случае успешного действия вернется пустой ответ со статусом 204. Исключение - случай, 
+когда есть родительское задание, имеющее статус 'Приёмка'. 
+В таком случае вернется хеш с метаданными, содержащими ID родительского задания, а код HTTP статуса будет 200.
+
 ### Вызов действия DV [PATCH]
 + Request (application/json)
 
 + Response 204 (application/json)
+
++ Request В случае, когда есть родительское задание в статусе 'Приёмка' (application/json)
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "parent_task": "959A074E-50E1-E611-A47A-0800279209D4"
+            }
+        }
+
 
 ## Распределение задания [/task_cards/{id}/delegation_template]
 - `id` ( **String**, *required* )
@@ -1159,7 +1174,6 @@ ID группы
     + Headers
 
     + Attributes (TaskCardWithActionsDelegation)
-
 
 ## Переназначение задания [/task_cards/{id}/reassign_template]
 - `id` ( **String**, *required* )
@@ -1250,7 +1264,7 @@ ID задания (`InstanceID` карточки)
 - `card_id` ( **String**, *required* )
 ID карточки, на которую необходимо создать ссылку (`InstanceID` карточки)
 
-В список связок документа будет добавлена ссылка на указанную карточку
+В список связок задания будет добавлена ссылка на указанную карточку
 
 + Request (application/vnd.api+json)
 
