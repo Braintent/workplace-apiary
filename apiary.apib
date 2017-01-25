@@ -650,6 +650,23 @@ UUID запрашиваемого сотрудника
         + data (EmployeeShowSerialized)
         + included (array[DepartmentInfo, DepartmentInfo])
 
+## Информация о сотрудниках [GET /staff/employees/?employees%5B%5D={employees}]
+- `employees` ( **Array**, *required* )
+массов UUID искомых сотрудников
+
+Вернет развернутую информацию о сотрудниках, UUID которых указаны в списке `employees`
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer <ACCESS_TOKEN>
+
++ Response 200 (application/vnd.api+json)
+    + Attributes
+        + data (array[EmployeeShowSerialized, EmployeeShowSerialized])
+        + included (array[DepartmentInfo, DepartmentInfo])
+
 ## Редактирование информации о сотруднике [PATCH /staff/employees/]
 Метод позволяет изменить некоторые атрибуты текущего сотрудника
 
@@ -909,6 +926,7 @@ ID группы
 - `performers` ( **Array** )
 
 Участники задания (Исполнители). Параметр позволяет отфильтровать задания, у которых исполнитель содержится в указанном списке ID.
+Фильтр не будет иметь смысла в списках, где при выборке текущий пользователь должен быть исполнителем задания.
 
 **Содержание ответа**
 
