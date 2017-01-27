@@ -451,6 +451,9 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + card_kind_name: `Тип карточки` (string)
     + card_kind_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string)
     + state_default_name: `In work` (string, required)
+    + parent_card_kind_name: `Исходящие документы`
+    + parent_card_kind_id: `B324E740-94CB-40D1-BF6B-28B83DC127C9`
+    + name: `Тема исходящая корреспонденция`
 
 
 ## CardReferenceLinkDescriptionExample1 (CardReferenceIdentifier)
@@ -501,7 +504,16 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + type: 'task_cards' (string, required)
     + attributes (TaskCardShowAttributes)
     + relationships (TaskCardShowRelationships)
++ included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, AllowedOperation, AllowedOperation])
+
+## TaskCardWithActionsReassign
++ data (object)
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+    + type: 'task_cards' (string, required)
+    + attributes (TaskCardShowAttributes)
+    + relationships (TaskCardShowRelationships)
 + included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, AllowedOperation, AllowedOperation])
+
 
 
 ## TaskCardAfterTemplateCreate
@@ -1169,7 +1181,7 @@ ID группы
 - `action_name` ( **String** )
 Имя действия. Требуется дополнительно для некоторых действий с заданиями вида `Расширенное согласование`. См. ниже.
 
-**Пояснения по `action_name`**
+**Пояснения по `action_name`. НА ДАННЫЙ МОМЕНТ ЭТО НЕ РАЗВЕНУТО**
 
 Для некоторых действий над заданием вида `Расширенное согласование` (Подписание, согласование и др..) требуется дополнительный параметр `action_name`
 
@@ -1251,7 +1263,7 @@ ID группы
 
     + Headers
 
-    + Attributes (TaskCardWithActionsDelegation)
+    + Attributes (TaskCardWithActionsReassign)
 
 ### Запустить шаблон переназначения в работу [PATCH /task_cards/{id}/reassign_template/{template_id}/start]
 - `id` ( **String**, *required* )
