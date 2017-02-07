@@ -497,25 +497,42 @@ https://github.com/apiaryio/api-blueprint/issues/58
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
 + type: `reference_list_card_references`
 
-## CardReferenceLinkCreateDescription (CardReferenceIdentifier)
-+ attributes
-  + type_description: `Дополнительные файлы` (string)
-  + type_name: `КЗ ДополненияФайлыОтчет` (string)
-  + creation_date: `2007-01-01 000000 UTC`
-+ relationships
-    + destination_card
-      + data (DocumentCardIdentifier)
+## CardReferenceLinkCreateDescription
++ data
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+    + type: `reference_list_card_references`
+    + attributes
+      + type_description: `Дополнительные файлы` (string)
+      + type_name: `КЗ ДополненияФайлыОтчет` (string)
+      + creation_date: `2007-01-01 000000 UTC`
+    + relationships
+        + destination_card
+          + data (DocumentCardIdentifier)
 + included (array[DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo]) 
 
-## DocumentCardReferenceLinkCreateDescription (CardReferenceIdentifier)
-+ attributes
-  + type_description: `Связанные карточки` (string)
-  + type_name: `КЗ ДополненияКарточкиВх` (string)
-  + creation_date: `2017-01-20T11:17:24.143Z`
-+ relationships
-    + destination_card
-      + data (DocumentCardIdentifier)
+## DocumentCardReferenceLinkCreateDescription
++ data
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
+    + type: `reference_list_card_references`
+    + attributes
+      + type_description: `Связанные карточки` (string)
+      + type_name: `КЗ ДополненияКарточкиВх` (string)
+      + creation_date: `2017-01-20T11:17:24.143Z`
+    + relationships
+        + destination_card
+            + data (DocumentCardIdentifier)
 + included (array[DocumentCardReferenceRelationInfo]) 
+
+## DocumentFileReferenceCreateDescription
++ data
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
+    + type: `document_card_files`
+    + attributes
+      + file_type: `mine` (string)
+    + relationships
+        + file_card
+          + data (VersionedFileCardIdentifier)
++ included (array[VersionedCardRelationInfo]) 
 
 ## DocumentCardReferenceRelationInfo
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
@@ -531,6 +548,8 @@ https://github.com/apiaryio/api-blueprint/issues/58
 
 
 ## CardReferenceLinkDescriptionExample1 (CardReferenceIdentifier)
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: `reference_list_card_references`
 + attributes
   + type_name: `КЗ_ДополненияФайлыОтчет` (string)
   + type_description: `Дополнительные файлы` (string)
@@ -541,6 +560,8 @@ https://github.com/apiaryio/api-blueprint/issues/58
 
 
 ## CardReferenceLinkDescriptionExample2 (CardReferenceIdentifier)
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: `reference_list_card_references`
 + attributes
   + type_name: `КЗ_Основной документ` (string)
   + type_description: `Основной документ` (string)
@@ -1388,8 +1409,7 @@ ID шаблона переназначения задания, полученн�
 
     + Headers
 
-    + Attributes 
-        + data (CardReferenceLinkCreateDescription)
+    + Attributes (CardReferenceLinkCreateDescription)
 
 
 ## Связки, ссылки на документы [/task_cards/{id}/references]
@@ -1413,8 +1433,7 @@ ID карточки, на которую необходимо создать с�
 
     + Headers
 
-    + Attributes 
-        + data (DocumentCardReferenceLinkCreateDescription)
+    + Attributes (DocumentCardReferenceLinkCreateDescription)
 
 ### Удаление связки, ссылки на документ или файла [DELETE /task_cards/{id}/references/{reference_id}]
 - `id` ( **String**, *required* )
@@ -1423,24 +1442,9 @@ ID задания (`InstanceID` карточки)
 - `reference_id` ( **String**, *required* )
 ID связки, которую нужно удалить (`InstanceID` карточки)
 
-Файлы задания - это карточки документа с типом `Файл`, которые привязаны через список ссылок карточки заданий ссылкой определнного типа.
-
-Добавление могло бы происходить в два шага: 
-
-1. Создание документа типа `Файл`
-2. Добавление определенного типа ссылки на новый документ.
-
-Однако, в этом случае, пользователь сможет заливать ни к чему не привязанные файлы, 
-по этой причине добавление файла и создание ссылки сделано в едином  методе. 
-
-Файл, на данный момент, заливается способом `multipart/form-data`
-Ответ приходит в форме JSON API.
-
-+ Request (multipart/form-data; boundary=---BOUNDARY)
++ Request (application/vnd.api+json)
 
     + Headers 
-
-            Accept: application/vnd.api+json
 
 + Response 204 (application/vnd.api+json)
 
@@ -3638,6 +3642,83 @@ UUID проекта документа, представленного к уда
         }
 
 
+## Добаление и удаление файлов [/document_cards/{id}/files]
+- `id` ( **String**, *required* )
+ID документа (`InstanceID` карточки)
+
+Файлы документа - это экземляры секции `DocumentCard::File` документа (секция ссылается на карточку файла `VersionedFileCard`).
+
+Файл, на данный момент, заливается способом `multipart/form-data`
+Ответ приходит в формате JSON API.
+
+### Добавление [POST]
++ Request (multipart/form-data; boundary=---BOUNDARY)
+
+    + Headers 
+
+            Accept: application/vnd.api+json
+
++ Response 201 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes (DocumentFileReferenceCreateDescription)
+
+### Удаление основного файла [DELETE /document_cards/{id}/files/{file_id}]
+- `id` ( **String**, *required* )
+ID документа (`InstanceID` карточки)
+
+- `file_id` ( **String**, *required* )
+ID ссылки на файл документа (секции `DocumentCard::File`), которую нужно удалить
+
++ Request (application/vnd.api+json)
+
+    + Headers 
+
++ Response 204 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes 
+
+
+## Связки [/document_cards/{id}/references]
+### Добавление [POST /document_cards/{id}/references?card_id={card_id}]
+
+- `id` ( **String**, *required* )
+ID документа (`InstanceID` карточки)
+
+- `card_id` ( **String**, *required* )
+ID карточки, на которую необходимо создать ссылку (`InstanceID` карточки)
+
+В список связок документа будет добавлена ссылка на указанную карточку
+
++ Request (application/vnd.api+json)
+
+    + Headers 
+
++ Response 201 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes (DocumentCardReferenceLinkCreateDescription)
+
+### Удаление связки [DELETE /document_cards/{id}/references/{reference_id}]
+- `id` ( **String**, *required* )
+ID документа (`InstanceID` карточки)
+
+- `reference_id` ( **String**, *required* )
+ID связки, которую нужно удалить (`InstanceID` карточки)
+
++ Request (application/vnd.api+json)
+
+    + Headers 
+
++ Response 204 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes 
 
 # Group Карточки файла с версиями
 
