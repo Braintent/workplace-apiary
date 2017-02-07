@@ -408,6 +408,48 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + file_cards 
         + data (array[VersionedFileCardIdentifier])
 
+## DocumentCardCreatedDraftTemplate
++ id: `CE6712F6-2DED-E611-8EAB-0800279209D4`
++ type: `document_cards`
++ attributes
+    + description: `Исходящий`
+    + card_kind_name: `Исходящий документ`
+    + card_kind_id: `0EEBB19D-C9F0-430E-A24A-84E93A669D77`
+    + state_default_name: `Drafting`
+    + change_date_time: `2017-02-07T19:07:15.000Z`
+    + creation_date_time: `2017-02-07T19:07:15.000Z`
+    + parent_card_kind_name: `Исходящие документы`
+    + parent_card_kind_id: `B324E740-94CB-40D1-BF6B-28B83DC127C9`
+    + name (string, nullable)
+    + content (string, nullable)
+    + case_name (string, nullable)
+    + number_of_sheets (string, nullable)
+    + number_of_sheets_appendix (string, nullable)
+    + added_to_favorites_at (string, nullable)
+    + project_number: `247`
+    + registration_number (string, nullable)
+    + registration_date (string, nullable)
+    + sending_type: `Самостоятельно` 
+    + attachment (string, nullable)
++ relationships
+    + recipients
+        + data (array[])
+    + allowed_operations
+        + data (array[])
+    + references
+        + data (array[])
+    + files
+        + data (array[])
+    + preparator
+        + data: null
+    + registrar (EmployeeIdentifier)
+    + signers
+        + data (array[])
+    + comments
+        + data (array[])
+    + approvers
+        + data (array[])
+
 
 ## VersionedFileCardIdentifier
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
@@ -1376,6 +1418,211 @@ ID связки, которую нужно удалить (`InstanceID` карт
 
 
 # Group Документы
+
+## Доступные шаблоны [/document_cards/available_templates]
+Вернет перечисление шаблонов документов, доступных для создания
+
+Ответ содержит папки `document_templates_folder`, разделяющие документы по типам. 
+Каждая папка содержит ярлыки, ссылающиеся на ID шаблона. 
+Кроме ID шаблона ярлык может содержать дополнительную информацию.
+
+Например: Для ИД прикрепляется `SendingKind` (Вид отправки), с которым будет создан документ.
+
+### Получить [GET]
+
++ Request (application/vnd.api+json)
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": [
+            {
+              "id": "A16B6ACF-A10C-48D2-935E-CE01D47D2095",
+              "type": "document_templates_folder",
+              "attributes": {
+                "name": "Служебные записки"
+              },
+              "relationships": {
+                "shortcuts": {
+                  "data": [
+                    {
+                      "id": "5524480C-1AEE-4AB9-B0D5-55F9CBF9F29B",
+                      "type": "document_template_shortcuts"
+                    },
+                    {
+                      "id": "4021EB3E-0B43-4912-BA97-4498CD194AD4",
+                      "type": "document_template_shortcuts"
+                    },
+                    {
+                      "id": "C9B0B831-0CD7-4E00-B606-428AA66E20CE",
+                      "type": "document_template_shortcuts"
+                    },
+                    {
+                      "id": "9ABF294E-A103-49C1-8E37-E1302F675695",
+                      "type": "document_template_shortcuts"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "FFBC9805-4295-454F-803D-08A181B27BD5",
+              "type": "document_templates_folder",
+              "attributes": {
+                "name": "Исходящая корреспонденция"
+              },
+              "relationships": {
+                "shortcuts": {
+                  "data": [
+                    {
+                      "id": "5B7FE3CD-509B-4BD0-9BD6-21CEEC1E5546",
+                      "type": "document_template_shortcuts"
+                    },
+                    {
+                      "id": "D9F80707-D967-4401-9D5D-1B9FC00C0122",
+                      "type": "document_template_shortcuts"
+                    },
+                    {
+                      "id": "3D59B062-2211-4BC8-BFC2-3CDE00A579DC",
+                      "type": "document_template_shortcuts"
+                    },
+                    {
+                      "id": "ECD278E2-9DBB-4578-A1D4-5AF65CBFBDA5",
+                      "type": "document_template_shortcuts"
+                    },
+                    {
+                      "id": "D590BD6C-A0CA-42A5-8ADD-C957E8EE7586",
+                      "type": "document_template_shortcuts"
+                    },
+                    {
+                      "id": "132E2669-4F97-45D5-B9E3-797CCA5E18BD",
+                      "type": "document_template_shortcuts"
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "included": [
+            {
+              "id": "5524480C-1AEE-4AB9-B0D5-55F9CBF9F29B",
+              "type": "document_template_shortcuts",
+              "attributes": {
+                "template_id": "B8D5603F-A86D-E611-9404-000C29D9CFCB",
+                "card_kind": "Служебная записка"
+              }
+            },
+            {
+              "id": "4021EB3E-0B43-4912-BA97-4498CD194AD4",
+              "type": "document_template_shortcuts",
+              "attributes": {
+                "template_id": "285D4A78-A875-E611-9404-000C29D9CFCB",
+                "card_kind": "Служебная записка (конфиденциальная)"
+              }
+            },
+            {
+              "id": "C9B0B831-0CD7-4E00-B606-428AA66E20CE",
+              "type": "document_template_shortcuts",
+              "attributes": {
+                "template_id": "1A29768B-A875-E611-9404-000C29D9CFCB",
+                "card_kind": "Служебная записка (с согласованием, подписанием и ручной регистрацией)"
+              }
+            },
+            {
+              "id": "9ABF294E-A103-49C1-8E37-E1302F675695",
+              "type": "document_template_shortcuts",
+              "attributes": {
+                "template_id": "CAFAC397-A875-E611-9404-000C29D9CFCB",
+                "card_kind": "Служебная записка (только регистрация)"
+              }
+            },
+            {
+              "id": "5B7FE3CD-509B-4BD0-9BD6-21CEEC1E5546",
+              "type": "document_template_shortcuts",
+              "attributes": {
+                "template_id": "DF3A7492-2E39-E611-BE8C-00505626075A",
+                "card_kind": "Исходящий документ (только регистрация)",
+                "sending_kind": "Централизованно"
+              }
+            },
+            {
+              "id": "D9F80707-D967-4401-9D5D-1B9FC00C0122",
+              "type": "document_template_shortcuts",
+              "attributes": {
+                "template_id": "81A76E99-3068-E611-9404-000C29D9CFCB",
+                "card_kind": "Исходящий документ (конфиденциальный)",
+                "sending_kind": "Самостоятельно"
+              }
+            },
+            {
+              "id": "3D59B062-2211-4BC8-BFC2-3CDE00A579DC",
+              "type": "document_template_shortcuts",
+              "attributes": {
+                "template_id": "8DA70796-9F6A-E611-9404-000C29D9CFCB",
+                "card_kind": "Исходящий документ",
+                "sending_kind": "Самостоятельно"
+              }
+            },
+            {
+              "id": "ECD278E2-9DBB-4578-A1D4-5AF65CBFBDA5",
+              "type": "document_template_shortcuts",
+              "attributes": {
+                "template_id": "7E7862B2-C8DE-E611-9407-000C29D9CFCB",
+                "card_kind": "Исходящий документ (конфиденциальный)",
+                "sending_kind": "Централизованно"
+              }
+            },
+            {
+              "id": "D590BD6C-A0CA-42A5-8ADD-C957E8EE7586",
+              "type": "document_template_shortcuts",
+              "attributes": {
+                "template_id": "19837379-44E1-E611-9407-000C29D9CFCB",
+                "card_kind": "Исходящий документ (только регистрация)",
+                "sending_kind": "Самостоятельно"
+              }
+            },
+            {
+              "id": "132E2669-4F97-45D5-B9E3-797CCA5E18BD",
+              "type": "document_template_shortcuts",
+              "attributes": {
+                "template_id": "22837379-44E1-E611-9407-000C29D9CFCB",
+                "card_kind": "Исходящий документ",
+                "sending_kind": "Централизованно"
+              }
+            }
+          ]
+        }
+
+## Создание документа по шаблону [/document_cards/drafts?template_id={template_id}]
+- `template_id` ( **String**, *required* )
+UUID шаблона, по которому требуется создать документ
+
+Метод создаст документ по указанному шаблону и вернет основную информацию.
+Созданный документ будет иметь статус `Проект` и получит проектный номер.
+
+Ответ будет сериализован так же, как и при просмотре (`show`) документа, однако к шаблону не будут присылаться зависимости (included)
+
+### Создать [POST]
++ Request (application/vnd.api+json)
+
++ Response 201 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes (DocumentCardCreatedDraftTemplate)
+
+## Удаление шаблона документа [/document_cards/drafts/{draft_id}]
+- `draft_id` ( **String**, *required* )
+UUID проекта документа, представленного к удалению
+
+Удаление проекта документа. Если документ имеет состояние, отличное от `Drafting` - вернется ошибка
+
+### Удалить [DELETE]
+
++ Request (application/vnd.api+json)
+
++ Response 204
+
 
 ## Поиск по документам [/document_cards/search?text={text}&kinds%5B%5D={kinds}&states%5B%5D={states}&limit={limit}&offset={offset}&controlled={controlled}&creation_date_from={creation_date_from}&creation_date_to={creation_date_to}&receiver%5B%5D={receivers}&signer%5B%5D={signers}&approver%5B%5D={approvers}&performer%5B%5D={performers}&partner%5B%5D={partners}]
 
