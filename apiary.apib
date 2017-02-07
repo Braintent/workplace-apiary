@@ -441,7 +441,7 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + files
         + data (array[])
     + preparator
-        + data: null
+        + data (object)
     + registrar (EmployeeIdentifier)
     + signers
         + data (array[])
@@ -449,6 +449,38 @@ https://github.com/apiaryio/api-blueprint/issues/58
         + data (array[])
     + approvers
         + data (array[])
+
+
+## DocumentCardSaveParamsBody
++ id: `CE6712F6-2DED-E611-8EAB-0800279209D4`
++ type: `document_cards`
++ attributes
+    + name (string, nullable)
+    + content (string, nullable)
+    + number_of_sheets (string, nullable)
+    + number_of_sheets_appendix (string, nullable)
+    + attachment (string, nullable)
++ relationships
+    + preparator
+        + data (object)
+    + case
+        + data (object)
+    + signers
+        + data (array[])
+    + approvers - только когда есть согласование
+        + data (array[])
+    + receiver_employees - только для СЗ
+        + data (array[])
+    + copy_recipients - только для СЗ
+        + data (array[])
+    + recipients
+        + data (array[]) - только для ИД
+    + order_type - для РД вида Приказ
+        + data (object)
+    + direction_type - для РД вида Распоряжение
+        + data (object)
+    + guidline_type - для РД вида Указание
+        + data (object)
 
 
 ## VersionedFileCardIdentifier
@@ -1611,7 +1643,7 @@ UUID шаблона, по которому требуется создать д�
 
     + Attributes (DocumentCardCreatedDraftTemplate)
 
-## Удаление шаблона документа [/document_cards/drafts/{draft_id}]
+## Удаление проекта документа [/document_cards/drafts/{draft_id}]
 - `draft_id` ( **String**, *required* )
 UUID проекта документа, представленного к удалению
 
@@ -1623,6 +1655,1162 @@ UUID проекта документа, представленного к уда
 
 + Response 204
 
+
+
+## Сохранение документа [/document_cards/{id}/save]
+
+Сохранение данных документа. Принимает атрибуты и данные зависимостей в теле запроса по стандарту JSONAPI.
+
+При описании сложных зависимостей ([compound documents](http://jsonapi.org/format/#document-compound-documents)) из `relationships` необходимо присылать сгенерированный UUID, по которому будет найден элемент того же типа из `included`. К примеру, это касается согласующих (тип `document_card_approvers`)
+
+Перечень доступных для сохранения обязательных и дополнительных данных можно посмотреть по ссылке [Создание карточек типа `Документ`](https://braintent.gitbooks.io/goznak-docs/content/dokument_card/sozdanie-dokumentov.html) в абзаце *Заполнение данных. Сохранение документа.*
+
+
+#### Замечания
+* Важно, что связки (`references`) и файлы (`files`) присылать в теле нельзя, а нужно прикреплять/удалять отдельными методами. Данный метод их не обработает.
+* При каждом сохранении необходимо присылать полный перечень зависимостей (согласующие, получатели, подписанты и др.) т.к. в БД, зависимости, присылаемые в `relationships` создаются по принятым данным, заменяя существующие. Т.е. **данные из БД будут перезаписаны**. 
+* У контрагента из списка получателей (`document_card_recipients`) атрибуты `address`, `email_recipient`, `fax_recipient`, `email_organization` и  `fax_organization` не являются обязательными. В случае их отсутсвия они будут заполнены автоматически из данных огранизации-контрагента
+
+#### Примеры запросов
+Для удобства приведено несколько примеров запросов и ответов: один общий и несколько для конкретных типов заданий
+
+### Сохранить [PATCH]
+
++ Request (application/vnd.api+json)
+    + Attributes (DocumentCardSaveParamsBody)
+
++ Response 201 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes (DocumentCardCreatedDraftTemplate)
+
+### Сохранить СЗ [PATCH /document_cards/{id}/save?dummy_apiary_param=СЗ]
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "id": "F847E5D3-96E8-E611-BFB2-0800279209D4",
+            "type": "document_cards",
+            "attributes": {
+              "name": "СЗ намба ван",
+              "content": "содержание СЗ s sayta",
+              "deadline": "2018-10-25T16:52:57.050Z"
+            },
+            "relationships": {
+              "receiver_employees": {
+                "data": [
+                  {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                ]
+              },
+              "case": {
+                "data": {
+                  "id": "D2672D78-102C-43A7-8C00-925CF846AB89",
+                  "type": "cases"
+                }
+              },
+              "signers": {
+                "data": [
+                  {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                ]
+              },
+              "preparator": {
+                "data": {
+                  "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                  "type": "employees"
+                }
+              },
+              "copy_recipients": {
+                "data": [
+                  {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                ]
+              }
+            }
+          }
+
+        }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "id": "F847E5D3-96E8-E611-BFB2-0800279209D4",
+            "type": "document_cards",
+            "attributes": {
+              "description": "СЗ № намба ван",
+              "card_kind_name": "Служебная записка",
+              "card_kind_id": "426D03DB-88EA-45A3-AC3E-7BD58F8FED5D",
+              "state_default_name": "Drafting",
+              "change_date_time": "2017-02-07T20:49:01.699Z",
+              "creation_date_time": "2017-02-01T22:55:19.163Z",
+              "state_id": "58E2D5C0-EA34-4FC3-881F-E168BE3851A7",
+              "state_name": "Проект",
+              "built_in_state_name": null,
+              "parent_card_kind_name": "Служебные записки",
+              "parent_card_kind_id": "9B83DD42-8F74-4B40-B2E3-43E43B60B3F5",
+              "name": "СЗ № намба ван",
+              "content": "содержание СЗ s sayta",
+              "control_date": null,
+              "stop_control_date": null,
+              "deadline": "2018-10-25T16:52:57.050Z",
+              "controlled": false,
+              "case_name": null,
+              "number_of_sheets": null,
+              "number_of_sheets_appendix": null,
+              "added_to_favorites_at": null,
+              "project_number": "14",
+              "registration_number": "СЗ-147",
+              "registration_date": null
+            },
+            "relationships": {
+              "receiver_employees": {
+                "data": [
+                  {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                ]
+              }
+              "references": {
+                "data": []
+              },
+              "files": {
+                "data": []
+              },
+              "preparator": {
+                "data": {
+                  "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                  "type": "employees"
+                }
+              },
+              "registrar": {
+                "data": null
+              },
+              "signers": {
+                "data": [
+                  {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                ]
+              },
+              "comments": {
+                "data": []
+              },
+              "approvers": {
+                "data": []
+              },
+              "copy_recipients": {
+                "data": [
+                  {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                ]
+              }
+            }
+          },
+          "included": [
+            {
+              "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+              "type": "employees",
+              "attributes": {
+                "first_name": null,
+                "last_name": "Администратор",
+                "middle_name": null,
+                "display_string": "Администратор, ГОЗНАК (АО)",
+                "gender": "male",
+                "has_photo": true
+              },
+              "relationships": {
+                "unit": {
+                  "data": null
+                },
+                "company": {
+                  "data": {
+                    "id": "38166F8F-B87A-4424-A322-3C0DBE4C28ED",
+                    "type": "departments"
+                  }
+                }
+              }
+            },
+            {
+              "id": "38166F8F-B87A-4424-A322-3C0DBE4C28ED",
+              "type": "departments",
+              "attributes": {
+                "name": "ГОЗНАК (АО)"
+              }
+            }
+          ]
+        }
+
+### Сохранить ИД [PATCH /document_cards/{id}/save?dummy_apiary_param=ИД]
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "id": "CFB142DE-05E7-E611-BFB2-0800279209D4",
+            "type": "document_cards",
+            "attributes": {
+              "name": "демо делегирования",
+              "content": "демо делегированиядемо делегирования",
+              "number_of_sheets": "1",
+              "number_of_sheets_appendix": "12"
+            },
+            "relationships": {
+              "case": {
+                "data": {
+                  "id": "D2672D78-102C-43A7-8C00-925CF846AB89",
+                  "type": "cases"
+                }
+              },
+              "preparator": {
+                "data": {
+                  "id": "A623F423-F061-491C-942A-2062A6A36F23",
+                  "type": "employees"
+                }
+              },
+              "recipients": {
+                "data": [
+                  {
+                    "id": "1E922FEA-8671-461C-B067-0C2CB274C79A",
+                    "type": "document_card_recipients"
+                  },
+                  {
+                    "id": "1E922FEA-8671-461C-B067-0C2CB274C79B",
+                    "type": "document_card_recipients"
+                  }
+                ]
+              },
+              "signers": {
+                "data": [
+                  {
+                    "id": "97AF0536-09A0-4F13-9079-4E9FF30C2148",
+                    "type": "employees"
+                  }
+                ]
+              },
+              "approvers": {
+                "data": [
+                  {
+                    "id": "B107B4A6-DBD5-49A5-A1D4-D5136E5B08BA",
+                    "type": "document_card_approvers"
+                  }
+                ]
+              }
+            }
+          },
+          "included": [
+            {
+              "id": "B107B4A6-DBD5-49A5-A1D4-D5136E5B08BA",
+              "type": "document_card_approvers",
+              "attributes": {
+                "number": 1,
+                "order": 2,
+                "route_type": "parallel"
+              },
+              "relationships": {
+                "employee": {
+                  "data": {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "1E922FEA-8671-461C-B067-0C2CB274C79A",
+              "type": "document_card_recipients",
+              "attributes": {
+                "address": "123, Новосибирск, Иванова,3, Руссия",
+                "email_recipient": "SH",
+                "fax_recipient": "AA",
+                "email_organization": "123@mail.ru",
+                "fax_organization": "333-333-333"
+              },
+              "relationships": {
+                "sending_type": {
+                  "data": {
+                    "id": "026940CF-D3B1-4C4A-BDF2-E3FF18DC6623",
+                    "type": "outcoming_doc_sending_kinds"
+                  }
+                },
+                "organization": {
+                  "data": {
+                    "id": "9E7B525A-14D3-43BF-8265-2E9E4BC7CE5F",
+                    "type": "partners_dir_companies"
+                  }
+                },
+                "recipient": {
+                  "data": {
+                    "id": "9492EEFA-67CC-40F6-87C6-1C952D81186E",
+                    "type": "partners_dir_employees"
+                  }
+                }
+              }
+            },
+                {
+              "id": "1E922FEA-8671-461C-B067-0C2CB274C79B",
+              "type": "document_card_recipients",
+              "attributes": {
+              },
+              "relationships": {
+                "sending_type": {
+                  "data": {
+                    "id": "026940CF-D3B1-4C4A-BDF2-E3FF18DC6623",
+                    "type": "outcoming_doc_sending_kinds"
+                  }
+                },
+                "organization": {
+                  "data": {
+                    "id": "DE874E38-3E74-4019-A54A-B41E82D57ECA",
+                    "type": "partners_dir_companies"
+                  }
+                },
+                "recipient": {
+                  "data": {
+                    "id": "85867F8C-BDF0-42B8-8590-E0CD2AACE2B3",
+                    "type": "partners_dir_employees"
+                  }
+                }
+              }
+            }
+          ]
+        }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "id": "CFB142DE-05E7-E611-BFB2-0800279209D4",
+            "type": "document_cards",
+            "attributes": {
+              "description": "Исходящий: демо делегирования",
+              "card_kind_name": "Исходящий документ",
+              "card_kind_id": "0EEBB19D-C9F0-430E-A24A-84E93A669D77",
+              "state_default_name": "Drafting",
+              "change_date_time": "2017-02-07T20:50:49.196Z",
+              "creation_date_time": "2017-01-30T23:05:08.127Z",
+              "state_id": "51EC6BB2-F191-45F8-B2AB-457B9F5EBE24",
+              "state_name": "Проект",
+              "built_in_state_name": null,
+              "parent_card_kind_name": "Исходящие документы",
+              "parent_card_kind_id": "B324E740-94CB-40D1-BF6B-28B83DC127C9",
+              "name": "демо делегирования",
+              "content": "демо делегированиядемо делегирования",
+              "case_name": null,
+              "number_of_sheets": 1,
+              "number_of_sheets_appendix": 12,
+              "added_to_favorites_at": null,
+              "project_number": "239",
+              "registration_number": "Исх-101",
+              "registration_date": null,
+              "sending_type": null,
+              "attachment": null
+            },
+            "relationships": {
+              "recipients": {
+                "data": [
+                  {
+                    "id": "1E922FEA-8671-461C-B067-0C2CB274C79A",
+                    "type": "document_card_recipients"
+                  },
+                  {
+                    "id": "1E922FEA-8671-461C-B067-0C2CB274C79B",
+                    "type": "document_card_recipients"
+                  }
+                ]
+              },
+              "references": {
+                "data": [
+                  {
+                    "id": "94782E50-4F90-4BF5-8494-F9CDC4B1F663",
+                    "type": "reference_list_card_references"
+                  }
+                ]
+              },
+              "files": {
+                "data": []
+              },
+              "preparator": {
+                "data": {
+                  "id": "A623F423-F061-491C-942A-2062A6A36F23",
+                  "type": "employees"
+                }
+              },
+              "registrar": {
+                "data": null
+              },
+              "signers": {
+                "data": [
+                  {
+                    "id": "97AF0536-09A0-4F13-9079-4E9FF30C2148",
+                    "type": "employees"
+                  }
+                ]
+              },
+              "comments": {
+                "data": []
+              },
+              "approvers": {
+                "data": [
+                  {
+                    "id": "B107B4A6-DBD5-49A5-A1D4-D5136E5B08BA",
+                    "type": "document_card_approvers"
+                  }
+                ]
+              }
+            }
+          },
+          "included": [
+            {
+              "id": "1E922FEA-8671-461C-B067-0C2CB274C79A",
+              "type": "document_card_recipients",
+              "attributes": {
+                "address": "123, Новосибирск, Иванова,3, Руссия",
+                "email_recipient": "SH",
+                "fax_recipient": "AA",
+                "email_organization": "123@mail.ru",
+                "fax_organization": "333-333-333",
+                "sending_type_name": "Письмо"
+              },
+              "relationships": {
+                "organization": {
+                  "data": {
+                    "id": "9E7B525A-14D3-43BF-8265-2E9E4BC7CE5F",
+                    "type": "partners_dir_companies"
+                  }
+                },
+                "recipient": {
+                  "data": {
+                    "id": "9492EEFA-67CC-40F6-87C6-1C952D81186E",
+                    "type": "partners_dir_employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "9E7B525A-14D3-43BF-8265-2E9E4BC7CE5F",
+              "type": "partners_dir_companies",
+              "attributes": {
+                "name": "Восток (ЗАО)",
+                "full_name": "Закрытое акционерное общество \"Восток\""
+              }
+            },
+            {
+              "id": "9492EEFA-67CC-40F6-87C6-1C952D81186E",
+              "type": "partners_dir_employees",
+              "attributes": {
+                "first_name": "Сергей",
+                "last_name": "Мамаев",
+                "middle_name": "Андреевич",
+                "display_string": "Мамаев Сергей Андреевич"
+              },
+              "relationships": {
+                "position": {
+                  "data": {
+                    "id": "342F9108-54CA-437B-8C13-D4EBBDBF3A76",
+                    "type": "partners_dir_positions"
+                  }
+                }
+              }
+            },
+            {
+              "id": "342F9108-54CA-437B-8C13-D4EBBDBF3A76",
+              "type": "partners_dir_positions",
+              "attributes": {
+                "name": "Генеральный директор"
+              }
+            },
+            {
+              "id": "1E922FEA-8671-461C-B067-0C2CB274C79B",
+              "type": "document_card_recipients",
+              "attributes": {
+                "address": "П111345, Москва, ул. Новая, д.9, Руссия",
+                "email_recipient": "cmirnof@mail.ru",
+                "fax_recipient": "(495) 345-45-67",
+                "email_organization": "info@itkon.ru",
+                "fax_organization": "(495) 345-45-43",
+                "sending_type_name": "Письмо"
+              },
+              "relationships": {
+                "organization": {
+                  "data": {
+                    "id": "DE874E38-3E74-4019-A54A-B41E82D57ECA",
+                    "type": "partners_dir_companies"
+                  }
+                },
+                "recipient": {
+                  "data": {
+                    "id": "85867F8C-BDF0-42B8-8590-E0CD2AACE2B3",
+                    "type": "partners_dir_employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "DE874E38-3E74-4019-A54A-B41E82D57ECA",
+              "type": "partners_dir_companies",
+              "attributes": {
+                "name": "Итокон (ООО)",
+                "full_name": "Общество с ограниченной ответственностью \"Итекон\""
+              }
+            },
+            {
+              "id": "85867F8C-BDF0-42B8-8590-E0CD2AACE2B3",
+              "type": "partners_dir_employees",
+              "attributes": {
+                "first_name": "Александр",
+                "last_name": "Смирнов",
+                "middle_name": "Иванович",
+                "display_string": "Смирнов Александр Иванович"
+              },
+              "relationships": {
+                "position": {
+                  "data": {
+                    "id": "342F9108-54CA-437B-8C13-D4EBBDBF3A76",
+                    "type": "partners_dir_positions"
+                  }
+                }
+              }
+            },
+            {
+              "id": "94782E50-4F90-4BF5-8494-F9CDC4B1F663",
+              "type": "reference_list_card_references",
+              "attributes": {
+                "type_name": "КЗ_ДополненияКарточкиВх",
+                "type_description": "Связанные карточки",
+                "creation_date": "2017-02-03T14:12:05.649Z"
+              },
+              "relationships": {
+                "destination_card": {
+                  "data": {
+                    "id": "8105A10F-3BD3-4CDE-BF58-F7C29FA7AB6F",
+                    "type": "task_cards"
+                  }
+                }
+              }
+            },
+            {
+              "id": "8105A10F-3BD3-4CDE-BF58-F7C29FA7AB6F",
+              "type": "task_cards",
+              "attributes": {
+                "description": "Поручение от 03.02.2017",
+                "card_kind_name": "Поручение",
+                "card_kind_id": "866625C0-89D0-4A5F-863C-1DB770958D99",
+                "state_default_name": "Started",
+                "change_date_time": "2017-02-03T21:17:08.483Z",
+                "creation_date_time": "2017-02-03T21:10:38.343Z",
+                "state_id": "83AD6A8D-786C-4645-9082-83EBCD25057F",
+                "state_name": "Исполняется",
+                "built_in_state_name": "started"
+              }
+            },
+            {
+              "id": "A623F423-F061-491C-942A-2062A6A36F23",
+              "type": "employees",
+              "attributes": {
+                "first_name": "Петр",
+                "last_name": "Петров",
+                "middle_name": "Сергеевич",
+                "display_string": "Петров П. С., ГОЗНАК (АО)",
+                "gender": "male",
+                "has_photo": false
+              }
+            },
+            {
+              "id": "B107B4A6-DBD5-49A5-A1D4-D5136E5B08BA",
+              "type": "document_card_approvers",
+              "attributes": {
+                "date_begin": null,
+                "date_end": null,
+                "number": 1,
+                "order": 1,
+                "route_type": "parallel",
+                "state": null,
+                "comment": null
+              },
+              "relationships": {
+                "employee": {
+                  "data": {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+              "type": "employees",
+              "attributes": {
+                "first_name": null,
+                "last_name": "Администратор",
+                "middle_name": null,
+                "display_string": "Администратор, ГОЗНАК (АО)",
+                "gender": "male",
+                "has_photo": true
+              }
+            }
+          ]
+        }
+
+### Сохранить РД - Указание [PATCH /document_cards/{id}/save?dummy_apiary_param=РД]
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "id": "2CD9ECBC-6AE9-E611-BFB2-0800279209D4",
+            "type": "document_cards",
+            "attributes": {
+              "name": "Тест списков исполнения и ознакомления РД из списка РД",
+              "content": "Очень большое содержание РД вида указание: Тест списков исполнения и ознакомления РД из списка РД; Тест списков исполнения и ознакомления РД из списка РД; Тест списков исполнения и ознакомления РД из списка РД",
+              "number_of_sheets": 12,
+              "number_of_sheets_appendix": 12
+            },
+            "relationships": {
+              "preparator": {
+                "data": {
+                  "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                  "type": "employees"
+                }
+              },
+              "signers": {
+                "data": [
+                  {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                ]
+              },
+              "guidline_type": {
+                "data": {
+                  "id": "D918A8EB-9EF0-4CFC-AB5A-EEA7383CE9ED",
+                  "type": "guidline_document_types"
+                }
+              },
+              "approvers": {
+                "data": [
+                  {
+                    "id": "843363B5-1363-4759-B798-81E8B153CEAA",
+                    "type": "document_card_approvers"
+                  },
+                  {
+                    "id": "3A5D0171-1092-40D2-A215-FDACA217C8AA",
+                    "type": "document_card_approvers"
+                  }
+                ]
+              },
+              "controller": {
+                "data": {
+                  "id": "97AF0536-09A0-4F13-9079-4E9FF30C2148",
+                  "type": "employees"
+                }
+              },
+              "perform_list": {
+                "data": [
+                  {
+                    "id": "B3CD29BC-75C1-48F6-B1DB-15A339AC45AA",
+                    "type": "document_card_perform_list_item"
+                  },
+                  {
+                    "id": "E06748E0-FCAD-4E5D-B32C-F7B8657C24AA",
+                    "type": "document_card_perform_list_item"
+                  }
+                ]
+              },
+              "inform_list": {
+                "data": [
+                  {
+                    "id": "F2F544A3-D3F5-4488-BA24-32E537507DAA",
+                    "type": "document_card_inform_list_item"
+                  },
+                  {
+                    "id": "277FC910-3BD9-4AF8-A895-DDC3DDE7CCAA",
+                    "type": "document_card_inform_list_item"
+                  }
+                ]
+              }
+            }
+          },
+          "included": [
+            {
+              "id": "843363B5-1363-4759-B798-81E8B153CEAA",
+              "type": "document_card_approvers",
+              "attributes": {
+                "number": 1,
+                "route_type": "parallel"
+              },
+              "relationships": {
+                "employee": {
+                  "data": {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "3A5D0171-1092-40D2-A215-FDACA217C8AA",
+              "type": "document_card_approvers",
+              "attributes": {
+                "number": 2,
+                "route_type": "parallel"
+              },
+              "relationships": {
+                "employee": {
+                  "data": {
+                    "id": "EDAE212A-0E13-4971-926A-D8FD4C4813BA",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "B3CD29BC-75C1-48F6-B1DB-15A339AC45AA",
+              "type": "document_card_perform_list_item",
+              "attributes": {
+                "content": "Тестирование задания из листа исполнения 1",
+                "deadline": "2017-03-02T00:00:00.000Z"
+              },
+              "relationships": {
+                "performer": {
+                  "data": {
+                    "id": "EDAE212A-0E13-4971-926A-D8FD4C4813BA",
+                    "type": "employees"
+                  }
+                },
+                "controller": {
+                  "data": {
+                    "id": "A623F423-F061-491C-942A-2062A6A36F23",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "E06748E0-FCAD-4E5D-B32C-F7B8657C24AA",
+              "type": "document_card_perform_list_item",
+              "attributes": {
+                "content": "Тест на исп из списка РД 2",
+                "deadline": "2017-03-03T00:00:00.000Z"
+              },
+              "relationships": {
+                "performer": {
+                  "data": {
+                    "id": "FE6A4BE9-2C74-425D-BFFE-F4E590E8472B",
+                    "type": "employees"
+                  }
+                },
+                "controller": {
+                  "data": {
+                    "id": "292D7064-CF03-46C7-8F3D-6E51DBFFA4E8",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "F2F544A3-D3F5-4488-BA24-32E537507DAA",
+              "type": "document_card_inform_list_item",
+              "attributes": {
+                "content": "Тест на ознакомление из списка РД"
+              },
+              "relationships": {
+                "performer": {
+                  "data": {
+                    "id": "DB1CB64D-48CB-4846-9D3A-3ACFE28175B6",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "277FC910-3BD9-4AF8-A895-DDC3DDE7CCAA",
+              "type": "document_card_inform_list_item",
+              "attributes": {
+                "content": "Тест на ознакомление из списка РД"
+              },
+              "relationships": {
+                "performer": {
+                  "data": {
+                    "id": "EDAE212A-0E13-4971-926A-D8FD4C4813BA",
+                    "type": "employees"
+                  }
+                }
+              }
+            }
+          ]
+        }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "id": "2CD9ECBC-6AE9-E611-BFB2-0800279209D4",
+            "type": "document_cards",
+            "attributes": {
+              "description": "Распорядительный документ: Тест списков исполнения и ознакомления РД из списка РД",
+              "card_kind_name": "Указание",
+              "card_kind_id": "F92AD18C-9166-4110-924E-2362816E1018",
+              "state_default_name": "Drafting",
+              "change_date_time": "2017-02-07T20:55:10.113Z",
+              "creation_date_time": "2017-02-03T00:12:13.823Z",
+              "state_id": "8C761F7E-A8F1-47F8-9DD7-E275A12F4309",
+              "state_name": "Проект",
+              "built_in_state_name": null,
+              "parent_card_kind_name": "Распорядительные документы",
+              "parent_card_kind_id": "39AE8E8E-E010-41D0-8987-9DD1B6351ABE",
+              "name": "Тест списков исполнения и ознакомления РД из списка РД",
+              "content": "Очень большое содержание РД вида указание: Тест списков исполнения и ознакомления РД из списка РД; Тест списков исполнения и ознакомления РД из списка РД; Тест списков исполнения и ознакомления РД из списка РД",
+              "doc_type": "Основная деятельность",
+              "case_name": null,
+              "number_of_sheets": 12,
+              "number_of_sheets_appendix": 12,
+              "added_to_favorites_at": null,
+              "project_number": "80",
+              "registration_number": null,
+              "registration_date": null
+            },
+            "relationships": {
+              "references": {
+                "data": []
+              },
+              "files": {
+                "data": [
+                  {
+                    "id": "E6404C8F-89B5-458D-A941-2DBE516D2170",
+                    "type": "document_card_files"
+                  },
+                  {
+                    "id": "724E93B5-BEF6-4CDD-A234-F7255C8322BF",
+                    "type": "document_card_files"
+                  }
+                ]
+              },
+              "preparator": {
+                "data": {
+                  "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                  "type": "employees"
+                }
+              },
+              "registrar": {
+                "data": {
+                  "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                  "type": "employees"
+                }
+              },
+              "signers": {
+                "data": [
+                  {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                ]
+              },
+              "comments": {
+                "data": []
+              },
+              "approvers": {
+                "data": [
+                  {
+                    "id": "843363B5-1363-4759-B798-81E8B153CEAA",
+                    "type": "document_card_approvers"
+                  },
+                  {
+                    "id": "3A5D0171-1092-40D2-A215-FDACA217C8AA",
+                    "type": "document_card_approvers"
+                  }
+                ]
+              },
+              "transfers": {
+                "data": []
+              },
+              "controller": {
+                "data": null
+              },
+              "perform_list": {
+                "data": [
+                  {
+                    "id": "B3CD29BC-75C1-48F6-B1DB-15A339AC45AA",
+                    "type": "document_card_perform_list_item"
+                  },
+                  {
+                    "id": "E06748E0-FCAD-4E5D-B32C-F7B8657C24AA",
+                    "type": "document_card_perform_list_item"
+                  }
+                ]
+              },
+              "inform_list": {
+                "data": [
+                  {
+                    "id": "F2F544A3-D3F5-4488-BA24-32E537507DAA",
+                    "type": "document_card_inform_list_item"
+                  },
+                  {
+                    "id": "277FC910-3BD9-4AF8-A895-DDC3DDE7CCAA",
+                    "type": "document_card_inform_list_item"
+                  }
+                ]
+              }
+            }
+          },
+          "included": [
+            {
+              "id": "E6404C8F-89B5-458D-A941-2DBE516D2170",
+              "type": "document_card_files",
+              "attributes": {
+                "file_type": "main"
+              },
+              "relationships": {
+                "file_card": {
+                  "data": {
+                    "id": "2298F56D-AE98-4A14-ACDC-931726354711",
+                    "type": "versioned_file_cards"
+                  }
+                }
+              }
+            },
+            {
+              "id": "2298F56D-AE98-4A14-ACDC-931726354711",
+              "type": "versioned_file_cards",
+              "attributes": {
+                "description": "Снимок экрана от 2016-08-01 14-03-55.png",
+                "file_name": "Снимок экрана от 2016-08-01 14-03-55.png",
+                "current_version_number": 1,
+                "current_version_file_id": "FA6F5125-9C2D-4B4C-9DC2-27F333ECDF25"
+              }
+            },
+            {
+              "id": "724E93B5-BEF6-4CDD-A234-F7255C8322BF",
+              "type": "document_card_files",
+              "attributes": {
+                "file_type": "main"
+              },
+              "relationships": {
+                "file_card": {
+                  "data": {
+                    "id": "218B7636-4BE8-46E7-BFE1-6FB59E772807",
+                    "type": "versioned_file_cards"
+                  }
+                }
+              }
+            },
+            {
+              "id": "218B7636-4BE8-46E7-BFE1-6FB59E772807",
+              "type": "versioned_file_cards",
+              "attributes": {
+                "description": "Снимок экрана от 2016-08-01 14-03-55.png",
+                "file_name": "Снимок экрана от 2016-08-01 14-03-55.png",
+                "current_version_number": 1,
+                "current_version_file_id": "8B404C15-A7E6-44C4-ACD6-8C81D2590FB2"
+              }
+            },
+            {
+              "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+              "type": "employees",
+              "attributes": {
+                "first_name": null,
+                "last_name": "Администратор",
+                "middle_name": null,
+                "display_string": "Администратор, ГОЗНАК (АО)",
+                "gender": "male",
+                "has_photo": true
+              }
+            },
+            {
+              "id": "843363B5-1363-4759-B798-81E8B153CEAA",
+              "type": "document_card_approvers",
+              "attributes": {
+                "date_begin": null,
+                "date_end": null,
+                "number": 1,
+                "order": 1,
+                "route_type": "parallel",
+                "state": null,
+                "comment": null
+              },
+              "relationships": {
+                "employee": {
+                  "data": {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "3A5D0171-1092-40D2-A215-FDACA217C8AA",
+              "type": "document_card_approvers",
+              "attributes": {
+                "date_begin": null,
+                "date_end": null,
+                "number": 2,
+                "order": 2,
+                "route_type": "parallel",
+                "state": null,
+                "comment": null
+              },
+              "relationships": {
+                "employee": {
+                  "data": {
+                    "id": "EDAE212A-0E13-4971-926A-D8FD4C4813BA",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "EDAE212A-0E13-4971-926A-D8FD4C4813BA",
+              "type": "employees",
+              "attributes": {
+                "first_name": "Иван",
+                "last_name": "Дроботенко",
+                "middle_name": "Николаевич",
+                "display_string": "Дроботенко И. Н.",
+                "gender": "male",
+                "has_photo": false
+              }
+            },
+            {
+              "id": "B3CD29BC-75C1-48F6-B1DB-15A339AC45AA",
+              "type": "document_card_perform_list_item",
+              "attributes": {
+                "content": "Тестирование задания из листа исполнения 1",
+                "deadline": "2017-03-02T00:00:00.000Z",
+                "completion_date": null
+              },
+              "relationships": {
+                "performer": {
+                  "data": {
+                    "id": "EDAE212A-0E13-4971-926A-D8FD4C4813BA",
+                    "type": "employees"
+                  }
+                },
+                "controller": {
+                  "data": {
+                    "id": "A623F423-F061-491C-942A-2062A6A36F23",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "A623F423-F061-491C-942A-2062A6A36F23",
+              "type": "employees",
+              "attributes": {
+                "first_name": "Петр",
+                "last_name": "Петров",
+                "middle_name": "Сергеевич",
+                "display_string": "Петров П. С., ГОЗНАК (АО)",
+                "gender": "male",
+                "has_photo": false
+              }
+            },
+            {
+              "id": "E06748E0-FCAD-4E5D-B32C-F7B8657C24AA",
+              "type": "document_card_perform_list_item",
+              "attributes": {
+                "content": "Тест на исп из списка РД 2",
+                "deadline": "2017-03-03T00:00:00.000Z",
+                "completion_date": null
+              },
+              "relationships": {
+                "performer": {
+                  "data": {
+                    "id": "FE6A4BE9-2C74-425D-BFFE-F4E590E8472B",
+                    "type": "employees"
+                  }
+                },
+                "controller": {
+                  "data": {
+                    "id": "292D7064-CF03-46C7-8F3D-6E51DBFFA4E8",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "FE6A4BE9-2C74-425D-BFFE-F4E590E8472B",
+              "type": "employees",
+              "attributes": {
+                "first_name": "Назар",
+                "last_name": "Рохмистров",
+                "middle_name": "Олегович",
+                "display_string": "Рохмистров Н. О.",
+                "gender": "male",
+                "has_photo": false
+              }
+            },
+            {
+              "id": "292D7064-CF03-46C7-8F3D-6E51DBFFA4E8",
+              "type": "employees",
+              "attributes": {
+                "first_name": "Сергей",
+                "last_name": "Сидоров",
+                "middle_name": "Сергеевич",
+                "display_string": "Сидоров С. С., ГОЗНАК (АО)",
+                "gender": "male",
+                "has_photo": false
+              }
+            },
+            {
+              "id": "F2F544A3-D3F5-4488-BA24-32E537507DAA",
+              "type": "document_card_inform_list_item",
+              "attributes": {
+                "content": "Тест на ознакомление из списка РД",
+                "completion_date": null
+              },
+              "relationships": {
+                "performer": {
+                  "data": {
+                    "id": "DB1CB64D-48CB-4846-9D3A-3ACFE28175B6",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "DB1CB64D-48CB-4846-9D3A-3ACFE28175B6",
+              "type": "employees",
+              "attributes": {
+                "first_name": "Тест2",
+                "last_name": "Тестов",
+                "middle_name": null,
+                "display_string": "Тестов Т., Тестовое подразделение",
+                "gender": "blank",
+                "has_photo": false
+              }
+            },
+            {
+              "id": "277FC910-3BD9-4AF8-A895-DDC3DDE7CCAA",
+              "type": "document_card_inform_list_item",
+              "attributes": {
+                "content": "Тест на ознакомление из списка РД",
+                "completion_date": null
+              },
+              "relationships": {
+                "performer": {
+                  "data": {
+                    "id": "EDAE212A-0E13-4971-926A-D8FD4C4813BA",
+                    "type": "employees"
+                  }
+                }
+              }
+            }
+          ]
+        }
 
 ## Поиск по документам [/document_cards/search?text={text}&kinds%5B%5D={kinds}&states%5B%5D={states}&limit={limit}&offset={offset}&controlled={controlled}&creation_date_from={creation_date_from}&creation_date_to={creation_date_to}&receiver%5B%5D={receivers}&signer%5B%5D={signers}&approver%5B%5D={approvers}&performer%5B%5D={performers}&partner%5B%5D={partners}]
 
