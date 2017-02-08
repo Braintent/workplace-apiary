@@ -3642,16 +3642,17 @@ UUID проекта документа, представленного к уда
         }
 
 
-## Добаление и удаление файлов [/document_cards/{id}/files]
-- `id` ( **String**, *required* )
-ID документа (`InstanceID` карточки)
+## Файлы документа [/document_cards/{id}/files]
 
-Файлы документа - это экземляры секции `DocumentCard::File` документа (секция ссылается на карточку файла `VersionedFileCard`).
+Файлы документа это экземляры секции `DocumentCard::File` документа (секция ссылается на карточку файла `VersionedFileCard`).
 
 Файл, на данный момент, заливается способом `multipart/form-data`
+
 Ответ приходит в формате JSON API.
 
 ### Добавление [POST]
+- `id` ( **String**, *required* )
+ID документа (`InstanceID` карточки)
 + Request (multipart/form-data; boundary=---BOUNDARY)
 
     + Headers 
@@ -3743,3 +3744,572 @@ ID связки, которую нужно удалить (`InstanceID` карт
 # Group Иное
 
 То, что пока не вошло в какой-либо раздел
+
+
+## Данные простых справочников [/simple_directories?cache_version={cache_version}]
+
+Данный метод предназначен для выдачи списка простых справочников, содержащихся в [конструкторе справочников](https://braintent.gitbooks.io/goznak-docs/content/items_dir.html). 
+
+Данные из простых справочников конструктора справочников активно используются приложением, например: при создании документов, в таких зависимостях как `Тип совещания`, `Дело`, `Тип указания` и др.
+
+Для экономии ресурсов системы метод позволяет проверить актуальность уже имеющейся у пользователя информации, для этого метод принимает маркер версии (дату обновления конструктора справочников) в параметрах.
+* Если пользователь прислал маркер версии и он актуален - ответ будет пустым.
+* Если маркер версии не задан либо его значение устарело - в ответе придет перечисление простых справочников и их элементов.
+
+В теле ответа, в объекте `meta`, по ключу `current_version` присылается актуальный маркер версии(дата обновления конструктора справочников).
+
+### Получить [GET]
+- `cache_version` ( **String**)
+Версия кеша, от которой необходимо проверять обновления. Содержит дату и время формате JSON
+
++ Request (application/vnd.api+json)
+
+    + Headers 
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": [
+            {
+              "id": "214C1F21-7117-4FA5-AF2A-04FE1162E1E8",
+              "type": "items_dir_item_types",
+              "attributes": {
+                "scope_name": "delivery_types",
+                "name": "Способы получения"
+              },
+              "relationships": {
+                "items": {
+                  "data": [
+                    {
+                      "id": "B42CE1AD-EA5A-4267-A926-07CDAFD7FF55",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "F35BC195-4FC9-4FBE-87AF-23A324D3DC51",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "03FB43A8-9C22-4EAF-A77C-E839BF7158C4",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "D852675F-66A6-43A0-880C-8E32A1DAF7FE",
+                      "type": "items_dir_item_type_items"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "F34F9B23-37E1-4677-AB1E-BE418FA5FD08",
+              "type": "items_dir_item_types",
+              "attributes": {
+                "scope_name": "security_classification",
+                "name": "Категории доступа"
+              },
+              "relationships": {
+                "items": {
+                  "data": [
+                    {
+                      "id": "6E5D32F7-0712-4F44-A031-414482C97578",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "4988A913-AC03-4753-A5D9-9192FD1280F3",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "4510BE1F-35E5-40AF-B459-80868FA740FB",
+                      "type": "items_dir_item_type_items"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "18E63B08-0725-4FEB-BCBE-13CE2D77989E",
+              "type": "items_dir_item_types",
+              "attributes": {
+                "scope_name": null,
+                "name": "Виды дублирования отправок"
+              },
+              "relationships": {
+                "items": {
+                  "data": [
+                    {
+                      "id": "EC4E11BB-35C6-4336-9C30-BD90758B975F",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "FE7F61A3-6A70-404E-901E-BB2CF4550465",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "C815A479-9E8A-4C15-9793-2A9D3859ECD9",
+                      "type": "items_dir_item_type_items"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "7E9069BD-F183-4498-B176-BA41625715AE",
+              "type": "items_dir_item_types",
+              "attributes": {
+                "scope_name": "sending_types",
+                "name": "Типы отправок"
+              },
+              "relationships": {
+                "items": {
+                  "data": [
+                    {
+                      "id": "026940CF-D3B1-4C4A-BDF2-E3FF18DC6623",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "AF1262AA-2EDA-47C7-8FE7-50185B11033F",
+                      "type": "items_dir_item_type_items"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "A26F2A7D-F88E-435B-978A-C87F628A695F",
+              "type": "items_dir_item_types",
+              "attributes": {
+                "scope_name": "order_types",
+                "name": "Типы приказов"
+              },
+              "relationships": {
+                "items": {
+                  "data": [
+                    {
+                      "id": "E5BE30FE-D52F-44E7-9D98-2BC61E7F852B",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "06E3C61B-A77B-4BD9-B7A3-ABE8BAAF2AF4",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "A5A2026B-1C5F-4A27-AEB7-3B974CC9CFF4",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "5BC1361C-C595-4C09-ABF2-5BBCDD0DFFFB",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "112A6FF5-9647-441D-A59B-004469D4ED8D",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "EA754208-1174-4807-A4CF-C94E25DDBA11",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "E837AC17-F375-4F09-A063-64A94811AB9D",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "39CAE097-9D37-4817-8E96-5DF8C24C350C",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "77484838-EEC3-4839-86BD-D3BC4A764B4F",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "4D6EE812-6400-4516-9035-D3E51F080E63",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "B106D1FA-0273-4217-A431-8B0541D7F0D0",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "86CA64B8-0CD4-424F-A7E8-BA27F52A4376",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "F266B77F-C71E-4904-BF3C-75AD25E183F5",
+                      "type": "items_dir_item_type_items"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "2F7A9D14-9F82-44CE-9055-9BB6E66D6D2D",
+              "type": "items_dir_item_types",
+              "attributes": {
+                "scope_name": "direction_types",
+                "name": "Типы распоряжений"
+              },
+              "relationships": {
+                "items": {
+                  "data": [
+                    {
+                      "id": "F160E651-A913-4125-88C2-A686139BB317",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "CA43AB97-9D4C-44E1-8FB9-50521ABE72E0",
+                      "type": "items_dir_item_type_items"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "73C8A8CB-8CB9-48F6-99AB-22C4DB6A6765",
+              "type": "items_dir_item_types",
+              "attributes": {
+                "scope_name": "guidline_types",
+                "name": "Типы указаний"
+              },
+              "relationships": {
+                "items": {
+                  "data": [
+                    {
+                      "id": "D918A8EB-9EF0-4CFC-AB5A-EEA7383CE9ED",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "B85AB445-4985-476D-9771-C88AED581359",
+                      "type": "items_dir_item_type_items"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "6BB2CC49-AE34-4097-9949-C4BE2327F665",
+              "type": "items_dir_item_types",
+              "attributes": {
+                "scope_name": "meeting_types",
+                "name": "Типы совещаний"
+              },
+              "relationships": {
+                "items": {
+                  "data": [
+                    {
+                      "id": "5594C6F0-3483-4AA1-A286-A78590ED57E9",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "7756DC4D-E682-40CE-AF43-6F01716902C7",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "FB84820A-00E4-4991-861B-66437CC66B08",
+                      "type": "items_dir_item_type_items"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "D6B7F151-AAF5-452F-B3B3-26C5A25B1615",
+              "type": "items_dir_item_types",
+              "attributes": {
+                "scope_name": "cases",
+                "name": "Справочник номенклатуры дел"
+              },
+              "relationships": {
+                "items": {
+                  "data": [
+                    {
+                      "id": "2AAB787E-D21F-4A8D-833B-CCC6E24CD186",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "35DA04FD-4A2B-4AE5-8DD3-A5BF82FC358F",
+                      "type": "items_dir_item_type_items"
+                    },
+                    {
+                      "id": "D2672D78-102C-43A7-8C00-925CF846AB89",
+                      "type": "items_dir_item_type_items"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "C33BFEBA-2236-492E-99D6-8AD9A84E096A",
+              "type": "items_dir_item_types",
+              "attributes": {
+                "scope_name": null,
+                "name": "Типы универсальных документов"
+              },
+              "relationships": {
+                "items": {
+                  "data": [
+                    {
+                      "id": "37B79802-B347-4CEA-A280-6A01DD878763",
+                      "type": "items_dir_item_type_items"
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "included": [
+            {
+              "id": "B42CE1AD-EA5A-4267-A926-07CDAFD7FF55",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "E-mail"
+              }
+            },
+            {
+              "id": "F35BC195-4FC9-4FBE-87AF-23A324D3DC51",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Факс"
+              }
+            },
+            {
+              "id": "03FB43A8-9C22-4EAF-A77C-E839BF7158C4",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Почта"
+              }
+            },
+            {
+              "id": "D852675F-66A6-43A0-880C-8E32A1DAF7FE",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Курьер"
+              }
+            },
+            {
+              "id": "6E5D32F7-0712-4F44-A031-414482C97578",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "ДСП"
+              }
+            },
+            {
+              "id": "4988A913-AC03-4753-A5D9-9192FD1280F3",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "КТ"
+              }
+            },
+            {
+              "id": "4510BE1F-35E5-40AF-B459-80868FA740FB",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "К"
+              }
+            },
+            {
+              "id": "EC4E11BB-35C6-4336-9C30-BD90758B975F",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "E-mail"
+              }
+            },
+            {
+              "id": "FE7F61A3-6A70-404E-901E-BB2CF4550465",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Факс"
+              }
+            },
+            {
+              "id": "C815A479-9E8A-4C15-9793-2A9D3859ECD9",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Почта"
+              }
+            },
+            {
+              "id": "026940CF-D3B1-4C4A-BDF2-E3FF18DC6623",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Письмо"
+              }
+            },
+            {
+              "id": "AF1262AA-2EDA-47C7-8FE7-50185B11033F",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Курьер"
+              }
+            },
+            {
+              "id": "E5BE30FE-D52F-44E7-9D98-2BC61E7F852B",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Основная деятельность"
+              }
+            },
+            {
+              "id": "06E3C61B-A77B-4BD9-B7A3-ABE8BAAF2AF4",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Административно-хозяйственные вопросы"
+              }
+            },
+            {
+              "id": "A5A2026B-1C5F-4A27-AEB7-3B974CC9CFF4",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Взыскания"
+              }
+            },
+            {
+              "id": "5BC1361C-C595-4C09-ABF2-5BBCDD0DFFFB",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Доплаты"
+              }
+            },
+            {
+              "id": "112A6FF5-9647-441D-A59B-004469D4ED8D",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Загранкомандировки"
+              }
+            },
+            {
+              "id": "EA754208-1174-4807-A4CF-C94E25DDBA11",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Командировки"
+              }
+            },
+            {
+              "id": "E837AC17-F375-4F09-A063-64A94811AB9D",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Личный состав"
+              }
+            },
+            {
+              "id": "39CAE097-9D37-4817-8E96-5DF8C24C350C",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Отпуска"
+              }
+            },
+            {
+              "id": "77484838-EEC3-4839-86BD-D3BC4A764B4F",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Переводы"
+              }
+            },
+            {
+              "id": "4D6EE812-6400-4516-9035-D3E51F080E63",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Поощрения"
+              }
+            },
+            {
+              "id": "B106D1FA-0273-4217-A431-8B0541D7F0D0",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Практика"
+              }
+            },
+            {
+              "id": "86CA64B8-0CD4-424F-A7E8-BA27F52A4376",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Прием"
+              }
+            },
+            {
+              "id": "F266B77F-C71E-4904-BF3C-75AD25E183F5",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Увольнение"
+              }
+            },
+            {
+              "id": "F160E651-A913-4125-88C2-A686139BB317",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Основная деятельность"
+              }
+            },
+            {
+              "id": "CA43AB97-9D4C-44E1-8FB9-50521ABE72E0",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Административно-хозяйственные вопросы"
+              }
+            },
+            {
+              "id": "D918A8EB-9EF0-4CFC-AB5A-EEA7383CE9ED",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Основная деятельность"
+              }
+            },
+            {
+              "id": "B85AB445-4985-476D-9771-C88AED581359",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Административно-хозяйственные вопросы"
+              }
+            },
+            {
+              "id": "5594C6F0-3483-4AA1-A286-A78590ED57E9",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Итоговые совещания"
+              }
+            },
+            {
+              "id": "7756DC4D-E682-40CE-AF43-6F01716902C7",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Проектные совещания"
+              }
+            },
+            {
+              "id": "FB84820A-00E4-4991-861B-66437CC66B08",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Нерегулярные совещания"
+              }
+            },
+            {
+              "id": "2AAB787E-D21F-4A8D-833B-CCC6E24CD186",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "1"
+              }
+            },
+            {
+              "id": "35DA04FD-4A2B-4AE5-8DD3-A5BF82FC358F",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Входящие 2016"
+              }
+            },
+            {
+              "id": "D2672D78-102C-43A7-8C00-925CF846AB89",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Исходящие 2016"
+              }
+            },
+            {
+              "id": "37B79802-B347-4CEA-A280-6A01DD878763",
+              "type": "items_dir_item_type_items",
+              "attributes": {
+                "name": "Заявка"
+              }
+            }
+          ],
+          "meta": {
+            "cache_version": "2017-01-26T20:57:28.220Z"
+          }
+        }
