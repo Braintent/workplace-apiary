@@ -983,11 +983,10 @@ ID группы
 | Параметр            | Описание             | Тип задания         | Распределено | В состоянии                               | Сотрудник, один из: | Дополнительно |
 | -                   | -                    | -                   | -   | -                                                  | -                   | - |
 | mine                | Выданные мной        | исп, длительные     | -   | 'Started', 'In work', 'Not accepted', 'Acceptance' | А                   | В этом списке не выводятся задания для соисполнителей (CollaboratorsTask) |
-| mine_regular_commissions | Мои длительные поручения | длит. поруч. | -   | 'Started', 'In work'                             | А                   | В этом списке не выводятся задания для соисполнителей (CollaboratorsTask) |
 | todo                | Мне сделать          | кроме `Поручение`   | нет | 'Started', 'In work', 'Not accepted', 'Acceptance', 'Delegated' | И, С, К, О          | - |
-| commissions_perform | Исполнение поручений | на исп,  длительные | нет | 'Started', 'In work'                               | И, С                | - |
+| commissions_perform | Исполнение поручений | на исполнение       | нет | 'Started', 'In work'                               | И, С                | - |
 | commissions_rework  | Доработка поручений  | на исполнение       | нет | 'Not accepted'                                     | И, С                | - |
-| commissions_check   | Контроль поручений   | на исп,  длительные | нет | 'Acceptance' для поручений, 'Started', 'In work' для длительных | К      | - |
+| commissions_check   | Контроль поручений   | на исполнение       | нет | 'Acceptance' для поручений, 'Started', 'In work' для длительных | К      | - |
 | informing           | Ознакомление         | на ознакомл.        | нет | 'Started', 'In work'                               | И, С                | - |
 | shared              | Распределены         | исп, рассм          | да  | 'Started', 'In work', 'Not ccepted', 'Delegated'   | И, С                | - |
 | completed           | Завершены            | кроме `Поручение`   | нет | 'Completed', 'Recalled', 'Rejected'                | И, С, К, О, А       | - |
@@ -996,6 +995,8 @@ ID группы
 | signing             | Подписание           | подписание          | нет | 'Started', 'In work', 'Delegated'                  | И, С                | - |
 | docs_rework         | Доработка документов | доработка, подг.оригинала | нет | 'Started', 'In work', 'Delegated'            | И, С                | - |
 | regular_commissions | Длительные поручения | длит. поруч.        | -   | 'Started', 'In work'                               | И, С                | - |
+| regular_commissions_check | Контроль длит. поручений | длит. поруч. | -   | 'Started', 'In work'                            | К                   | - |
+| mine_regular_commissions | Мои длительные поручения | длит. поруч. | -   | 'Started', 'In work'                             | А                   | В этом списке не выводятся задания для соисполнителей (CollaboratorsTask) |
 
 Все листы сортируются по **дате создания карточки**, кроме completed в нём - по **дате завершения**
 
