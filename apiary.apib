@@ -982,14 +982,14 @@ ID группы
 На данный момент доступны следующие листы (В таблице после параметра и описания указаны условия соответсвия листу): 
 | Параметр            | Описание             | Тип задания         | Распределено | В состоянии                               | Сотрудник, один из: | Дополнительно |
 | -                   | -                    | -                   | -   | -                                                  | -                   | - |
-| mine                | Выданные мной        | исп, длительные     | -   | 'Started', 'In work', 'Not accepted', 'Acceptance' | А                   | В этом списке не выводятся задания для соисполнителей (CollaboratorsTask) |
+| mine                | Выданные мной        | Поручение           | -   | 'Started', 'In work', 'Not accepted', 'Acceptance' | А                   | В этом списке не выводятся задания для соисполнителей (CollaboratorsTask) |
 | todo                | Мне сделать          | кроме `Поручение`   | нет | 'Started', 'In work', 'Not accepted', 'Acceptance', 'Delegated' | И, С, К, О          | - |
 | commissions_perform | Исполнение поручений | на исполнение       | нет | 'Started', 'In work'                               | И, С                | - |
 | commissions_rework  | Доработка поручений  | на исполнение       | нет | 'Not accepted'                                     | И, С                | - |
 | commissions_check   | Контроль поручений   | на исполнение       | нет | 'Acceptance' для поручений, 'Started', 'In work' для длительных | К      | - |
 | informing           | Ознакомление         | на ознакомл.        | нет | 'Started', 'In work'                               | И, С                | - |
 | shared              | Распределены         | исп, рассм          | да  | 'Started', 'In work', 'Not ccepted', 'Delegated'   | И, С                | - |
-| completed           | Завершены            | кроме `Поручение`   | нет | 'Completed', 'Recalled', 'Rejected'                | И, С, К, О, А       | - |
+| completed           | Завершены            | все, кроме длительных | нет | 'Completed', 'Recalled', 'Rejected'                | И, С, К, О, А       | - |
 | consideration       | Рассмотрение         | на рассмотр.        | нет | 'Started', 'In work'                               | И, С                | - |
 | approval            | Согласование         | cогласование        | нет | 'Started', 'In work', 'Delegated'                  | И, С                | - |
 | signing             | Подписание           | подписание          | нет | 'Started', 'In work', 'Delegated'                  | И, С                | - |
