@@ -1684,7 +1684,7 @@ UUID проекта документа, представленного к уда
 + Request (application/vnd.api+json)
     + Attributes (DocumentCardSaveParamsBody)
 
-+ Response 201 (application/vnd.api+json)
++ Response 200 (application/vnd.api+json)
 
     + Headers
 
@@ -1745,7 +1745,7 @@ UUID проекта документа, представленного к уда
 
         }
 
-+ Response 201 (application/vnd.api+json)
++ Response 200 (application/vnd.api+json)
 
         {
           "data": {
@@ -1994,7 +1994,7 @@ UUID проекта документа, представленного к уда
           ]
         }
 
-+ Response 201 (application/vnd.api+json)
++ Response 200 (application/vnd.api+json)
 
         {
           "data": {
@@ -2459,7 +2459,7 @@ UUID проекта документа, представленного к уда
           ]
         }
 
-+ Response 201 (application/vnd.api+json)
++ Response 200 (application/vnd.api+json)
 
         {
           "data": {
@@ -2817,6 +2817,42 @@ UUID проекта документа, представленного к уда
           ]
         }
 
+
+
+## Запустить согласовние [/document_cards/{id}/start_approving]
+
+Метод запускает согласование. Перед запуском согласования информация о документе должна быть заполнена и корректно сохранена
+
+### Запустить согласование [PATCH]
+
++ Request (application/vnd.api+json)
+
++ Response 204 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes ()
+
+
+## Сохранить и запустить согласование [/document_cards/{id}/save_and_start_approving]
+
+Метод объединяет сохранение данных документа и запуск согласования.
+
+Обработка происходит в точности так же, как и у метода `Сохранить`, т.е. сработают все те же валидаторы и запись данных о документе.
+После удачного сохранения информации документа - будет запущен процесс согласования.
+
+Более развернутые примеры запросов и ответов (для СЗ, ИД, РД) можно посмотреть в методе `Сохранить`
+
+### Сохранить и запустить согласование [PATCH]
+
++ Request (application/vnd.api+json)
+
++ Response 200 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes (DocumentCardCreatedDraftTemplate)
+
 ## Поиск по документам [/document_cards/search?text={text}&kinds%5B%5D={kinds}&states%5B%5D={states}&limit={limit}&offset={offset}&controlled={controlled}&creation_date_from={creation_date_from}&creation_date_to={creation_date_to}&receiver%5B%5D={receivers}&signer%5B%5D={signers}&approver%5B%5D={approvers}&performer%5B%5D={performers}&partner%5B%5D={partners}]
 
 Метод используется для расширенного поиска по документам.
@@ -2881,7 +2917,7 @@ UUID проекта документа, представленного к уда
 
 + Request (application/vnd.api+json)
 
-+ Response 201 (application/vnd.api+json)
++ Response 200 (application/vnd.api+json)
 
     + Headers
 
