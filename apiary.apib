@@ -108,6 +108,66 @@ https://github.com/apiaryio/api-blueprint/issues/58
 ## EmployeeWithDepartment (Employee)
 + relationships (EmployeeRelationships)
 
+## PartnersDirCompanySearch
++ id:`AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: partners_dir_companies (string, required)
++ attributes (object)
+    + name: `Роспил` - имя
+    + full_name: `Общество вообще без ответственности 'РосПил'` - полное имя
+    + org_type: `ООО` - вид компании. Пока пуст
+
+## PartnersDirCompanyShow
++ id:`AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: partners_dir_companies (string, required)
++ attributes (object)
+    + name: `Роспил` - имя
+    + full_name: `Общество вообще без ответственности 'РосПил'` - полное имя
+    + org_type: `ООО` - вид компании. Пока пуст
+    + phone: `1314`
+    + fax: `(495) 345-45-43`
+    + email: `info@rospil.ru`
+    + zip_code: `П111345`
+    + city: `Москва`
+    + address: `ул. Древесная, д.89`
+    + country: `Россия`
++ relationships
+    + manager - руководитель
+        + data (PartnersDirEmployeeIdentifier)
+    + contact_person - контактное лицо
+        + data (PartnersDirEmployeeIdentifier)
+    + employees - все сотрудники
+        + data (array[PartnersDirEmployeeIdentifier])
+
+## PartnersDirEmployeeIdentifier
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `partners_dir_employees` (string, required)
+
+## PartnersDirEmployee
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `partners_dir_employees` (string, required)
++ attributes
+    + first_name: `Иван`
+    + last_name: `Данилов`
+    + middle_name: `Иванович`
+    + display_string: `Данилов Иван Иванович`
+    + phone: ``
+    + gender: `male`
++ relationships
+    + position - должность
+        + data(PartnersDirPositionIdentifier) 
+
+
+## PartnersDirPositionIdentifier
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: partners_dir_positions
+
+## PartnersDirPosition
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: partners_dir_positions
++ attributes
+    + name: 'Пила' - название
+
+
 ## TaskCardCommentsIdentifierAttributes
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
 + type: task_card_comments (string, required)
@@ -910,6 +970,32 @@ ID группы
     + Attributes
         + data (array[EmployeeSearchSerialized, EmployeeSearchSerialized])
 
+# Group Контрагенты
+
+## Поиск компании по имени [GET /partners/companies]
+- `filter` ( **String**, *required* )
+Часть имени, по которой будет производится поиск
+
+Метод производит поиск по компаниям. Вернутся все совпадения, где искомая строка является частью имени `Name` или полного имени `FullName`
+
++ Request (application/vnd.api+json)
+
++ Response 200 (application/vnd.api+json)
+    + Attributes
+        + data (array[PartnersDirCompanySearch, PartnersDirCompanySearch])
+
+## Данные о компании [GET /partners/companies/{id}]
+- `id` ( **String**, *required* )
+ID компании
+
+Метод вернет развернутую информацию о компании включая зависимости: ссылки на руководителя, контактное лицо и так же всех участников.
+
++ Request (application/vnd.api+json)
+
++ Response 200 (application/vnd.api+json)
+    + Attributes
+        + data (PartnersDirCompanyShow)
+        + included (array[PartnersDirPosition, PartnersDirEmployee])
 
 
 # Group Карточки
