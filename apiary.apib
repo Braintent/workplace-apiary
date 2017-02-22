@@ -944,6 +944,235 @@ ID сотрудника
 
         Ok.
 
+# Group Заместители сотрудника, активность
+
+Все методы из этой группы могут быть использованы только для текущего сотрудника
+
+## Изменить параметры активности, статус сотрудника [PATCH /staff/employees/activity?status={status}&inactive_from={inactive_from}&inactive_to={inactive_to}&inactive_status={inactive_status}]
+
+- `status` ( **String** )
+
+Текущий cтатус. Может принимать значение из таблицы представленной ниже.
+
+| Значение | Что значит |
+| - | - |
+| active         | Активен        |
+| sick           | Болен          |
+| vacation       | В отпуске      |
+| business_trip  | В командировке |
+| absent         | Отсутствует    |
+
+
+- `inactive_status` ( **String** )
+Статус в период неактивности
+Может принимать значение из таблицы представленной ниже.
+
+| Значение | Что значит |
+| - | - |
+| sick           | Болен          |
+| vacation       | В отпуске      |
+| business_trip  | В командировке |
+| absent         | Отсутствует    |
+
+- `inactive_from` ( **String** )
+Дата начала срока неактивности. Формат даты: `2011-02-02`
+- `inactive_to` ( **String** )
+Дата завершения срока неактивности. Формат даты: `2011-02-02`
+
+
++ Request (application/vnd.api+json)
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+            "type": "employees",
+            "attributes": {
+              "first_name": null,
+              "last_name": "Администратор",
+              "middle_name": null,
+              "display_string": "Администратор",
+              "gender": "male",
+              "has_photo": true,
+              "status": "sick",
+              "inactive_status": "absent",
+              "inactive_from": "2013-02-02T00:00:00.000Z",
+              "inactive_to": "2013-02-02T00:00:00.000Z"
+            }
+          }
+        }
+
+
+
+## Список заместителей [GET /staff/employees/mine_deputies]
+
+Метод вернет список заместителей сотрудника
+
++ Request (application/vnd.api+json)
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": [
+            {
+              "id": "6F749340-E657-443C-B73D-369BEB1BF0AC",
+              "type": "staff_dir_employee_deputies",
+              "attributes": {
+                "performing": true,
+                "control": true,
+                "signature": false,
+                "permanent_deputy": false,
+                "deputy_access": false
+              },
+              "relationships": {
+                "employee": {
+                  "data": {
+                    "id": "67239E79-A2FC-46AD-AE44-F462386B46F2",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "41F2AF44-43D3-4329-859A-536045BE79FD",
+              "type": "staff_dir_employee_deputies",
+              "attributes": {
+                "performing": true,
+                "control": true,
+                "signature": true,
+                "permanent_deputy": true,
+                "deputy_access": true
+              },
+              "relationships": {
+                "employee": {
+                  "data": {
+                    "id": "FE6A4BE9-2C74-425D-BFFE-F4E590E8472B",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "ADD2EE8D-C0D7-4CB5-B4EC-51C68A3EA14B",
+              "type": "staff_dir_employee_deputies",
+              "attributes": {
+                "performing": true,
+                "control": true,
+                "signature": true,
+                "permanent_deputy": true,
+                "deputy_access": true
+              },
+              "relationships": {
+                "employee": {
+                  "data": {
+                    "id": "EDAE212A-0E13-4971-926A-D8FD4C4813BA",
+                    "type": "employees"
+                  }
+                }
+              }
+            }
+          ]
+        }
+
+
+## Добавить заместителя [POST /staff/employees/mine_deputies/?employee_id=67239E79-A2FC-46AD-AE44-F462386B46F2&performing={performing}&control={control}&signature={signature}&permanent_deputy={permanent_deputy}&deputy_access={deputy_access}]
+- `employee_id` ( **String**, *required* )
+ok
+- `performing` ( **Boolean** )
+Исполнение (атрибут в DV: `Performing`)
+- `control` ( **Boolean** )
+Ответственное исполнение (атрибут в DV: `Control`)
+- `signature` ( **Boolean** )
+Подпись (атрибут в DV: `Signature`)
+- `permanent_deputy` ( **Boolean** )
+Постоянный заместитель (атрибут в DV: `PermanentDeputy`)
+- `deputy_access` ( **Boolean** )
+Выдавать права доступа (атрибут в DV: `DeputyAccess`)
+
+
+Метод создает заместителя текущего сотрудника с указанными параметрами.
+
+Если выбран сотрудник, который уже указан в заместителях текущего - вернется ошибка.
+
++ Request (application/vnd.api+json)
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "id": "6F749340-E657-443C-B73D-369BEB1BF0AC",
+            "type": "staff_dir_employee_deputies",
+            "attributes": {
+              "performing": true,
+              "control": true,
+              "signature": false,
+              "permanent_deputy": false,
+              "deputy_access": false
+            },
+            "relationships": {
+              "employee": {
+                "data": {
+                  "id": "67239E79-A2FC-46AD-AE44-F462386B46F2",
+                  "type": "employees"
+                }
+              }
+            }
+          }
+        }
+
+
+## Редактировать заместителя [PATCH /staff/employees/mine_deputies/{deputy_id}/performing={performing}&control={control}&signature={signature}&permanent_deputy={permanent_deputy}&deputy_access={deputy_access}]
+- `deputy_id` ( **String**, *required* )
+ID редактируемого заместителя (type: staff_dir_employee_deputies)
+- `performing` ( **Boolean** )
+Исполнение (атрибут в DV: `Performing`)
+- `control` ( **Boolean** )
+Ответственное исполнение (атрибут в DV: `Control`)
+- `signature` ( **Boolean** )
+Подпись (атрибут в DV: `Signature`)
+- `permanent_deputy` ( **Boolean** )
+Постоянный заместитель (атрибут в DV: `PermanentDeputy`)
+- `deputy_access` ( **Boolean** )
+Выдавать права доступа (атрибут в DV: `DeputyAccess`)
+
++ Request (application/vnd.api+json)
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "id": "6F749340-E657-443C-B73D-369BEB1BF0AC",
+            "type": "staff_dir_employee_deputies",
+            "attributes": {
+              "performing": true,
+              "control": true,
+              "signature": false,
+              "permanent_deputy": false,
+              "deputy_access": false
+            },
+            "relationships": {
+              "employee": {
+                "data": {
+                  "id": "67239E79-A2FC-46AD-AE44-F462386B46F2",
+                  "type": "employees"
+                }
+              }
+            }
+          }
+        }
+
+
+## Удалить заместителя [DELETE /staff/employees/mine_deputies/{deputy_id}/]
+- `deputy_id` ( **String**, *required* )
+ID удаляемого заместителя (type: staff_dir_employee_deputies)
+
+
++ Request (application/vnd.api+json)
+
++ Response 204 (application/vnd.api+json)
+
+
 # Group Группы
 
 ## Получить всех участников [GET /staff/groups/{id}/participants]
@@ -1549,11 +1778,11 @@ ID основного задания задания (`InstanceID` карточк
 - `from` ( **Array**, *required* )
 Массив ID заданий, из которых нужно скопировать связки
 
-Метод копированует связки из отчетов(`TaskCard::Cycle`) о завершении заданий, список ID которых указан в параметре `from`, в основное задание.
+Метод предназначен для копирования связок из отчетов о завершении заданий, список ID которых указан в параметре `from`, в основное задание.
 
 Примечания:
 * Если в указанных через `from` заданиях отсутсвует завершающий цикл - из такого задания никаких ссылок не скопируется.
-* Если основное задание уже имеет ссылку, идентичную копируемой (на ту же карточку и с тем же типом) - ссылка не продублируется.
+* Если текущее задание уже имеет ссылку, идентичную копируемой (на ту же карточку и с тем же типом) - ссылка не продублируется.
 
 + Request (application/vnd.api+json)
 
