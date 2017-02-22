@@ -298,12 +298,14 @@ https://github.com/apiaryio/api-blueprint/issues/58
 ## TaskCardListIncluded
 + included (array[Employee, Employee, Employee] )
 
-## TaskCardShowAttributes
+## TaskCardBaseAttributes
 + description: `Задание на исполнение Поручение от 09.09.2016` (string, required)
-+ content: `Тест заполненности полей` (string, required)
 + card_kind_name: `Тип карточки` (string)
 + card_kind_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string)
 + state_default_name: `Started` (string, required)
+
+## TaskCardShowAttributes (TaskCardBaseAttributes)
++ content: `Тест заполненности полей` (string, required)
 + start_date: `2016-10-21T00:00:00.000Z` (string, required)
 + collaborators_task: true (boolean)
 + end_date_actual: `2016-10-21T00:00:00.000Z` (string, required)
@@ -345,8 +347,9 @@ https://github.com/apiaryio/api-blueprint/issues/58
 + card_kind_name: `Длительное поручение` (string) - Тип карточки
 
 
-
-
+## TaskCardOnlyReferencesRelationships
++ references
+    + data (array[CardReferenceIdentifier, CardReferenceIdentifier])
 
 ## TaskCardShowRelationships
 + author (EmployeeIdentifier)
@@ -1538,6 +1541,39 @@ ID связки, которую нужно удалить (`InstanceID` карт
     + Headers
 
     + Attributes 
+
+### Копирование связок из завершающего цикла других заданий [PATCH /task_cards/{id}/references/copy?from={copy_from}]
+- `id` ( **String**, *required* )
+ID основного задания задания (`InstanceID` карточки)
+
+- `from` ( **Array**, *required* )
+Массив ID заданий, из которых нужно скопировать связки
+
+
+Метод предназначен для перенесения связок из последнего цикла заданий, указанных в параметре `from` в текущее задание.
+
+Примечания:
+* Если в указанных через `from` заданиях отсутсвует завершающий цикл - из такого задания никаких ссылок не скопируется.
+* Если текущее задание уже имеет ссылку, идентичную копируемой (на ту же карточку и с тем же типом) - ссылка не продублируется.
+
++ Request (application/vnd.api+json)
+
+    + Headers 
+
+            Accept: application/vnd.api+json
+
++ Response 200 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes
+
+        + data (object)
+            + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+            + type: 'task_cards' (string, required)
+            + attributes (TaskCardBaseAttributes)
+            + relationships (TaskCardOnlyReferencesRelationships)
+        + included (array[CardReferenceLinkDescriptionExample1, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, DocumentCardReferenceRelationInfoFile])
 
 
 # Group Документы
