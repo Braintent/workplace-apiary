@@ -514,6 +514,40 @@ https://github.com/apiaryio/api-blueprint/issues/58
         + data (array[])
 
 
+## DocumentCardFileFormedResponse
++ id: `CE6712F6-2DED-E611-8EAB-0800279209D4`
++ type: `document_cards`
++ attributes
+    + description: `Исходящий`
+    + card_kind_name: `Исходящий документ`
+    + card_kind_id: `0EEBB19D-C9F0-430E-A24A-84E93A669D77`
+    + state_default_name: `Drafting`
+    + change_date_time: `2017-02-07T19:07:15.000Z`
+    + creation_date_time: `2017-02-07T19:07:15.000Z`
+    + parent_card_kind_name: `Исходящие документы`
+    + parent_card_kind_id: `B324E740-94CB-40D1-BF6B-28B83DC127C9`
+    + name (string, nullable)
+    + content (string, nullable)
++ relationships
+    + files
+        + data (array[DocumentCardFileSectionRelationElementIdentifier])
++ included (array[DocumentCardFileSectionRelationElement, VersionedCardRelationInfo]) 
+
+
+## DocumentCardFileSectionRelationElementIdentifier
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `document_card_files`
+
+## DocumentCardFileSectionRelationElement (DocumentCardFileSectionRelationElementIdentifier)
++ attributes
+  + file_type: `mine` (string)
++ relationships
+    + file_card
+      + data (VersionedFileCardIdentifier)
+
+
+
+
 ## DocumentCardSaveParamsBody
 + id: `CE6712F6-2DED-E611-8EAB-0800279209D4`
 + type: `document_cards`
@@ -3510,6 +3544,25 @@ UUID проекта документа, представленного к уда
     + Headers
 
     + Attributes (DocumentCardCreatedDraftTemplate)
+
+## Сформировать документ [/document_cards/{id}/form_file]
+
+Метод вызовет формирование файла документа.
+
+Сфомированный файл документа будет приложен к документу в зависимости `files` (секция `DocumentCard::File`)
+
+Если по документу уже был сформирован файл - вновь сформированный файл будет добавлен как новая версия существующего.
+
+### Сформировать документ [PATCH]
+
++ Request (application/vnd.api+json)
+
++ Response 200 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes (DocumentCardFileFormedResponse)
+
 
 ## Поиск по документам [/document_cards/search?text={text}&kinds%5B%5D={kinds}&states%5B%5D={states}&limit={limit}&offset={offset}&controlled={controlled}&creation_date_from={creation_date_from}&creation_date_to={creation_date_to}&receiver%5B%5D={receivers}&signer%5B%5D={signers}&approver%5B%5D={approvers}&performer%5B%5D={performers}&partner%5B%5D={partners}]
 
