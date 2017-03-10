@@ -533,6 +533,38 @@ https://github.com/apiaryio/api-blueprint/issues/58
         + data (array[DocumentCardFileSectionRelationElementIdentifier])
 + included (array[DocumentCardFileSectionRelationElement, VersionedCardRelationInfo]) 
 
+## DocumentCardWithFullTree
++ id: `CE6712F6-2DED-E611-8EAB-0800279209D4`
++ type: `document_cards`
++ attributes
+    + description: `Исходящий`
+    + card_kind_name: `Исходящий документ`
+    + card_kind_id: `0EEBB19D-C9F0-430E-A24A-84E93A669D77`
+    + state_default_name: `Drafting`
+    + change_date_time: `2017-02-07T19:07:15.000Z`
+    + creation_date_time: `2017-02-07T19:07:15.000Z`
++ relationships
+    + task_tree_items - задания из дерева заданий исполнения
+        + data (array[TaskCardIdentifier, TaskCardIdentifier])
+    + approval_steps - элементы истории согласования
+        + data (array[DocumentApprovalStepIdentifier, DocumentApprovalStepIdentifier])
+    }
++ included (array[DocumentApprovalStep, DocumentApprovalStep, TaskCardTreeListData, TaskCardTreeListData, TaskCardTreeListData, Employee, Employee, Employee] )
+
+## DocumentApprovalStepIdentifier
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ type: `document_cards_approval_steps`
+
+## DocumentApprovalStep (DocumentApprovalStepIdentifier)
++ attributes
+    + number: `0` - номер цикла
+    + state_name: `Подписан` - состояние на шаге согласования
++ relationships
+    + task
+        + data (TaskCardIdentifier)
+    + task_tree_items
+        + data (array[TaskCardIdentifier, TaskCardIdentifier])
+        
 
 ## DocumentCardFileSectionRelationElementIdentifier
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
@@ -4416,6 +4448,37 @@ UUID проекта документа, представленного к уда
             }
           ]
         }
+
+## Полное дерево исполнения [/document_cards/{id}/tree]
+
+- `id` ( **String**, *required* )
+Уникальный ID задания (`InstanceID` карточки)
+
+### Построить [GET]
+
+### Описание 
+Метод возвращает документ с полной информацией об исполнении.
+С помощью данной информации можно построить полноценное дерево заданий, связанных с исполнением документа.
+
+Информация об исполнении является комбинацией методов `Дерево заданий` и `История согласования` и включает:
+* Дерево заданий исполнения документа `task_tree_items` (соответсвует процессам `Рассмотрение`, `Исполнение` и др.)
+* Историю согласования `approval_steps`. У каждого задания `task` из шага согласования так же может быть своё дерево распределения `task_tree_items`
+
+Примечания:
+* В отличии от возврата из `История согласования` - в данном методе не включены комментарии и файлы отчетов по заданиям из истории согласования
+
+
++ Request (application/vnd.api+json)
+
+
++ Response 200 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes
+        + data (DocumentCardWithFullTree)
+
+
 
 
 ## Файлы документа [/document_cards/{id}/files]
