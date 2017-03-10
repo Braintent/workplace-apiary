@@ -3578,6 +3578,154 @@ UUID проекта документа, представленного к уда
 
     + Attributes (DocumentCardCreatedDraftTemplate)
 
+## Получить шаблоны листа согласования [/document_cards/approval_list_templates]
+
+Метод вернет список с шаблонами согласования, записанными в системе DocsVision
+
+На данный момент шаблон согласования ссылается на карточку списка согласования, таким образом, в ответе будут те же `document_card_approvers` что и в сериализации согласующих по документам.
+
+### Сохранить и запустить согласование [GET]
+
++ Request (application/vnd.api+json)
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": [
+            {
+              "id": "E5F6E6AF-B385-E611-9404-000C29D9CFCB",
+              "type": "approval_list_templates",
+              "attributes": {
+                "name": "Только администратор",
+                "not_available": null
+              },
+              "relationships": {
+                "approvers": {
+                  "data": [
+                    {
+                      "id": "01D6FD9D-55C6-491D-B19A-F03C3E06DABC",
+                      "type": "document_card_approvers"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "44E92DC0-B385-E611-9404-000C29D9CFCB",
+              "type": "approval_list_templates",
+              "attributes": {
+                "name": "Тестовые пользователи",
+                "not_available": null
+              },
+              "relationships": {
+                "approvers": {
+                  "data": [
+                    {
+                      "id": "39B12391-8F3F-48BA-AB58-060CA88799C4",
+                      "type": "document_card_approvers"
+                    },
+                    {
+                      "id": "63DD316F-1A8E-40C3-BAB9-C7C7D20573BE",
+                      "type": "document_card_approvers"
+                    },
+                    {
+                      "id": "55500E32-6E1E-4B16-AE63-6B854E9E00D3",
+                      "type": "document_card_approvers"
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "included": [
+            {
+              "id": "01D6FD9D-55C6-491D-B19A-F03C3E06DABC",
+              "type": "document_card_approvers",
+              "attributes": {
+                "date_begin": null,
+                "date_end": null,
+                "number": 1,
+                "order": 1,
+                "route_type": null,
+                "state": null,
+                "comment": null
+              },
+              "relationships": {
+                "employee": {
+                  "data": {
+                    "id": "02826E05-666D-467D-B836-A9E5608D2ABD",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "39B12391-8F3F-48BA-AB58-060CA88799C4",
+              "type": "document_card_approvers",
+              "attributes": {
+                "date_begin": null,
+                "date_end": null,
+                "number": 1,
+                "order": 1,
+                "route_type": "parallel",
+                "state": null,
+                "comment": null
+              },
+              "relationships": {
+                "employee": {
+                  "data": {
+                    "id": "BA68DD96-95D6-4B17-9C65-31EB877D96BF",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "63DD316F-1A8E-40C3-BAB9-C7C7D20573BE",
+              "type": "document_card_approvers",
+              "attributes": {
+                "date_begin": null,
+                "date_end": null,
+                "number": 2,
+                "order": 2,
+                "route_type": "parallel",
+                "state": null,
+                "comment": null
+              },
+              "relationships": {
+                "employee": {
+                  "data": {
+                    "id": "4522BB35-F4C5-4618-9ABF-09AAAB75A29F",
+                    "type": "employees"
+                  }
+                }
+              }
+            },
+            {
+              "id": "55500E32-6E1E-4B16-AE63-6B854E9E00D3",
+              "type": "document_card_approvers",
+              "attributes": {
+                "date_begin": null,
+                "date_end": null,
+                "number": 3,
+                "order": 3,
+                "route_type": null,
+                "state": null,
+                "comment": null
+              },
+              "relationships": {
+                "employee": {
+                  "data": {
+                    "id": "EDAE212A-0E13-4971-926A-D8FD4C4813BA",
+                    "type": "employees"
+                  }
+                }
+              }
+            }
+          ]
+        }
+
+
 ## Сформировать документ [/document_cards/{id}/form_file]
 
 Метод вызовет формирование файла документа.
