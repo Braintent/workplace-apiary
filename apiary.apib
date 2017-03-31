@@ -74,14 +74,26 @@ https://github.com/apiaryio/api-blueprint/issues/58
 + type: `employees` (string, required)
 + attributes (EmployeeAttributes)
 
-## EmployeeExpandedForDeputy (object)
+## EmployeeExpanded (object)
 + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
 + type: `employees` (string, required)
 + attributes (EmployeeAttributes)
     + position: `должность`
 
+
+## EmployeeExpandedWithActivity (object)
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: `employees` (string, required)
++ attributes (EmployeeAttributes)
+    + position: `Маэстро` - должность
+    + status: `sick` - текущий статус
+    + inactive_status: `sick` - статус в период неактивности
+    + inactive_from: `2009-11-22T12:22:00`
+    + inactive_to: `2099-11-22T12:22:00`
+
+
 ## EmployeeSearchSerialized (object)
-+ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 + type: `employees` (string, required)
 + attributes (EmployeeAttributes)
     + position: `должность`
@@ -92,7 +104,7 @@ https://github.com/apiaryio/api-blueprint/issues/58
         + data (DepartmentIdentifier)
 
 ## EmployeeShowSerialized (object)
-+ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 + type: `employees` (string, required)
 + attributes (EmployeeAttributes)
     + position: `должность`
@@ -107,6 +119,18 @@ https://github.com/apiaryio/api-blueprint/issues/58
 
 ## EmployeeWithDepartment (Employee)
 + relationships (EmployeeRelationships)
+
+## DeputyInfoWithEmployee
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
++ type: `staff_dir_employee_deputies` (string, required)
++ attributes
+    + performing: true
+    + control: true
+    + signature: false
+    + permanent_deputy: null
+    + deputy_access: true
++ relationships
+    + employee (EmployeeIdentifier)
 
 ## PartnersDirCompanySearch
 + id:`AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
@@ -864,7 +888,7 @@ https://github.com/apiaryio/api-blueprint/issues/58
 
 + Response 200 (application/vnd.api+json)
     + Attributes
-        + data (EmployeeExpandedForDeputy)
+        + data (EmployeeExpanded)
         + meta
             + phonebook_url: `https://localhost:12345`
             + resolutions: `Тестирование резолюций`, `Резолюция, добавленая позднее`, `И еще позднее`
@@ -982,8 +1006,8 @@ UUID запрашиваемого сотрудника
 
 + Response 200 (application/vnd.api+json)
     + Attributes
-        + data (array[EmployeeExpandedForDeputy, EmployeeExpandedForDeputy])
-        + included (array[DepartmentInfo, DepartmentInfo])
+        + data (array[DeputyInfoWithEmployee, DeputyInfoWithEmployee])
+        + included (array[EmployeeExpandedWithActivity, EmployeeExpandedWithActivity])
 
 
 ## Сотрудники быстрого выбора [GET /staff/employees/preferred_employees]
@@ -1080,68 +1104,9 @@ ID сотрудника
 + Request (application/vnd.api+json)
 
 + Response 200 (application/vnd.api+json)
-
-        {
-          "data": [
-            {
-              "id": "6F749340-E657-443C-B73D-369BEB1BF0AC",
-              "type": "staff_dir_employee_deputies",
-              "attributes": {
-                "performing": true,
-                "control": true,
-                "signature": false,
-                "permanent_deputy": false,
-                "deputy_access": false
-              },
-              "relationships": {
-                "employee": {
-                  "data": {
-                    "id": "67239E79-A2FC-46AD-AE44-F462386B46F2",
-                    "type": "employees"
-                  }
-                }
-              }
-            },
-            {
-              "id": "41F2AF44-43D3-4329-859A-536045BE79FD",
-              "type": "staff_dir_employee_deputies",
-              "attributes": {
-                "performing": true,
-                "control": true,
-                "signature": true,
-                "permanent_deputy": true,
-                "deputy_access": true
-              },
-              "relationships": {
-                "employee": {
-                  "data": {
-                    "id": "FE6A4BE9-2C74-425D-BFFE-F4E590E8472B",
-                    "type": "employees"
-                  }
-                }
-              }
-            },
-            {
-              "id": "ADD2EE8D-C0D7-4CB5-B4EC-51C68A3EA14B",
-              "type": "staff_dir_employee_deputies",
-              "attributes": {
-                "performing": true,
-                "control": true,
-                "signature": true,
-                "permanent_deputy": true,
-                "deputy_access": true
-              },
-              "relationships": {
-                "employee": {
-                  "data": {
-                    "id": "EDAE212A-0E13-4971-926A-D8FD4C4813BA",
-                    "type": "employees"
-                  }
-                }
-              }
-            }
-          ]
-        }
+    + Attributes
+        + data (array[DeputyInfoWithEmployee, DeputyInfoWithEmployee])
+        + included (array[EmployeeExpandedWithActivity, EmployeeExpandedWithActivity])
 
 
 ## Добавить заместителя [POST /staff/employees/mine_deputies/?employee_id=67239E79-A2FC-46AD-AE44-F462386B46F2&performing={performing}&control={control}&signature={signature}&permanent_deputy={permanent_deputy}&deputy_access={deputy_access}]
@@ -1166,28 +1131,9 @@ ok
 + Request (application/vnd.api+json)
 
 + Response 200 (application/vnd.api+json)
-
-        {
-          "data": {
-            "id": "6F749340-E657-443C-B73D-369BEB1BF0AC",
-            "type": "staff_dir_employee_deputies",
-            "attributes": {
-              "performing": true,
-              "control": true,
-              "signature": false,
-              "permanent_deputy": false,
-              "deputy_access": false
-            },
-            "relationships": {
-              "employee": {
-                "data": {
-                  "id": "67239E79-A2FC-46AD-AE44-F462386B46F2",
-                  "type": "employees"
-                }
-              }
-            }
-          }
-        }
+    + Attributes
+        + data (DeputyInfoWithEmployee)
+        + included (array[EmployeeExpandedWithActivity])
 
 
 ## Редактировать заместителя [PATCH /staff/employees/mine_deputies/{deputy_id}/performing={performing}&control={control}&signature={signature}&permanent_deputy={permanent_deputy}&deputy_access={deputy_access}]
@@ -1207,29 +1153,9 @@ ID редактируемого заместителя (type: staff_dir_employee
 + Request (application/vnd.api+json)
 
 + Response 200 (application/vnd.api+json)
-
-        {
-          "data": {
-            "id": "6F749340-E657-443C-B73D-369BEB1BF0AC",
-            "type": "staff_dir_employee_deputies",
-            "attributes": {
-              "performing": true,
-              "control": true,
-              "signature": false,
-              "permanent_deputy": false,
-              "deputy_access": false
-            },
-            "relationships": {
-              "employee": {
-                "data": {
-                  "id": "67239E79-A2FC-46AD-AE44-F462386B46F2",
-                  "type": "employees"
-                }
-              }
-            }
-          }
-        }
-
+    + Attributes
+        + data (DeputyInfoWithEmployee)
+        + included (array[EmployeeExpandedWithActivity])
 
 ## Удалить заместителя [DELETE /staff/employees/mine_deputies/{deputy_id}/]
 - `deputy_id` ( **String**, *required* )
