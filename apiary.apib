@@ -518,7 +518,7 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + project_number: `247`
     + registration_number (string, nullable)
     + registration_date (string, nullable)
-    + sending_type: `Самостоятельно` 
+    + sending_type: `0`  - централизованно или самостоятельно  цифрой
     + attachment (string, nullable)
 + relationships
     + recipients
@@ -2160,7 +2160,7 @@ ID основного задания задания (`InstanceID` карточк
               "attributes": {
                 "template_id": "F590195C-4AED-E611-9407-000C29D9CFCB",
                 "card_kind": "Исходящий документ",
-                "sending_kind": "Централизованно",
+                "sending_kind": "1",
                 "doc_type": null
               },
               "relationships": {
@@ -2178,7 +2178,7 @@ ID основного задания задания (`InstanceID` карточк
               "attributes": {
                 "template_id": "5B3BB9AB-4AED-E611-9407-000C29D9CFCB",
                 "card_kind": "Исходящий документ (конфиденциальный)",
-                "sending_kind": "Централизованно",
+                "sending_kind": "1",
                 "doc_type": null
               },
               "relationships": {
@@ -2196,7 +2196,7 @@ ID основного задания задания (`InstanceID` карточк
               "attributes": {
                 "template_id": "02F064C2-4AED-E611-9407-000C29D9CFCB",
                 "card_kind": "Исходящий документ (только регистрация)",
-                "sending_kind": "Централизованно",
+                "sending_kind": "1",
                 "doc_type": null
               },
               "relationships": {
@@ -2214,7 +2214,7 @@ ID основного задания задания (`InstanceID` карточк
               "attributes": {
                 "template_id": "69DEC6DB-4AED-E611-9407-000C29D9CFCB",
                 "card_kind": "Исходящий документ",
-                "sending_kind": "Самостоятельно",
+                "sending_kind": "0",
                 "doc_type": null
               },
               "relationships": {
@@ -2229,7 +2229,7 @@ ID основного задания задания (`InstanceID` карточк
               "attributes": {
                 "template_id": "76DEC6DB-4AED-E611-9407-000C29D9CFCB",
                 "card_kind": "Исходящий документ (конфиденциальный)",
-                "sending_kind": "Самостоятельно",
+                "sending_kind": "0",
                 "doc_type": null
               },
               "relationships": {
@@ -2244,7 +2244,7 @@ ID основного задания задания (`InstanceID` карточк
               "attributes": {
                 "template_id": "83DEC6DB-4AED-E611-9407-000C29D9CFCB",
                 "card_kind": "Исходящий документ (только регистрация)",
-                "sending_kind": "Самостоятельно",
+                "sending_kind": "0",
                 "doc_type": null
               },
               "relationships": {
@@ -3827,9 +3827,9 @@ UUID документа, который нужно скопировать
 
 | Тип документа | Дополнительные объекты из сериализации |
 | - | - |
-| ВД | отправитель(+кто); Номер письма (main\_info.ExternalNumber); повторность (тип дублирования); гриф; контроль(+срок контроля, снятия); тема; содержание; |
+| ВД | отправитель(+кто); Номер письма (main\_info.ExternalNumber); повторность (тип дублирования); гриф; контроль(+срок контроля, снятия); тема; содержание |
 | ИД | куда(+кому) ; тема; содержание;  |
-| СЗ | срок выполнения; кто получатель + его подразделение; тема; содержание; контроль(+срок контроля, снятия); |
+| СЗ | подписанты; срок выполнения; кто получатель + его подразделение; тема; содержание; контроль(+срок контроля, снятия); |
 | Протокол | номер; дата регистрации; тема; тип совещания; содержание |
 | УД | содержание; тип документа (doc_type); номер; дата регистрации |
 | РД | тема; содержание; тип распоряжения (doc_type) |
