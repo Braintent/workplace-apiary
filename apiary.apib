@@ -205,6 +205,13 @@ https://github.com/apiaryio/api-blueprint/issues/58
         + content: `Текст комментария` (string, required)
 
 
+## DocumentCardCommentCreateParams
++ data
+    + type: document_card_comments (string, required)
+    + attributes
+        + content: `Текст комментария` (string, required)
+
+
 ## TaskCardCommentWithAuthor
 + id:`AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 + type: task_card_comments (string, required)
@@ -225,6 +232,7 @@ https://github.com/apiaryio/api-blueprint/issues/58
 + relationships
     + author (EmployeeIdentifier)
      
+
 
 
 ## TaskCardIdentifier
@@ -1425,18 +1433,19 @@ ID компании
     + Attributes (TaskCardWithActions)
 
 
-## Комментирование [/task_cards/{id}/comments?content={content}]
+## Комментирование [/task_cards/{id}/comments]
 
 - `id` ( **String**, *required* )
 Уникальный идентификатор документа.
-- `content` ( **String**, *required* )
-Текст комментария
 
 ### Добавить комментарий [POST]
 
 
 + Request (application/vnd.api+json)
-        
+    
+    + Attributes (TaskCardCommentCreateParams)
+
+
 + Response 201 (application/vnd.api+json)
 
     + Headers
@@ -1583,7 +1592,7 @@ ID компании
         + included (array[Employee, Employee, Employee] )
 
 
-## Действие над заданием [/task_cards/{id}/operation/{operation_id}?report={report}]
+## Действие над заданием [/task_cards/{id}/operation/{operation_id}?action_name={action_name}]
 
 **Параметры**
 
@@ -1592,9 +1601,6 @@ ID компании
 
 - `operation_id` ( **String**, *required* )
 Уникальный ID операции (StatesDir::CardKindSettings::Operation)
-
-- `report` ( **String** )
-Текст отчета о выполнении, если требуется.
 
 - `action_name` ( **String** )
 Имя действия. Требуется дополнительно для некоторых действий с заданиями вида `Расширенное согласование`. См. ниже.
@@ -1606,6 +1612,8 @@ ID компании
 Это необходимо потому-что разные действия могут ссылаться на одну и ту же операцию. 
 Например, действия `resume` и `recycle` представляют собой операцию `Completed` с доп. обработкой. В этом случае не возможно точно определить реакцию.
 Для разрешения неоднозначных реакций требуется параметр `action_name`. 
+
+**Примечание**: Если необходимо добавить отчет к заданию, в теле запроса требуется добавить объект `task_card_comments` в таком же виде, как и в методе `Комментирование`
 
 Список действий представлен в таблице:
 
@@ -1621,9 +1629,11 @@ ID компании
 В таком случае вернется хеш с метаданными, содержащими ID родительского задания, а код HTTP статуса будет 200.
 
 ### Вызов действия DV [PATCH]
-+ Request (application/json)
++ Request (application/vnd.api+json)
+    
+    + Attributes (TaskCardCommentCreateParams)
 
-+ Response 204 (application/json)
++ Response 204 (application/vnd.api+json)
 
 + Request В случае, когда есть родительское задание в статусе 'Приёмка' (application/json)
 
@@ -4177,18 +4187,18 @@ UUID документа, который нужно скопировать
             ]
         }
 
-## Комментирование [/document_cards/{id}/comments?content={content}]
+## Комментирование [/document_cards/{id}/comments]
 
 - `id` ( **String**, *required* )
 Уникальный идентификатор документа.
-- `content` ( **String**, *required* )
-Текст комментария
 
 ### Добавить комментарий [POST]
 
 
 + Request (application/vnd.api+json)
-        
+
+    + Attributes (DocumentCardCommentCreateParams)
+
 + Response 201 (application/vnd.api+json)
 
     + Headers
