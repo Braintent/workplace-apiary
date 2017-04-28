@@ -3813,6 +3813,24 @@ ms-word:ofv|u|http://example.com/document_cards/ED8D6CDA-8F1F-E711-BA19-08002792
     + Attributes (DocumentCardCreatedDraftTemplate)
 
 
+## Отправить на ознаклмение  [/document_cards/{id}/familiarization?performers%5B%5D={performers}&end_date={end_date}]
+- `id` ( **String**, *required* )
+ID карточки документа
+- `performers` ( **String**, *required* )
+Список ID сотрудников, которым необходимо разослать задания на ознакомления
+- `end_date` ( **String**, *required* )
+Дата завершения для заданий ознакомления. Обязательно должна быть больше текущего времени.
+
+Метод создает связанный с документом бизнес-процесс "Отправка документа на ознакомление" и заполняет необходимые переменные (автора, исполнителей и др.)
+
+### Отправить [PATCH]
+
++ Request (application/vnd.api+json)
+
++ Response 204 (application/vnd.api+json)
+
+
+
 
 ## Поиск по документам [/document_cards/search?text={text}&kinds%5B%5D={kinds}&states%5B%5D={states}&limit={limit}&offset={offset}&controlled={controlled}&creation_date_from={creation_date_from}&creation_date_to={creation_date_to}&receiver%5B%5D={receivers}&signer%5B%5D={signers}&approver%5B%5D={approvers}&performer%5B%5D={performers}&partner%5B%5D={partners}]
 
