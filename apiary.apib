@@ -881,6 +881,110 @@ https://github.com/apiaryio/api-blueprint/issues/58
             }
             
 
+
+# Group Справочник сотрудников
+
+## Получить содержимое по номеру версии [GET /staff/updates?version={version}]
+- `version` ( **Array**, *required* )
+Версия. Целое число, обозначающее номер версии, от которой необходимо получить все обновления. Если не задано или равно 0 - в ответе вернется весь справочник сотрудников
+
+Вернет развернутую информацию о сотрудниках, UUID которых указаны в списке `employees`
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: Bearer <ACCESS_TOKEN>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "id": "35591080",
+            "type": "staff_dir_updates",
+            "attributes": {
+              "version_for_check": 35591080,
+              "actual_maximum": 35615180
+            },
+            "relationships": {
+              "departments": {
+                "data": [
+                  {
+                    "id": "47048CA1-79BD-47AB-9F0C-BDC5E8074881",
+                    "type": "departments"
+                  }
+                ]
+              },
+              "employees": {
+                "data": [
+                  {
+                    "id": "19057F1E-F1C5-43C9-BF19-14F09C88506B",
+                    "type": "employees"
+                  }
+                ]
+              },
+              "positions": {
+                "data": [
+                  {
+                    "id": "362F4EDA-23FD-48DA-B1B0-4BD5F0958887",
+                    "type": "staff_dir_positions"
+                  }
+                ]
+              }
+            }
+          },
+          "included": [
+            {
+              "id": "47048CA1-79BD-47AB-9F0C-BDC5E8074881",
+              "type": "departments",
+              "attributes": {
+                "name": "АО \"Гознак\"",
+                "type": "company"
+              },
+              "relationships": {
+                "parent": {
+                  "data": null
+                }
+              }
+            },
+            {
+              "id": "19057F1E-F1C5-43C9-BF19-14F09C88506B",
+              "type": "employees",
+              "attributes": {
+                "first_name": "Админ",
+                "last_name": "Администратор",
+                "middle_name": "Админович",
+                "display_string": "Администратор А. А.",
+                "gender": "blank",
+                "has_photo": false
+              },
+              "relationships": {
+                "department": {
+                  "data": {
+                    "id": "47048CA1-79BD-47AB-9F0C-BDC5E8074881",
+                    "type": "departments"
+                  }
+                },
+                "position": {
+                  "data": {
+                    "id": "362F4EDA-23FD-48DA-B1B0-4BD5F0958887",
+                    "type": "staff_dir_positions"
+                  }
+                }
+              }
+            },
+            {
+              "id": "362F4EDA-23FD-48DA-B1B0-4BD5F0958887",
+              "type": "staff_dir_positions",
+              "attributes": {
+                "name": "Карабинер"
+              }
+            }
+          ]
+        }
+
+
+
 # Group Сотрудники
 
 ## Домашная страница [GET /staff/employees/my_page]
@@ -3813,7 +3917,7 @@ ms-word:ofv|u|http://example.com/document_cards/ED8D6CDA-8F1F-E711-BA19-08002792
     + Attributes (DocumentCardCreatedDraftTemplate)
 
 
-## Отправить на ознаклмение  [/document_cards/{id}/familiarization?performers%5B%5D={performers}&end_date={end_date}]
+## Отправить на ознакомление  [/document_cards/{id}/familiarization?performers%5B%5D={performers}&end_date={end_date}]
 - `id` ( **String**, *required* )
 ID карточки документа
 - `performers` ( **String**, *required* )
