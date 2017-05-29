@@ -337,6 +337,8 @@ https://github.com/apiaryio/api-blueprint/issues/58
 + card_kind_name: `Тип карточки` (string)
 + card_kind_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string)
 + state_default_name: `Started` (string, required)
++ change_date_time: `2017-02-07T19:07:15.000Z`
++ creation_date_time: `2017-02-07T19:07:15.000Z`
 
 ## TaskCardShowAttributes (TaskCardBaseAttributes)
 + content: `Тест заполненности полей` (string, required)
@@ -494,16 +496,29 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + current_version_file_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
 
 ## DocumentCardReferenceRelationInfoFile
-+ id: `99BF9654-7389-E611-80AD-0800278BDFDD` (string, required)
++ id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA (string, required)
 + type: `document_cards` (string, required)
 + attributes
     + description:         `Имя файла.формат` (string, required)
     + card_kind_name:      `Файл` (string, required)
     + card_kind_id:        `F9A8D158-9884-4765-859D-31C4EFCA149D` (string, required)
     + state_default_name:  `Created` (string, required)
+    + parent_card_kind_id: `8ACE1220-A452-455D-8EEB-9EDF9DC6E327`
+    + name:                `Имя файла.формат` (string, required)
+    + content (string, nullable)
+    + main_versioned_file_card: `B324E740-94CB-40D1-BF6B-28B83DC127C9`
 + relationships 
     + file_cards 
         + data (array[VersionedFileCardIdentifier])
+
+
+## DocumentCardBaseAttributes
++ description: `Распорядительный документ: Тестируем!` (string, required)
++ card_kind_name: `Приказ` (string)
++ card_kind_id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string)
++ state_default_name: `Started` (string, required)
++ change_date_time: `2017-02-07T19:07:15.000Z`
++ creation_date_time: `2017-02-07T19:07:15.000Z`
 
 ## DocumentCardCreatedDraftTemplate
 + id: `CE6712F6-2DED-E611-8EAB-0800279209D4`
@@ -549,40 +564,42 @@ https://github.com/apiaryio/api-blueprint/issues/58
 
 
 ## DocumentCardFileFormedResponse
-+ id: `CE6712F6-2DED-E611-8EAB-0800279209D4`
-+ type: `document_cards`
-+ attributes
-    + description: `Исходящий`
-    + card_kind_name: `Исходящий документ`
-    + card_kind_id: `0EEBB19D-C9F0-430E-A24A-84E93A669D77`
-    + state_default_name: `Drafting`
-    + change_date_time: `2017-02-07T19:07:15.000Z`
-    + creation_date_time: `2017-02-07T19:07:15.000Z`
-    + parent_card_kind_name: `Исходящие документы`
-    + parent_card_kind_id: `B324E740-94CB-40D1-BF6B-28B83DC127C9`
-    + name (string, nullable)
-    + content (string, nullable)
-+ relationships
-    + files
-        + data (array[DocumentCardFileSectionRelationElementIdentifier])
++ data
+    + id: `CE6712F6-2DED-E611-8EAB-0800279209D4`
+    + type: `document_cards`
+    + attributes
+        + description: `Исходящий`
+        + card_kind_name: `Исходящий документ`
+        + card_kind_id: `0EEBB19D-C9F0-430E-A24A-84E93A669D77`
+        + state_default_name: `Drafting`
+        + change_date_time: `2017-02-07T19:07:15.000Z`
+        + creation_date_time: `2017-02-07T19:07:15.000Z`
+        + parent_card_kind_name: `Исходящие документы`
+        + parent_card_kind_id: `B324E740-94CB-40D1-BF6B-28B83DC127C9`
+        + name (string, nullable)
+        + content (string, nullable)
+    + relationships
+        + files
+            + data (array[DocumentCardFileSectionRelationElementIdentifier])
 + included (array[DocumentCardFileSectionRelationElement, VersionedCardRelationInfo]) 
 
 ## DocumentCardWithFullTree
-+ id: `CE6712F6-2DED-E611-8EAB-0800279209D4`
-+ type: `document_cards`
-+ attributes
-    + description: `Исходящий`
-    + card_kind_name: `Исходящий документ`
-    + card_kind_id: `0EEBB19D-C9F0-430E-A24A-84E93A669D77`
-    + state_default_name: `Drafting`
-    + change_date_time: `2017-02-07T19:07:15.000Z`
-    + creation_date_time: `2017-02-07T19:07:15.000Z`
-+ relationships
-    + task_tree_items - задания из дерева заданий исполнения
-        + data (array[TaskCardIdentifier, TaskCardIdentifier])
-    + approval_steps - элементы истории согласования
-        + data (array[DocumentApprovalStepIdentifier, DocumentApprovalStepIdentifier])
-    }
++ data
+    + id: `CE6712F6-2DED-E611-8EAB-0800279209D4`
+    + type: `document_cards`
+    + attributes
+        + description: `Исходящий`
+        + card_kind_name: `Исходящий документ`
+        + card_kind_id: `0EEBB19D-C9F0-430E-A24A-84E93A669D77`
+        + state_default_name: `Drafting`
+        + change_date_time: `2017-02-07T19:07:15.000Z`
+        + creation_date_time: `2017-02-07T19:07:15.000Z`
+    + relationships
+        + task_tree_items - задания из дерева заданий исполнения
+            + data (array[TaskCardIdentifier, TaskCardIdentifier])
+        + approval_steps - элементы истории согласования
+            + data (array[DocumentApprovalStepIdentifier, DocumentApprovalStepIdentifier])
+        }
 + included (array[DocumentApprovalStep, DocumentApprovalStep, TaskCardTreeListData, TaskCardTreeListData, TaskCardTreeListData, Employee, Employee, Employee] )
 
 ## DocumentApprovalStepIdentifier
@@ -606,7 +623,7 @@ https://github.com/apiaryio/api-blueprint/issues/58
 
 ## DocumentCardFileSectionRelationElement (DocumentCardFileSectionRelationElementIdentifier)
 + attributes
-  + file_type: `mine` (string)
+  + file_type: `main` (string)
 + relationships
     + file_card
       + data (VersionedFileCardIdentifier)
@@ -671,7 +688,41 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + relationships
         + destination_card
           + data (DocumentCardIdentifier)
-+ included (array[DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo]) 
+
+
+## DocumentCardWithNewReferenceLink
++ data
+    + id: `CE6712F6-2DED-E611-8EAB-0800279209D4`
+    + type: `document_cards`
+    + attributes (DocumentCardBaseAttributes)
+    + relationships
+        + references
+            + data (array[CardReferenceIdentifier])
++ included (array[DocumentCardReferenceLinkIncluded, DocumentCardReferenceRelationInfo])
+
+## DocumentCardWithNewFileResponse
++ data
+    + id: `CE6712F6-2DED-E611-8EAB-0800279209D4`
+    + type: `document_cards`
+    + attributes (DocumentCardBaseAttributes)
+    + relationships
+        + files
+            + data (array[DocumentCardFileSectionRelationElementIdentifier])
++ included (array[DocumentCardFileSectionRelationElement, VersionedCardRelationInfo]) 
+
+
+## DocumentCardReferenceLinkIncluded
++ data
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
+    + type: `reference_list_card_references`
+    + attributes
+      + type_description: `Связанные карточки` (string)
+      + type_name: `КЗ ДополненияКарточкиВх` (string)
+      + creation_date: `2017-01-20T11:17:24.143Z`
+    + relationships
+        + destination_card
+            + data (DocumentCardIdentifier)
+
 
 ## DocumentCardReferenceLinkCreateDescription
 + data
@@ -691,7 +742,7 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA`
     + type: `document_card_files`
     + attributes
-      + file_type: `mine` (string)
+      + file_type: `main` (string)
     + relationships
         + file_card
           + data (VersionedFileCardIdentifier)
@@ -772,6 +823,29 @@ https://github.com/apiaryio/api-blueprint/issues/58
     + relationships (TaskCardShowRelationships)
 + included (array[Employee, Employee, DepartmentInfo, CardReferenceLinkDescriptionExample1, DocumentCardReferenceRelationInfoFile, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo, AllowedOperation, AllowedOperation])
 
+
+
+## TaskCardWithNewReferenceLink
++ data (object)
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+    + type: 'task_cards' (string, required)
+    + attributes (TaskCardBaseAttributes)
+    + relationships
+        + references
+            + data (array[CardReferenceIdentifier])
++ included (array[DocumentCardReferenceLinkIncluded, DocumentCardReferenceRelationInfo])
+
+
+
+## TaskCardWithNewFileLink
++ data (object)
+    + id: `AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA` (string, required)
+    + type: 'task_cards' (string, required)
+    + attributes (TaskCardBaseAttributes)
+    + relationships
+        + references
+            + data (array[CardReferenceIdentifier])
++ included (array[CardReferenceLinkCreateDescription, DocumentCardReferenceRelationInfoFile, VersionedCardRelationInfo])
 
 
 ## TaskCardAfterTemplateCreate
@@ -904,13 +978,17 @@ https://github.com/apiaryio/api-blueprint/issues/58
             "type": "staff_dir_updates",
             "attributes": {
               "version_for_check": 35591080,
-              "actual_maximum": 35615180
+              "actual_maximum": 35648435
             },
             "relationships": {
               "departments": {
                 "data": [
                   {
                     "id": "47048CA1-79BD-47AB-9F0C-BDC5E8074881",
+                    "type": "departments"
+                  },
+                  {
+                    "id": "3FFE27CB-0F9C-4950-ADAB-0AB0EA2357E4",
                     "type": "departments"
                   }
                 ]
@@ -919,6 +997,10 @@ https://github.com/apiaryio/api-blueprint/issues/58
                 "data": [
                   {
                     "id": "19057F1E-F1C5-43C9-BF19-14F09C88506B",
+                    "type": "employees"
+                  },
+                  {
+                    "id": "50EFB99E-EAF3-4AFE-8D6C-BF27EA6E4E60",
                     "type": "employees"
                   }
                 ]
@@ -930,6 +1012,14 @@ https://github.com/apiaryio/api-blueprint/issues/58
                     "type": "staff_dir_positions"
                   }
                 ]
+              },
+              "groups": {
+                "data": [
+                  {
+                    "id": "024B4645-F121-460C-BA40-39D4C72ECE7F",
+                    "type": "groups"
+                  }
+                ]
               }
             }
           },
@@ -939,11 +1029,29 @@ https://github.com/apiaryio/api-blueprint/issues/58
               "type": "departments",
               "attributes": {
                 "name": "АО \"Гознак\"",
-                "type": "company"
+                "type": "company",
+                "searchable": true
               },
               "relationships": {
                 "parent": {
                   "data": null
+                }
+              }
+            },
+            {
+              "id": "3FFE27CB-0F9C-4950-ADAB-0AB0EA2357E4",
+              "type": "departments",
+              "attributes": {
+                "name": "36 Цех по ремонту и обслуживанию технологического оборудования",
+                "type": "unit",
+                "searchable": false
+              },
+              "relationships": {
+                "parent": {
+                  "data": {
+                    "id": "E237495A-5565-4A51-AE78-119B7789B044",
+                    "type": "departments"
+                  }
                 }
               }
             },
@@ -956,7 +1064,8 @@ https://github.com/apiaryio/api-blueprint/issues/58
                 "middle_name": "Админович",
                 "display_string": "Администратор А. А.",
                 "gender": "blank",
-                "has_photo": false
+                "has_photo": false,
+                "searchable": true
               },
               "relationships": {
                 "department": {
@@ -968,6 +1077,33 @@ https://github.com/apiaryio/api-blueprint/issues/58
                 "position": {
                   "data": {
                     "id": "362F4EDA-23FD-48DA-B1B0-4BD5F0958887",
+                    "type": "staff_dir_positions"
+                  }
+                }
+              }
+            },
+            {
+              "id": "50EFB99E-EAF3-4AFE-8D6C-BF27EA6E4E60",
+              "type": "employees",
+              "attributes": {
+                "first_name": "Вероника",
+                "last_name": "Вилесова",
+                "middle_name": "Сергеевна",
+                "display_string": "Вилесова В. С.",
+                "gender": "female",
+                "has_photo": false,
+                "searchable": false
+              },
+              "relationships": {
+                "department": {
+                  "data": {
+                    "id": "09FBC70C-FB29-43C9-B820-8708D532184C",
+                    "type": "departments"
+                  }
+                },
+                "position": {
+                  "data": {
+                    "id": "56355890-4E1D-4BBC-BBA0-26176CE22AA6",
                     "type": "staff_dir_positions"
                   }
                 }
@@ -1846,7 +1982,7 @@ ID шаблона переназначения задания, полученн�
 
     + Headers
 
-    + Attributes (CardReferenceLinkCreateDescription)
+    + Attributes (TaskCardWithNewFileLink)
 
 
 ## Связки, ссылки на документы [/task_cards/{id}/references]
@@ -1858,7 +1994,7 @@ ID задания (`InstanceID` карточки)
 - `card_id` ( **String**, *required* )
 ID карточки, на которую необходимо создать ссылку (`InstanceID` карточки)
 
-В список связок задания будет добавлена ссылка на указанную карточку
+**Важно**: В заданиях при добавлении связки возвращается только базовая информация по самому заданию и новая ссылка и **ТОЛЬКО ОНА!** включена в relation refereneces
 
 + Request (application/vnd.api+json)
 
@@ -1870,7 +2006,7 @@ ID карточки, на которую необходимо создать с�
 
     + Headers
 
-    + Attributes (DocumentCardReferenceLinkCreateDescription)
+    + Attributes (TaskCardWithNewReferenceLink)
 
 ### Удаление связки, ссылки на документ или файла [DELETE /task_cards/{id}/references/{reference_id}]
 - `id` ( **String**, *required* )
@@ -4813,7 +4949,7 @@ ID документа (`InstanceID` карточки)
 
     + Headers
 
-    + Attributes (DocumentFileReferenceCreateDescription)
+    + Attributes (DocumentCardWithNewFileResponse)
 
 ### Удаление основного файла [DELETE /document_cards/{id}/files/{file_id}]
 - `id` ( **String**, *required* )
@@ -4842,17 +4978,19 @@ ID документа (`InstanceID` карточки)
 - `card_id` ( **String**, *required* )
 ID карточки, на которую необходимо создать ссылку (`InstanceID` карточки)
 
-В список связок документа будет добавлена ссылка на указанную карточку
+**Важно:** В документах при добавлении связки возвращается только базовая информация по самому документу и новая ссылка и **ТОЛЬКО ОНА!** включена в relation refereneces
 
 + Request (application/vnd.api+json)
 
     + Headers 
 
+            Accept: application/vnd.api+json
+
 + Response 201 (application/vnd.api+json)
 
     + Headers
 
-    + Attributes (DocumentCardReferenceLinkCreateDescription)
+    + Attributes (DocumentCardWithNewReferenceLink)
 
 ### Удаление связки [DELETE /document_cards/{id}/references/{reference_id}]
 - `id` ( **String**, *required* )
