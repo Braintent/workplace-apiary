@@ -4052,6 +4052,25 @@ ms-word:ofv|u|http://example.com/document_cards/ED8D6CDA-8F1F-E711-BA19-08002792
 
     + Attributes (DocumentCardCreatedDraftTemplate)
 
+## Пометить исходящий документ отправленным [/document_cards/{id}//mark_as_sent]
+
+Метод переведет документ в состояние "Отправлен"
+
+Доступен только для исходящих документов, находящихся в состоянии `Подписан`
+
+Ответ от сервера будет содержать всю информацию о документе. Как и в методе `Информацию по документу`
+
+### Пометить отправленным [PATCH]
+
++ Request (application/vnd.api+json)
+
++ Response 200 (application/vnd.api+json)
+
+    + Headers
+
+    + Attributes (DocumentCardCreatedDraftTemplate)
+
+
 
 ## Отправить на ознакомление  [/document_cards/{id}/familiarization?performers%5B%5D={performers}&end_date={end_date}]
 - `id` ( **String**, *required* )
